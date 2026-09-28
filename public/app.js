@@ -1,189 +1,186 @@
-const form = document.getElementById("goalForm");
-const goal = document.getElementById("goal");
-const counter = document.getElementById("counter");
-const result = document.getElementById("result");
-const tasks = document.getElementById("tasks");
-const planTitle = document.getElementById("planTitle");
-const planSummary = document.getElementById("planSummary");
-const progressText = document.getElementById("progressText");
-const progressBar = document.getElementById("progressBar");
-const error = document.getElementById("error");
-const generate = document.getElementById("generate");
-const reset = document.getElementById("reset");
-const modeLabel = document.getElementById("modeLabel");
-const modeBadge = document.getElementById("modeBadge");
-const totalTasks = document.getElementById("totalTasks");
-const doneTasks = document.getElementById("doneTasks");
-const remainingTasks = document.getElementById("remainingTasks");
-const history = document.getElementById("history");
-const historyList = document.getElementById("historyList");
-const clearHistory = document.getElementById("clearHistory");
-
-const HISTORY_KEY = "agentflow-history-v1";
+const $ = (id) => document.getElementById(id);
+const goalInput = $("goalInput");
+const generateBtn = $("generateBtn");
+const modeBadge = $("modeBadge");
+const projectSection = $("projectSection");
+const emptyState = $("emptyState");
+const taskList = $("taskList");
+const historyList = $("historyList");
+const errorBox = $("error");
 let currentPlan = null;
-let currentChecks = [];
+let selectedTaskId = null;
 
-goal.addEventListener("input", () => {
-  counter.textContent = `${goal.value.length} / 1000`;
-});
+const HISTORY_KEY = "agentflow-v12-history";
+const loadHistory = () => {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]"); } catch { return []; }
+};
+const saveHistory = (items) => localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 8)));
 
-document.querySelectorAll("[data-example]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    goal.value = btn.dataset.example;
-    goal.dispatchEvent(new Event("input"));
-    goal.focus();
-  });
-});
+function updateStats() {
+  if (!currentPlan) return;
+  const total = currentPlan.tasks.length;
+  const completed = currentPlan.tasks.filter(t => t.done).length;
+  const remaining = total - completed;
+  const pct = total ? Math.round(completed / total * 100) : 0;
+  $("totalStat").textContent = total;
+  $("completedStat").textContent = completed;
+  $("remainingStat").textContent = remaining;
+  $("progressStat").textContent = `${pct}%`;
+  $("progressLabel").textContent = `${pct}%`;
+  $("progressBar").style.width = `${pct}%`;
+}
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const value = goal.value.trim();
-  if (!value) return;
-
-  setLoading(true);
-  hideError();
-
-  try {
-    const response = await fetch("/api/plan", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ goal: value })
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || "Something went wrong.");
-
-    renderPlan(data.plan, data.mode);
-    saveHistory(data.plan, data.mode);
-    result.classList.remove("hidden");
-    result.scrollIntoView({behavior: "smooth", block: "start"});
-  } catch (err) {
-    showError(err.message);
-  } finally {
-    setLoading(false);
+function renderDetail(task) {
+  if (!task) {
+    $("detailEmpty").classList.remove("hidden");
+    $("detailContent").classList.add("hidden");
+    return;
   }
-});
+  $("detailEmpty").classList.add("hidden");
+  $("detailContent").classList.remove("hidden");
+  $("detailCategory").textContent = task.category || "Task";
+  $("detailTitle").textContent = task.title;
+  $("detailDescription").textContent = task.description;
+  $("detailPriority").textContent = task.priority || "Medium";
+  $("detailEstimate").textContent = task.estimate || "30–45 min";
+  $("detailComplete").textContent = task.done ? "Mark as incomplete" : "Mark complete";
+}
 
-function renderPlan(plan, mode = "local", checks = []) {
-  currentPlan = plan;
-  currentChecks = Array.isArray(checks) ? checks : [];
-  planTitle.textContent = plan.title || "Your workflow";
-  planSummary.textContent = plan.summary || "A practical workflow generated from your goal.";
-  const isAI = mode === "ai";
-  modeLabel.textContent = isAI ? "AI connected" : "Local agent ready";
-  modeBadge.textContent = isAI ? "AI MODE" : "LOCAL DEMO";
-  modeBadge.classList.toggle("ai", isAI);
-  tasks.innerHTML = "";
-
-  (plan.tasks || []).forEach((task, index) => {
-    const el = document.createElement("label");
-    el.className = "task";
+function renderTasks() {
+  taskList.innerHTML = "";
+  currentPlan.tasks.forEach(task => {
+    const el = document.createElement("div");
+    el.className = `task ${task.done ? "done" : ""} ${task.id === selectedTaskId ? "selected" : ""}`;
     el.innerHTML = `
-      <input type="checkbox" ${currentChecks[index] ? "checked" : ""} data-index="${index}">
-      <span class="task-number">${String(index + 1).padStart(2, "0")}</span>
-      <div class="task-body">
-        <b>Day ${task.day ?? index + 1} · ${escapeHtml(task.title || "Task")}</b>
-        <small>${escapeHtml(task.detail || "")}</small>
-      </div>
-      <span class="checkmark">✓</span>
-    `;
-    el.querySelector("input").addEventListener("change", updateProgress);
-    tasks.appendChild(el);
+      <button class="check" aria-label="Toggle task">${task.done ? "✓" : ""}</button>
+      <div><h3>Day ${task.day} · ${escapeHtml(task.title)}</h3><p>${escapeHtml(task.description)}</p></div>
+      <span class="day">${escapeHtml(task.estimate || "30–45 min")}</span>`;
+    el.addEventListener("click", (e) => {
+      if (e.target.closest(".check")) {
+        task.done = !task.done;
+        persistCurrent();
+        renderTasks();
+        updateStats();
+        renderDetail(task);
+      } else {
+        selectedTaskId = task.id;
+        renderTasks();
+        renderDetail(task);
+      }
+    });
+    taskList.appendChild(el);
   });
-  updateProgress();
+  updateStats();
 }
 
-function updateProgress() {
-  const boxes = [...tasks.querySelectorAll("input")];
-  currentChecks = boxes.map(b => b.checked);
-  const done = boxes.filter(b => b.checked).length;
-  const total = boxes.length;
-  const pct = total ? Math.round(done / total * 100) : 0;
-
-  progressText.textContent = `${pct}%`;
-  progressBar.style.width = `${pct}%`;
-  totalTasks.textContent = total;
-  doneTasks.textContent = done;
-  remainingTasks.textContent = Math.max(0, total - done);
-
-  boxes.forEach(box => box.closest(".task").classList.toggle("complete", box.checked));
-  persistCurrentProgress();
-}
-
-function setLoading(loading) {
-  generate.disabled = loading;
-  generate.innerHTML = loading ? "Building plan…" : 'Generate workflow <span>→</span>';
-}
-
-function saveHistory(plan, mode) {
-  const item = {
-    id: Date.now(),
-    plan,
-    mode,
-    checks: new Array(plan.tasks?.length || 0).fill(false)
-  };
-  const list = getHistory().filter(x => x.plan?.title !== plan.title);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify([item, ...list].slice(0, 5)));
+function persistCurrent() {
+  if (!currentPlan) return;
+  const history = loadHistory();
+  const snapshot = JSON.parse(JSON.stringify(currentPlan));
+  const idx = history.findIndex(h => h.id === currentPlan.id);
+  if (idx >= 0) history[idx] = snapshot;
+  else history.unshift(snapshot);
+  saveHistory(history);
   renderHistory();
 }
 
-function getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]"); }
-  catch { return []; }
+function showPlan(plan) {
+  currentPlan = plan;
+  currentPlan.id = currentPlan.id || `${Date.now()}`;
+  currentPlan.tasks = (currentPlan.tasks || []).map((t, i) => ({...t, id: t.id || `${currentPlan.id}-${i}`, done: Boolean(t.done)}));
+  selectedTaskId = currentPlan.tasks[0]?.id || null;
+  $("projectTitle").textContent = currentPlan.goal;
+  $("projectSummary").textContent = currentPlan.summary || `${currentPlan.duration || currentPlan.tasks.length}-day workflow`;
+  modeBadge.textContent = currentPlan.mode === "ai" ? "AI MODE" : "LOCAL DEMO";
+  modeBadge.className = `badge ${currentPlan.mode === "ai" ? "ai" : ""}`;
+  emptyState.classList.add("hidden");
+  projectSection.classList.remove("hidden");
+  renderTasks();
+  renderDetail(currentPlan.tasks[0]);
+  persistCurrent();
+  projectSection.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+async function generate() {
+  const goal = goalInput.value.trim();
+  errorBox.textContent = "";
+  if (!goal) {
+    errorBox.textContent = "Enter a goal first.";
+    goalInput.focus();
+    return;
+  }
+  generateBtn.disabled = true;
+  generateBtn.textContent = "Planning…";
+  try {
+    const res = await fetch("/api/plan", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({goal})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Could not generate workflow.");
+    showPlan(data);
+  } catch (err) {
+    errorBox.textContent = err.message;
+  } finally {
+    generateBtn.disabled = false;
+    generateBtn.innerHTML = 'Generate workflow <span>→</span>';
+  }
 }
 
 function renderHistory() {
-  const list = getHistory();
-  history.classList.toggle("hidden", list.length === 0);
+  const items = loadHistory();
   historyList.innerHTML = "";
-  list.forEach(item => {
-    const button = document.createElement("button");
-    button.className = "history-item";
-    button.innerHTML = `<span>${escapeHtml(item.plan.title || "Untitled")}</span><small>${item.plan.tasks?.length || 0} tasks · ${item.mode === "ai" ? "AI" : "Local"}</small>`;
-    button.addEventListener("click", () => {
-      goal.value = item.plan.title || "";
-      goal.dispatchEvent(new Event("input"));
-      renderPlan(item.plan, item.mode, item.checks);
-      result.classList.remove("hidden");
-      result.scrollIntoView({behavior:"smooth", block:"start"});
-    });
-    historyList.appendChild(button);
+  if (!items.length) {
+    historyList.innerHTML = '<div class="history-empty">No projects yet. Generate your first workflow above.</div>';
+    return;
+  }
+  items.forEach(item => {
+    const done = item.tasks.filter(t => t.done).length;
+    const el = document.createElement("div");
+    el.className = "history-item";
+    el.innerHTML = `<div><strong>${escapeHtml(item.goal)}</strong><br><span>${done}/${item.tasks.length} tasks completed</span></div><span>Open →</span>`;
+    el.addEventListener("click", () => showPlan(item));
+    historyList.appendChild(el);
   });
 }
 
-function persistCurrentProgress() {
-  if (!currentPlan?.title) return;
-  const list = getHistory();
-  const item = list.find(x => x.plan?.title === currentPlan.title);
-  if (item) {
-    item.checks = currentChecks;
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
-  }
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
 
-reset.addEventListener("click", () => {
-  result.classList.add("hidden");
-  goal.value = "";
-  goal.dispatchEvent(new Event("input"));
-  goal.focus();
+generateBtn.addEventListener("click", generate);
+goalInput.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") generate(); });
+document.querySelectorAll("[data-goal]").forEach(btn => btn.addEventListener("click", () => {
+  goalInput.value = btn.dataset.goal;
+  goalInput.focus();
+}));
+$("detailComplete").addEventListener("click", () => {
+  if (!currentPlan) return;
+  const task = currentPlan.tasks.find(t => t.id === selectedTaskId);
+  if (!task) return;
+  task.done = !task.done;
+  persistCurrent();
+  renderTasks();
+  renderDetail(task);
+});
+$("newPlanBtn").addEventListener("click", () => {
+  goalInput.focus();
   window.scrollTo({top:0, behavior:"smooth"});
 });
-
-clearHistory.addEventListener("click", () => {
+$("focusNav").addEventListener("click", () => projectSection.scrollIntoView({behavior:"smooth"}));
+$("historyNav").addEventListener("click", () => $("historySection").scrollIntoView({behavior:"smooth"}));
+$("clearHistoryBtn").addEventListener("click", () => {
   localStorage.removeItem(HISTORY_KEY);
   renderHistory();
 });
-
-function showError(message) {
-  error.textContent = message;
-  error.classList.remove("hidden");
-}
-function hideError() {
-  error.classList.add("hidden");
-}
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[c]));
-}
-
+$("resetBtn").addEventListener("click", () => {
+  currentPlan = null;
+  selectedTaskId = null;
+  projectSection.classList.add("hidden");
+  emptyState.classList.remove("hidden");
+  goalInput.value = "";
+  renderHistory();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
 renderHistory();

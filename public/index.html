@@ -1,89 +1,140 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1220" />
-  <title>AgentFlow AI — Goal to Workflow</title>
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AgentFlow AI — Planning Workspace</title>
+  <meta name="description" content="Turn goals into actionable workflows with AgentFlow AI.">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <main class="shell">
+  <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#">
-        <div class="logo">AF</div>
-        <div>
-          <h1>AgentFlow AI</h1>
-          <p>Goal → plan → progress.</p>
-        </div>
+      <a class="brand" href="/">
+        <span class="brand-mark">✦</span>
+        <span>AgentFlow <b>AI</b></span>
       </a>
-      <div class="status"><i></i><span id="modeLabel">Local agent ready</span></div>
+      <div class="top-actions">
+        <span id="modeBadge" class="badge">LOCAL DEMO</span>
+        <button id="resetBtn" class="ghost">Reset</button>
+      </div>
     </header>
 
-    <section class="hero">
-      <div class="eyebrow">PERSONAL AI PLANNING AGENT</div>
-      <h2>Turn a goal into a workflow you can actually follow.</h2>
-      <p>Describe what you want to accomplish. AgentFlow breaks it into clear actions, lets you track progress, and keeps recent plans on this device.</p>
-
-      <form id="goalForm">
-        <label for="goal" class="sr-only">Your goal</label>
-        <textarea id="goal" maxlength="1000" placeholder="Example: I want to launch a personal portfolio website in 7 days..." required></textarea>
-        <div class="form-row">
-          <span id="counter">0 / 1000</span>
-          <button id="generate" type="submit">Generate workflow <span>→</span></button>
-        </div>
-      </form>
-
-      <div class="examples">
-        <span>Try:</span>
-        <button data-example="Launch a personal portfolio website in 7 days">Portfolio</button>
-        <button data-example="Start an online store in 14 days">Online store</button>
-        <button data-example="Learn JavaScript basics in 10 days">Learn JavaScript</button>
-      </div>
-    </section>
-
-    <section id="result" class="result hidden">
-      <div class="result-head">
-        <div class="result-copy">
-          <div class="eyebrow">GENERATED WORKFLOW</div>
-          <h3 id="planTitle"></h3>
-          <p id="planSummary"></p>
-          <span id="modeBadge" class="mode-badge">LOCAL DEMO</span>
-        </div>
-        <div class="progress-card">
-          <span>Progress</span>
-          <strong id="progressText">0%</strong>
-          <div class="progress"><span id="progressBar"></span></div>
-        </div>
-      </div>
-
-      <div class="stats">
-        <div><strong id="totalTasks">0</strong><span>Total tasks</span></div>
-        <div><strong id="doneTasks">0</strong><span>Completed</span></div>
-        <div><strong id="remainingTasks">0</strong><span>Remaining</span></div>
-      </div>
-
-      <div id="tasks" class="tasks"></div>
-
-      <div class="result-actions">
-        <button id="reset" class="secondary">Create another</button>
-        <button id="clearHistory" class="text-button">Clear recent plans</button>
-      </div>
-    </section>
-
-    <section id="history" class="history hidden">
-      <div class="section-heading">
+    <main class="layout">
+      <aside class="sidebar">
         <div>
-          <div class="eyebrow">RECENT PLANS</div>
-          <h3>Continue where you left off</h3>
+          <p class="eyebrow">WORKSPACE</p>
+          <nav>
+            <button class="nav-item active"><span>⌂</span> Overview</button>
+            <button class="nav-item" id="focusNav"><span>◈</span> Active workflow</button>
+            <button class="nav-item" id="historyNav"><span>↺</span> Recent plans</button>
+          </nav>
         </div>
-      </div>
-      <div id="historyList"></div>
-    </section>
+        <div class="side-card">
+          <span class="side-icon">✦</span>
+          <strong>AgentFlow V1.2</strong>
+          <p>Plan goals, break down work, and track execution from one workspace.</p>
+        </div>
+      </aside>
 
-    <p id="error" class="error hidden"></p>
-    <footer>AgentFlow AI · Hackathon MVP · Works locally without API credits</footer>
-  </main>
+      <section class="content">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">AI PLANNING WORKSPACE</p>
+            <h1>Turn a goal into a workflow.</h1>
+            <p class="hero-copy">Describe what you want to accomplish. AgentFlow turns it into an actionable plan with priorities, estimates, and progress tracking.</p>
+          </div>
+          <div class="hero-orb">✦</div>
+        </section>
+
+        <section class="planner card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">NEW PROJECT</p>
+              <h2>What do you want to accomplish?</h2>
+            </div>
+            <span class="hint">Try a goal with a deadline</span>
+          </div>
+          <div class="input-row">
+            <textarea id="goalInput" rows="3" placeholder="e.g. Build a personal portfolio website in 7 days"></textarea>
+            <button id="generateBtn" class="primary">Generate workflow <span>→</span></button>
+          </div>
+          <div class="examples">
+            <span>Examples:</span>
+            <button data-goal="Build a personal portfolio website in 7 days">Portfolio</button>
+            <button data-goal="Start an online store in 14 days">Online store</button>
+            <button data-goal="Learn JavaScript basics in 10 days">Learn JavaScript</button>
+          </div>
+          <p id="error" class="error"></p>
+        </section>
+
+        <section id="emptyState" class="empty card">
+          <div class="empty-icon">✦</div>
+          <h2>Your next project starts here.</h2>
+          <p>Generate a workflow and your active project will appear in this workspace.</p>
+        </section>
+
+        <section id="projectSection" class="hidden">
+          <div class="project-head">
+            <div>
+              <p class="eyebrow">ACTIVE WORKFLOW</p>
+              <h2 id="projectTitle">Project</h2>
+              <p id="projectSummary" class="muted"></p>
+            </div>
+            <button id="newPlanBtn" class="secondary">+ New plan</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat card"><span>Total tasks</span><strong id="totalStat">0</strong></div>
+            <div class="stat card"><span>Completed</span><strong id="completedStat">0</strong></div>
+            <div class="stat card"><span>Remaining</span><strong id="remainingStat">0</strong></div>
+            <div class="stat card"><span>Progress</span><strong id="progressStat">0%</strong></div>
+          </div>
+
+          <div class="progress-card card">
+            <div class="progress-top"><strong>Execution progress</strong><span id="progressLabel">0%</span></div>
+            <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+          </div>
+
+          <div class="workflow-grid">
+            <div>
+              <div class="section-head compact">
+                <div><p class="eyebrow">TASK PLAN</p><h2>Workflow</h2></div>
+              </div>
+              <div id="taskList" class="tasks"></div>
+            </div>
+
+            <aside class="detail-panel card">
+              <p class="eyebrow">TASK DETAIL</p>
+              <div id="detailEmpty" class="detail-empty">
+                <div class="detail-icon">◎</div>
+                <h3>Select a task</h3>
+                <p>Choose a task to see its description, priority, estimate, and next action.</p>
+              </div>
+              <div id="detailContent" class="hidden">
+                <span id="detailCategory" class="category"></span>
+                <h3 id="detailTitle"></h3>
+                <p id="detailDescription" class="detail-description"></p>
+                <div class="detail-meta">
+                  <div><span>Priority</span><strong id="detailPriority"></strong></div>
+                  <div><span>Estimate</span><strong id="detailEstimate"></strong></div>
+                </div>
+                <button id="detailComplete" class="primary full">Mark complete</button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="historySection" class="history card">
+          <div class="section-head compact">
+            <div><p class="eyebrow">RECENT PLANS</p><h2>Your projects</h2></div>
+            <button id="clearHistoryBtn" class="ghost">Clear</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </section>
+    </main>
+  </div>
   <script src="/app.js"></script>
 </body>
 </html>

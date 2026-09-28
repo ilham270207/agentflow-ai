@@ -1,18 +1,19 @@
-# AgentFlow AI
+# AgentFlow AI v1.2
 
-AgentFlow AI turns a natural-language goal into a practical, trackable workflow.
+AgentFlow AI is a planning workspace that turns natural-language goals into actionable workflows.
 
-## MVP features
-- Local planning mode with no API cost
-- Optional OpenAI integration
-- Automatic fallback to local planning when the API is unavailable or out of credits
-- 5–8 task workflow generation
-- Checklist and live progress
-- Workflow statistics
-- Recent workflow history stored in the browser
-- Responsive mobile-first UI
+## V1.2
+- Project-style dashboard
+- Task detail panel
+- Task priorities and estimates
+- Progress tracking
+- Recent project history
+- Goal examples
+- Responsive mobile UI
+- Local demo mode with optional OpenAI integration and automatic fallback
 
 ## Run locally
+
 ```bash
 npm install
 npm start
@@ -20,4 +21,6 @@ npm start
 
 Open http://127.0.0.1:3000
 
-The app works without an API key. If an API key is present but the API cannot be used, AgentFlow automatically falls back to local demo mode.
+## Environment
+
+Copy `.env.example` to `.env` if you want to enable optional OpenAI integration. Never commit `.env`.
