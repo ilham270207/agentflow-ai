@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>AgentFlow AI — Goal to Workflow</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <div class="logo">AF</div>
+        <div>
+          <h1>AgentFlow AI</h1>
+          <p>Goal → plan → progress.</p>
+        </div>
+      </a>
+      <div class="status"><i></i><span id="modeLabel">Local agent ready</span></div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">PERSONAL AI PLANNING AGENT</div>
+      <h2>Turn a goal into a workflow you can actually follow.</h2>
+      <p>Describe what you want to accomplish. AgentFlow breaks it into clear actions, lets you track progress, and keeps recent plans on this device.</p>
+
+      <form id="goalForm">
+        <label for="goal" class="sr-only">Your goal</label>
+        <textarea id="goal" maxlength="1000" placeholder="Example: I want to launch a personal portfolio website in 7 days..." required></textarea>
+        <div class="form-row">
+          <span id="counter">0 / 1000</span>
+          <button id="generate" type="submit">Generate workflow <span>→</span></button>
+        </div>
+      </form>
+
+      <div class="examples">
+        <span>Try:</span>
+        <button data-example="Launch a personal portfolio website in 7 days">Portfolio</button>
+        <button data-example="Start an online store in 14 days">Online store</button>
+        <button data-example="Learn JavaScript basics in 10 days">Learn JavaScript</button>
+      </div>
+    </section>
+
+    <section id="result" class="result hidden">
+      <div class="result-head">
+        <div class="result-copy">
+          <div class="eyebrow">GENERATED WORKFLOW</div>
+          <h3 id="planTitle"></h3>
+          <p id="planSummary"></p>
+          <span id="modeBadge" class="mode-badge">LOCAL DEMO</span>
+        </div>
+        <div class="progress-card">
+          <span>Progress</span>
+          <strong id="progressText">0%</strong>
+          <div class="progress"><span id="progressBar"></span></div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div><strong id="totalTasks">0</strong><span>Total tasks</span></div>
+        <div><strong id="doneTasks">0</strong><span>Completed</span></div>
+        <div><strong id="remainingTasks">0</strong><span>Remaining</span></div>
+      </div>
+
+      <div id="tasks" class="tasks"></div>
+
+      <div class="result-actions">
+        <button id="reset" class="secondary">Create another</button>
+        <button id="clearHistory" class="text-button">Clear recent plans</button>
+      </div>
+    </section>
+
+    <section id="history" class="history hidden">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">RECENT PLANS</div>
+          <h3>Continue where you left off</h3>
+        </div>
+      </div>
+      <div id="historyList"></div>
+    </section>
+
+    <p id="error" class="error hidden"></p>
+    <footer>AgentFlow AI · Hackathon MVP · Works locally without API credits</footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
