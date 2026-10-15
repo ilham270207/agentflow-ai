@@ -1,0 +1,121 @@
+/* Umaira layout v2 - desain orisinal */
+.sb-head { display: flex; align-items: center; justify-content: space-between; margin: 2px 2px 14px; }
+.sb-brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-size: 19px; font-weight: 600; }
+.sb-logo { width: 34px; height: 34px; border-radius: 11px; }
+.sb-collapse, .sb-reopen {
+  display: inline-grid; place-items: center; width: 38px; height: 38px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,.04); color: var(--text-soft); font-size: 17px;
+}
+.sb-collapse:hover, .sb-reopen:hover { background: rgba(160,100,255,.16); }
+.sb-reopen { display: none; position: fixed; top: 16px; left: 16px; z-index: 45; background: rgba(20,12,36,.9); }
+
+.sidebar .new-chat-btn {
+  background: rgba(255,255,255,.08) !important; border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: none !important; color: var(--text) !important; border-radius: 14px !important; min-height: 44px;
+}
+.sidebar .new-chat-btn:hover { background: rgba(255,255,255,.13) !important; filter: none; }
+.nav-group-label { text-transform: none !important; letter-spacing: 0 !important; font-size: 13px !important; color: var(--muted) !important; margin: 16px 6px 6px !important; }
+.sidebar .eyebrow { text-transform: none !important; letter-spacing: 0 !important; font-size: 13px !important; color: var(--muted) !important; }
+.nav-item.active { background: rgba(255,255,255,.09) !important; border-color: transparent !important; }
+.nav-item.active .nav-icon { color: var(--accent); }
+.sidebar-section { border-top: 1px solid var(--border); margin-top: 14px !important; padding-top: 4px; }
+.side-card { text-align: center; padding: 16px !important; background: rgba(255,255,255,.04) !important; }
+.side-card .side-icon { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.07); color: var(--accent); margin-bottom: 6px; }
+.side-card p { margin: 4px 0 12px; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+.side-card-btn {
+  width: 100%; min-height: 40px; border: 0; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,.09); color: var(--text); font-size: 13px;
+}
+.side-card-btn:hover { background: rgba(255,255,255,.15); }
+
+/* header chat */
+.chat-header { border-bottom: 0 !important; padding: 14px 18px !important; align-items: center; }
+.chat-header .eyebrow { display: none !important; }
+.chat-header h1 {
+  display: block; margin: 0; max-width: 52vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  padding: 9px 16px; font-size: 14px !important; border: 1px solid var(--border-strong); border-radius: 999px; background: rgba(255,255,255,.04);
+}
+.chat-header > div:first-child { min-width: 0; flex: 1 1 0; }
+.chat-header h1 { width: fit-content; max-width: 100% !important; }
+.chat-header-actions { display: flex; flex: 0 0 auto; gap: 8px; }
+.chat-header-actions .ghost { padding: 9px 15px !important; font-size: 13px !important; background: rgba(0,0,0,.35) !important; }
+
+/* chip */
+.umaira-chips { display: flex; gap: 8px; padding: 0 2px 10px; overflow-x: auto; scrollbar-width: none; }
+.umaira-chips::-webkit-scrollbar { display: none; }
+.umaira-chip {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap;
+  padding: 9px 16px; font-size: 13.5px; color: var(--text); border: 1px solid var(--border-strong);
+  border-radius: 999px; background: rgba(10,6,20,.7); touch-action: manipulation;
+}
+.umaira-chip:hover { background: rgba(139,77,255,.2); }
+
+/* input dua baris */
+.chat-composer {
+  display: grid !important; grid-template-columns: auto 1fr auto auto;
+  grid-template-areas: "input input input input" "plus . mic send";
+  gap: 6px 8px; border-radius: 26px !important; padding: 12px 12px 10px !important; min-height: 0 !important; align-items: center;
+}
+#chatInput { grid-area: input; width: 100%; min-height: 44px; max-height: 180px; padding: 6px 10px !important; }
+.composer-plus { grid-area: plus; width: auto !important; height: 38px !important; padding: 0 14px 0 12px !important; border-radius: 999px !important; display: inline-flex !important; align-items: center; gap: 6px; font-size: 18px; }
+.composer-plus::after { content: "Lampirkan"; font-size: 13px; }
+.composer-mic { grid-area: mic; }
+#chatSendBtn { grid-area: send; }
+
+/* kartu fitur */
+.umaira-feature-cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.umaira-suggest.umaira-feature { display: grid !important; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; padding: 14px !important; background: rgba(8,4,16,.7) !important; }
+.umaira-feature .umaira-tag { justify-self: end; padding: 5px 11px; font-size: 11.5px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--text-soft); }
+.umaira-feature strong { grid-column: 1 / -1; margin-top: 8px; }
+.umaira-feature small { grid-column: 1 / -1; }
+.umaira-empty { display: flex; flex-direction: column; justify-content: center; min-height: 100%; }
+
+/* desktop */
+@media (min-width: 761px) {
+  .topbar { display: none !important; }
+  .app-shell { min-height: 100vh; }
+  .layout { height: 100vh; min-height: 0 !important; padding: 12px; gap: 12px; grid-template-columns: 268px minmax(0,1fr); box-sizing: border-box; }
+  .sidebar {
+    margin: 0 !important; min-height: 0 !important; height: 100% !important; position: static !important; top: auto !important;
+    display: flex !important; flex-direction: column; overflow: hidden; border-radius: 26px !important; padding: 16px 14px !important;
+    background: linear-gradient(180deg, #0f0919, #08050f) !important;
+  }
+  .sidebar-top { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+  .sidebar-bottom { flex: 0 0 auto; margin-top: 10px; }
+  .chat-history-list { max-height: none !important; min-height: 0; }
+  .content {
+    height: 100% !important; min-height: 0 !important; overflow: hidden; border-radius: 26px; border: 1px solid var(--border);
+    background: radial-gradient(900px 480px at 50% -10%, rgba(139,77,255,.16), transparent 62%), rgba(10,6,20,.55) !important;
+  }
+  .chat-section, .chat-layout, .chat-main { height: 100%; min-height: 0; }
+  body.sidebar-collapsed .layout { grid-template-columns: minmax(0,1fr) !important; }
+  body.sidebar-collapsed .sb-reopen { display: inline-grid; }
+  body.sidebar-collapsed .chat-header { padding-left: 70px !important; }
+  .chat-composer-wrap { max-width: 860px; margin-left: auto !important; margin-right: auto !important; width: 100%; }
+}
+
+.nav-item { min-height: 38px !important; padding-top: 6px !important; padding-bottom: 6px !important; }
+.chat-history-list { min-height: 130px; }
+.chat-header-actions .ghost { white-space: nowrap; }
+
+/* mobile */
+@media (max-width: 760px) {
+  .sb-head { display: none; }
+  .chat-header-actions { gap: 6px; }
+  .chat-header-actions .ghost { padding: 8px 12px !important; font-size: 12px !important; }
+  .chat-header h1 { font-size: 13px !important; padding: 8px 12px; }
+  .umaira-feature small { display: none; }
+  .umaira-suggest.umaira-feature { grid-template-columns: auto 1fr auto; gap: 4px 12px; padding: 10px 12px !important; }
+  .umaira-feature .umaira-suggest-icon { grid-column: 1; grid-row: 1; }
+  .umaira-feature strong { grid-column: 2 !important; grid-row: 1; margin: 0 !important; }
+  .umaira-feature .umaira-tag { grid-column: 3; grid-row: 1; }
+  .umaira-cards { gap: 8px; }
+  .umaira-feature-cards { grid-template-columns: 1fr; }
+  .umaira-suggest.umaira-feature { padding: 12px 14px !important; }
+  .umaira-feature strong { margin-top: 2px; }
+  .chat-header { padding: 12px 14px !important; }
+  .chat-header h1 { max-width: 44vw; }
+  .chat-composer { padding: 10px 10px 8px !important; border-radius: 22px !important; }
+  .chat-composer-wrap { padding-left: 0; padding-right: 0; }
+  .umaira-chips { padding-bottom: 8px; }
+}

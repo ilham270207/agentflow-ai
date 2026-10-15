@@ -1,0 +1,18 @@
+.ai-row{display:flex;align-items:flex-start;gap:12px}
+.ai-row>.ai-body{flex:1;min-width:0;line-height:1.6}
+.robot{flex-shrink:0;animation:rb-float 3s ease-in-out infinite}
+@keyframes rb-float{50%{transform:translateY(-3px)}}
+.robot .antenna{animation:rb-blink 1.4s infinite}
+@keyframes rb-blink{50%{opacity:.3}}
+.robot .eyes,.robot .mouth{transition:transform .35s ease,d .35s ease}
+.robot .eye{transform-box:fill-box;transform-origin:center;animation:rb-eye 4s infinite}
+@keyframes rb-eye{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.robot svg{transition:transform .35s}
+.robot[data-state="thinking"] svg{transform:rotate(-6deg)}
+.robot[data-state="thinking"] .eyes{transform:translate(3px,-5px)}
+.robot[data-state="thinking"] .mouth{d:path("M26 38 Q32 36 38 38")}
+.robot[data-state="thinking"] .eye{animation:none}
+.robot[data-state="responding"] .eyes{transform:translate(0,-1px)}
+.robot[data-state="responding"] .mouth{d:path("M24 35 Q32 44 40 35")}
+.ai-body.thinking::after{content:"●●●";letter-spacing:3px;font-size:10px;color:#6b7cff;animation:rb-dots 1.2s infinite}
+@keyframes rb-dots{0%,100%{opacity:.2}50%{opacity:1}}

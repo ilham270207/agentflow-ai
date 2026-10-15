@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Masuk · Umaira AI</title>
+<link rel="icon" href="/assets/umaira-logo-gradient.svg" type="image/svg+xml">
+<style>
+:root{--bg:#07050f;--card:rgba(22,15,44,.78);--line:rgba(167,139,250,.22);--text:#f5f3ff;--muted:#a79fc4;--accent:#8b5cf6;--danger:#fca5a5}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);display:grid;place-items:center;min-height:100vh;padding:24px 16px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 50% 0%,rgba(124,58,237,.35),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.12),transparent 70%)}
+.card{position:relative;width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 24px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:22px;text-align:center}
+.brand img{width:56px;height:56px;filter:drop-shadow(0 0 14px rgba(124,58,237,.55))}
+h1{margin:0;font-size:22px;font-weight:600}
+.sub{margin:0;color:var(--muted);font-size:14px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:18px}
+.tab{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;padding:9px;border-radius:9px;cursor:pointer}
+.tab[aria-selected="true"]{background:rgba(139,92,246,.28);color:var(--text)}
+#googleWrap{display:flex;justify-content:center;min-height:44px}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:16px 0}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+.field{margin-bottom:14px}
+input{width:100%;background:rgba(10,7,22,.7);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-size:16px;padding:12px 14px;outline:none}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+.pw{position:relative}
+.pw input{padding-right:78px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--muted);font:inherit;font-size:13px;padding:8px 10px;cursor:pointer;border-radius:8px}
+.primary{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#8b5cf6,#6d28d9);cursor:pointer}
+.primary:disabled{opacity:.6;cursor:default}
+.error{min-height:20px;margin:12px 0 0;color:var(--danger);font-size:13px;text-align:center}
+.foot{margin:14px 0 0;color:var(--muted);font-size:12px;text-align:center}
+[hidden]{display:none!important}
+</style>
+<script>(function(){try{var p=localStorage.getItem("umaira-theme-preference")||"light";var d=p==="dark"||p==="gelap"||((p==="system"||p==="sistem"||p==="auto")&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-uui",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-uui","light");}})();</script>
+<link rel="stylesheet" href="/login-theme.css">
+</head>
+<body>
+<main class="card">
+  <div class="brand">
+    <img src="/assets/umaira-logo-gradient.svg" alt="Umaira" width="56" height="56">
+    <h1 id="title">Selamat datang kembali</h1>
+    <p class="sub" id="subtitle">Masuk untuk melanjutkan obrolan Anda</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab" role="tab" data-mode="login" aria-selected="true">Masuk</button>
+    <button type="button" class="tab" role="tab" data-mode="register" aria-selected="false">Daftar</button>
+  </div>
+
+  <div id="googleSection">
+    <div id="googleWrap"><div id="googleBtn"></div></div>
+    <div class="divider">atau</div>
+  </div>
+
+  <form id="authForm" novalidate>
+    <div class="field" id="nameField" hidden>
+      <label for="name">Nama</label>
+      <input id="name" type="text" autocomplete="name" maxlength="60" placeholder="Nama Anda">
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" inputmode="email" placeholder="nama@email.com">
+    </div>
+    <div class="field">
+      <label for="password">Kata sandi</label>
+      <div class="pw">
+        <input id="password" type="password" autocomplete="current-password" maxlength="128" placeholder="Minimal 8 karakter">
+        <button type="button" id="togglePw" aria-label="Tampilkan kata sandi">Lihat</button>
+      </div>
+    </div>
+    <button class="primary" id="submitBtn" type="submit">Masuk</button>
+    <p class="error" id="error" role="alert" aria-live="polite"></p>
+  </form>
+  <p class="foot">Obrolan dan galeri Anda tersimpan terpisah untuk setiap akun.</p>
+</main>
+
+<script>
+(function () {
+  var mode = "login";
+  var $ = function (id) { return document.getElementById(id); };
+  var tabs = document.querySelectorAll(".tab");
+
+  function setError(msg) { $("error").textContent = msg || ""; }
+  function busy(on) {
+    $("submitBtn").disabled = on;
+    $("submitBtn").textContent = on ? "Memproses..." : (mode === "register" ? "Daftar" : "Masuk");
+  }
+  function goChat() { location.replace("/"); }
+
+  function setMode(m) {
+    mode = m;
+    tabs.forEach(function (t) { t.setAttribute("aria-selected", String(t.getAttribute("data-mode") === m)); });
+    $("nameField").hidden = m !== "register";
+    $("title").textContent = m === "register" ? "Buat akun Umaira" : "Selamat datang kembali";
+    $("subtitle").textContent = m === "register" ? "Daftar untuk mulai mengobrol dengan Umaira" : "Masuk untuk melanjutkan obrolan Anda";
+    $("password").setAttribute("autocomplete", m === "register" ? "new-password" : "current-password");
+    $("submitBtn").textContent = m === "register" ? "Daftar" : "Masuk";
+    setError("");
+  }
+  tabs.forEach(function (t) { t.addEventListener("click", function () { setMode(t.getAttribute("data-mode")); }); });
+
+  $("togglePw").addEventListener("click", function () {
+    var show = $("password").type === "password";
+    $("password").type = show ? "text" : "password";
+    this.textContent = show ? "Sembunyikan" : "Lihat";
+    this.setAttribute("aria-label", show ? "Sembunyikan kata sandi" : "Tampilkan kata sandi");
+  });
+
+  function post(url, body) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) {
+        if (!r.ok) throw new Error(d.error || "Terjadi kesalahan. Coba lagi.");
+        return d;
+      });
+    });
+  }
+
+  $("authForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    setError("");
+    var name = $("name").value.trim();
+    var email = $("email").value.trim();
+    var password = $("password").value;
+    if (mode === "register" && !name) return setError("Nama wajib diisi.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setError("Format email belum benar.");
+    if (password.length < 8 || password.length > 128) return setError("Kata sandi harus 8–128 karakter.");
+    busy(true);
+    var body = mode === "register" ? { name: name, email: email, password: password } : { email: email, password: password };
+    post("/api/auth/" + mode, body).then(goChat).catch(function (err) {
+      setError(err.message);
+      busy(false);
+    });
+  });
+
+  function onCredential(resp) {
+    setError("");
+    busy(true);
+    post("/api/auth/google", { credential: resp.credential }).then(goChat).catch(function (err) {
+      setError(err.message);
+      busy(false);
+    });
+  }
+
+  function initGoogle() {
+    fetch("/api/auth/google/config", { credentials: "same-origin" })
+      .then(function (r) { return r.json(); })
+      .then(function (cfg) {
+        if (!cfg.clientId) throw new Error("no client");
+        return new Promise(function (ok, no) {
+          var s = document.createElement("script");
+          s.src = "https://accounts.google.com/gsi/client";
+          s.async = true;
+          s.onload = ok;
+          s.onerror = no;
+          document.head.appendChild(s);
+        }).then(function () {
+          google.accounts.id.initialize({ client_id: cfg.clientId, callback: onCredential });
+          google.accounts.id.renderButton($("googleBtn"), {
+            theme: (document.documentElement.getAttribute("data-uui") === "dark" ? "filled_black" : "outline"), size: "large", shape: "pill", text: "continue_with",
+            width: Math.min(320, $("googleWrap").clientWidth || 320)
+          });
+        });
+      })
+      .catch(function () { $("googleSection").hidden = true; });
+  }
+  initGoogle();
+
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.user) goChat(); })
+      .catch(function () {});
+  });
+})();
+</script>
+</body>
+</html>

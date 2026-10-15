@@ -1,0 +1,346 @@
+import express from "express";
+import crypto from "node:crypto";
+import { promisify } from "node:util";
+import fs from "node:fs/promises";
+import path from "node:path";
+import * as fsSync from "node:fs";
+import { OAuth2Client } from "google-auth-library";
+
+const router = express.Router();
+
+// ===== UMAIRA RATE LIMIT =====
+const rlStore = new Map();
+function rlGuard(name, max, windowMs, countAll) {
+  return (req, res, next) => {
+    if (req.method !== "POST") return next();
+    const key = name + "|" + (req.ip || (req.socket && req.socket.remoteAddress) || "?");
+    const now = Date.now();
+    let e = rlStore.get(key);
+    if (!e || e.reset < now) { e = { n: 0, reset: now + windowMs }; rlStore.set(key, e); }
+    if (e.n >= max) {
+      res.setHeader("Retry-After", String(Math.ceil((e.reset - now) / 1000)));
+      return res.status(429).json({ error: "Terlalu banyak percobaan. Coba lagi beberapa menit lagi." });
+    }
+    e.n++;
+    res.on("finish", () => { if (!countAll && res.statusCode < 400) e.n = Math.max(0, e.n - 1); });
+    next();
+  };
+}
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of rlStore) if (v.reset < now) rlStore.delete(k);
+}, 10 * 60 * 1000).unref();
+router.use("/login", rlGuard("login", 8, 15 * 60 * 1000, false));
+router.use("/register", rlGuard("register", 5, 60 * 60 * 1000, true));
+router.use("/google", rlGuard("google", 20, 15 * 60 * 1000, false));
+
+
+// ===== UMAIRA AUTH HARDENING =====
+const rateBuckets = new Map();
+function rateHit(key, max, windowMs) {
+  const now = Date.now();
+  const b = rateBuckets.get(key);
+  if (!b || b.reset < now) {
+    rateBuckets.set(key, { n: 1, reset: now + windowMs });
+    return true;
+  }
+  b.n += 1;
+  return b.n <= max;
+}
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, b] of rateBuckets) if (b.reset < now) rateBuckets.delete(k);
+}, 10 * 60 * 1000).unref();
+
+const AUTH_LIMITS = {
+  "/login": [10, 10 * 60 * 1000],
+  "/register": [5, 60 * 60 * 1000],
+  "/google": [20, 10 * 60 * 1000]
+};
+function authLimiter(req, res, next) {
+  if (req.method !== "POST") return next();
+  const rule = AUTH_LIMITS[req.path];
+  if (!rule) return next();
+  const ip = req.ip || (req.socket && req.socket.remoteAddress) || "x";
+  const tooMany = () => res.status(429).json({
+    error: "Terlalu banyak percobaan. Coba lagi beberapa menit lagi."
+  });
+  if (!rateHit(ip + req.path, rule[0], rule[1])) return tooMany();
+  const email = String((req.body && req.body.email) || "").trim().toLowerCase();
+  if (req.path === "/login" && email && !rateHit("email:" + email, 15, 15 * 60 * 1000)) return tooMany();
+  next();
+}
+router.use(authLimiter);
+
+const scrypt = promisify(crypto.scrypt);
+const dataDir = path.join(process.cwd(), "data");
+const usersFile = path.join(dataDir, "umaira-users.json");
+const SESSIONS_FILE = path.join(dataDir, "umaira-sessions.json");
+const sessionKey = (token) => crypto.createHash("sha256").update(String(token)).digest("hex");
+const sessions = (() => {
+  const map = new Map();
+  try {
+    const raw = JSON.parse(fsSync.readFileSync(SESSIONS_FILE, "utf8"));
+    const now = Date.now();
+    for (const [k, v] of Object.entries(raw)) {
+      if (v && v.expires > now) map.set(k, v);
+    }
+  } catch {}
+  let timer = null;
+  function persist() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        fsSync.mkdirSync(dataDir, { recursive: true, mode: 0o700 });
+        const tmp = SESSIONS_FILE + ".tmp";
+        fsSync.writeFileSync(tmp, JSON.stringify(Object.fromEntries(map)), { mode: 0o600 });
+        fsSync.renameSync(tmp, SESSIONS_FILE);
+      } catch (err) {
+        console.error("Gagal menyimpan sesi:", err.message);
+      }
+    }, 500);
+  }
+  setInterval(() => {
+    const now = Date.now();
+    let changed = false;
+    for (const [k, v] of map) {
+      if (v.expires < now) { map.delete(k); changed = true; }
+    }
+    if (changed) persist();
+  }, 60 * 60 * 1000).unref();
+  return {
+    get: (token) => map.get(sessionKey(token)),
+    set: (token, value) => { map.set(sessionKey(token), value); persist(); },
+    delete: (token) => { if (map.delete(sessionKey(token))) persist(); },
+    deleteByUser: (userId) => {
+      let changed = false;
+      for (const [k, v] of map) {
+        if (v.userId === userId) { map.delete(k); changed = true; }
+      }
+      if (changed) persist();
+    }
+  };
+})();
+const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ||
+  "139250142631-4coe0opo9ie1616h45j27125uqdsduek.apps.googleusercontent.com";
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+async function readUsers() {
+  try {
+    return JSON.parse(await fs.readFile(usersFile, "utf8"));
+  } catch (err) {
+    if (err.code === "ENOENT") return [];
+    throw err;
+  }
+}
+
+async function saveUsers(users) {
+  await fs.mkdir(dataDir, { recursive: true, mode: 0o700 });
+  const temp = usersFile + ".tmp";
+  await fs.writeFile(temp, JSON.stringify(users, null, 2), { mode: 0o600 });
+  await fs.rename(temp, usersFile);
+  await fs.chmod(usersFile, 0o600);
+}
+
+async function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
+  const hash = await scrypt(password, salt, 64);
+  return { salt, hash: hash.toString("hex") };
+}
+
+async function verifyPassword(password, user) {
+  const actual = await scrypt(password, user.salt, 64);
+  const expected = Buffer.from(user.hash, "hex");
+  return actual.length === expected.length &&
+    crypto.timingSafeEqual(actual, expected);
+}
+
+function cookieToken(req) {
+  const entry = (req.headers.cookie || "").split(";")
+    .map(v => v.trim()).find(v => v.startsWith("umaira_session="));
+  return entry ? decodeURIComponent(entry.slice("umaira_session=".length)) : "";
+}
+
+function setCookie(res, token, maxAge) {
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  res.setHeader("Set-Cookie",
+    `umaira_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`);
+}
+
+async function currentUser(req) {
+  const token = cookieToken(req);
+  const session = sessions.get(token);
+  if (!session || session.expires < Date.now()) {
+    sessions.delete(token);
+    return null;
+  }
+  const user = (await readUsers()).find(u => u.id === session.userId);
+  return user ? { id: user.id, name: user.name, email: user.email } : null;
+}
+
+router.get("/me", async (req, res) => {
+  try {
+    res.json({ user: await currentUser(req) });
+  } catch {
+    res.status(500).json({ error: "Gagal membaca status akun." });
+  }
+});
+
+router.post("/register", async (req, res) => {
+  try {
+    const name = String(req.body?.name || "").trim().slice(0, 60);
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    const password = String(req.body?.password || "");
+    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "Nama atau email tidak valid." });
+    }
+    if (password.length < 8 || password.length > 128) {
+      return res.status(400).json({ error: "Kata sandi harus 8–128 karakter." });
+    }
+    const users = await readUsers();
+    if (users.some(u => u.email === email)) {
+      return res.status(409).json({ error: "Email sudah terdaftar." });
+    }
+    const { salt, hash } = await hashPassword(password);
+    const user = { id: crypto.randomUUID(), name, email, salt, hash };
+    users.push(user);
+    await saveUsers(users);
+    const token = crypto.randomBytes(32).toString("hex");
+    sessions.set(token, { userId: user.id, expires: Date.now() + SESSION_MS });
+    setCookie(res, token, SESSION_MS / 1000);
+    res.status(201).json({ user: { id: user.id, name, email } });
+  } catch {
+    res.status(500).json({ error: "Pendaftaran gagal. Periksa penyimpanan server." });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    const password = String(req.body?.password || "");
+    const user = (await readUsers()).find(u => u.email === email);
+    if (!user || !user.salt || !user.hash || !(await verifyPassword(password, user))) {
+      return res.status(401).json({ error: "Email atau kata sandi salah." });
+    }
+    const token = crypto.randomBytes(32).toString("hex");
+    sessions.set(token, { userId: user.id, expires: Date.now() + SESSION_MS });
+    setCookie(res, token, SESSION_MS / 1000);
+    res.json({ user: { id: user.id, name: user.name, email: user.email } });
+  } catch {
+    res.status(500).json({ error: "Login gagal. Coba lagi." });
+  }
+});
+
+
+router.get("/google/config", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ clientId: GOOGLE_CLIENT_ID });
+});
+
+router.post("/google", async (req, res) => {
+  try {
+    const credential = String(req.body?.credential || "");
+    if (!credential || credential.length > 12000) {
+      return res.status(400).json({ error: "Kredensial Google tidak valid." });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: GOOGLE_CLIENT_ID
+    });
+    const payload = ticket.getPayload();
+
+    if (!payload?.sub || !payload.email || payload.email_verified !== true) {
+      return res.status(401).json({
+        error: "Email Google belum terverifikasi."
+      });
+    }
+
+    const email = payload.email.trim().toLowerCase();
+    const googleSub = payload.sub;
+    const users = await readUsers();
+    let user = users.find(u => u.googleSub === googleSub);
+
+    if (!user) {
+      user = users.find(u => u.email === email);
+
+      if (user) {
+        if (user.googleSub && user.googleSub !== googleSub) {
+          return res.status(409).json({
+            error: "Email ini sudah terhubung ke akun Google lain."
+          });
+        }
+        user.googleSub = googleSub;
+        if (user.hash) {
+          delete user.hash;
+          delete user.salt;
+          sessions.deleteByUser(user.id);
+        }
+        if (!user.name && payload.name) {
+          user.name = String(payload.name).trim().slice(0, 60);
+        }
+      } else {
+        user = {
+          id: crypto.randomUUID(),
+          name: String(payload.name || email.split("@")[0]).trim().slice(0, 60),
+          email,
+          googleSub
+        };
+        users.push(user);
+      }
+
+      await saveUsers(users);
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    sessions.set(token, {
+      userId: user.id,
+      expires: Date.now() + SESSION_MS
+    });
+    setCookie(res, token, SESSION_MS / 1000);
+
+    res.json({
+      user: { id: user.id, name: user.name, email: user.email }
+    });
+  } catch (err) {
+    console.error("Google sign-in verification failed:", err.message);
+    res.status(401).json({
+      error: "Login Google gagal diverifikasi. Silakan coba lagi."
+    });
+  }
+});
+
+router.post("/logout", (req, res) => {
+  sessions.delete(cookieToken(req));
+  setCookie(res, "", 0);
+  res.json({ success: true });
+});
+
+export { router as authRouter };
+
+export { currentUser };
+
+export async function requireAuth(req, res, next) {
+  try {
+    const user = await currentUser(req);
+    if (!user) {
+      return res.status(401).json({ error: "Silakan login terlebih dahulu.", login: true });
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error("requireAuth error:", err.message);
+    res.status(500).json({ error: "Gagal memeriksa sesi." });
+  }
+}
+
+export function originGuard(req, res, next) {
+  if (req.method === "GET" || req.method === "HEAD" || req.method === "OPTIONS") return next();
+  const origin = req.headers.origin;
+  if (!origin) return next();
+  try {
+    const allowed = (process.env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean);
+    if (new URL(origin).host === req.headers.host || allowed.includes(origin)) return next();
+  } catch {}
+  return res.status(403).json({ error: "Asal permintaan tidak diizinkan." });
+}

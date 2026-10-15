@@ -1,140 +1,228 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AgentFlow AI — Planning Workspace</title>
-  <meta name="description" content="Turn goals into actionable workflows with AgentFlow AI.">
-  <link rel="stylesheet" href="/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Umaira AI — your personal AI assistant.">
+  <meta name="theme-color" content="#f7f5fc">
+  <title>Umaira AI</title>
+  <link rel="stylesheet" href="style.css?v=1792007985096">
+  <link rel="stylesheet" href="umaira-theme.css?v=1791959019">
+  <link rel="stylesheet" href="umaira-layout.css?v=1791959019">
+  <link rel="stylesheet" href="umaira-glass-override.css?v=20261014T162358Z">
+  <link rel="stylesheet" href="umaira-ui.css?v=mv8wnumc">
 </head>
+
 <body>
   <div class="app-shell">
+    <button type="button" id="sidebarReopenBtn" class="sb-reopen" aria-label="Buka sidebar">☰</button>
+
     <header class="topbar">
-      <a class="brand" href="/">
-        <span class="brand-mark">✦</span>
-        <span>AgentFlow <b>AI</b></span>
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Buka/tutup sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="#" aria-label="Umaira AI">
+        <img
+          src="assets/umaira-topbar-gradient.svg?v=20261015-gradient2"
+          alt=""
+          class="brand-mark umaira-logo"
+          width="38"
+          height="38"
+        >
+        <span>Umaira <b>AI</b></span>
       </a>
+
       <div class="top-actions">
-        <span id="modeBadge" class="badge">LOCAL DEMO</span>
-        <button id="resetBtn" class="ghost">Reset</button>
+        
       </div>
     </header>
 
-    <main class="layout">
+    <div class="layout">
+
+      <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
       <aside class="sidebar">
-        <div>
-          <p class="eyebrow">WORKSPACE</p>
-          <nav>
-            <button class="nav-item active"><span>⌂</span> Overview</button>
-            <button class="nav-item" id="focusNav"><span>◈</span> Active workflow</button>
-            <button class="nav-item" id="historyNav"><span>↺</span> Recent plans</button>
+        <div class="sidebar-top">
+
+          <div class="sb-head"><a class="sb-brand" href="#" aria-label="Umaira AI"><img src="assets/umaira-logo.svg?v=umaira-20261015-055713" alt="" class="sb-logo" width="34" height="34"><span>Umaira</span></a><button type="button" id="sidebarCollapseBtn" class="sb-collapse" aria-label="Ciutkan sidebar" title="Ciutkan sidebar">◧</button></div>
+          <button id="newChatBtn" class="new-chat-btn">
+            <span>＋</span>
+            <span>Obrolan baru</span>
+          </button>
+
+          <nav class="primary-nav" aria-label="Navigasi Umaira">
+            <p class="nav-group-label">Fitur</p>
+            <button class="nav-item active" type="button" data-view="chat" aria-current="page"><span class="nav-icon">◈</span><span>Obrolan</span></button>
+            <button class="nav-item" type="button" id="navArchiveBtn"><span class="nav-icon">▣</span><span>Arsip</span></button>
+            <button class="nav-item" type="button" data-view="library"><span class="nav-icon">▤</span><span>Pustaka</span></button>
+            <button class="nav-item" type="button" data-view="scheduled"><span class="nav-icon">◷</span><span>Terjadwal</span></button>
+            <p class="nav-group-label">Workspace</p>
+            <button class="nav-item" type="button" data-view="images"><span class="nav-icon">▧</span><span>Gambar AI</span></button>
+            <button class="nav-item" type="button" data-view="plugins"><span class="nav-icon">⧉</span><span>Plugin</span></button>
+            <button class="nav-item" type="button" data-view="projects"><span class="nav-icon">▣</span><span>Proyek</span></button>
+            <button class="nav-item" type="button" data-view="codex"><span class="nav-icon">{ }</span><span>Codex</span></button>
           </nav>
+
+          <div class="sidebar-section">
+            <p class="eyebrow">Riwayat</p>
+            <input id="chatSearchInput" class="chat-search" type="search" placeholder="Cari obrolan..." autocomplete="off" aria-label="Cari obrolan">
+            <div id="chatHistoryList" class="chat-history-list"></div>
+          </div>
+
         </div>
-        <div class="side-card">
-          <span class="side-icon">✦</span>
-          <strong>AgentFlow V1.2</strong>
-          <p>Plan goals, break down work, and track execution from one workspace.</p>
+
+        <div class="sidebar-settings">
+          <button class="nav-item" type="button" id="navSettingsBtn" aria-label="Buka pengaturan">
+            <span class="nav-icon">⚙</span><span>Pengaturan</span>
+          </button>
+          <button class="nav-item" type="button" id="navLoginBtn" aria-label="Login atau akun">
+            <span class="nav-icon">♙</span><span id="navAccountLabel">Login / Akun</span>
+          </button>
+        </div>
+
+        <div class="sidebar-bottom">
+          <div class="side-card"><span class="side-icon">✦</span><strong>Jelajahi Umaira</strong><p>Gambar AI, pustaka, dan asisten kode di satu tempat.</p><button type="button" class="side-card-btn" data-view-goto="images">Coba Gambar AI</button></div>
         </div>
       </aside>
 
-      <section class="content">
-        <section class="hero">
-          <div>
-            <p class="eyebrow">AI PLANNING WORKSPACE</p>
-            <h1>Turn a goal into a workflow.</h1>
-            <p class="hero-copy">Describe what you want to accomplish. AgentFlow turns it into an actionable plan with priorities, estimates, and progress tracking.</p>
-          </div>
-          <div class="hero-orb">✦</div>
-        </section>
+      <main class="content">
 
-        <section class="planner card">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">NEW PROJECT</p>
-              <h2>What do you want to accomplish?</h2>
-            </div>
-            <span class="hint">Try a goal with a deadline</span>
-          </div>
-          <div class="input-row">
-            <textarea id="goalInput" rows="3" placeholder="e.g. Build a personal portfolio website in 7 days"></textarea>
-            <button id="generateBtn" class="primary">Generate workflow <span>→</span></button>
-          </div>
-          <div class="examples">
-            <span>Examples:</span>
-            <button data-goal="Build a personal portfolio website in 7 days">Portfolio</button>
-            <button data-goal="Start an online store in 14 days">Online store</button>
-            <button data-goal="Learn JavaScript basics in 10 days">Learn JavaScript</button>
-          </div>
-          <p id="error" class="error"></p>
-        </section>
+        <section id="chatSection" class="chat-section">
 
-        <section id="emptyState" class="empty card">
-          <div class="empty-icon">✦</div>
-          <h2>Your next project starts here.</h2>
-          <p>Generate a workflow and your active project will appear in this workspace.</p>
-        </section>
+          <div class="chat-layout">
 
-        <section id="projectSection" class="hidden">
-          <div class="project-head">
-            <div>
-              <p class="eyebrow">ACTIVE WORKFLOW</p>
-              <h2 id="projectTitle">Project</h2>
-              <p id="projectSummary" class="muted"></p>
-            </div>
-            <button id="newPlanBtn" class="secondary">+ New plan</button>
-          </div>
+            <section class="chat-main">
 
-          <div class="stats">
-            <div class="stat card"><span>Total tasks</span><strong id="totalStat">0</strong></div>
-            <div class="stat card"><span>Completed</span><strong id="completedStat">0</strong></div>
-            <div class="stat card"><span>Remaining</span><strong id="remainingStat">0</strong></div>
-            <div class="stat card"><span>Progress</span><strong id="progressStat">0%</strong></div>
-          </div>
-
-          <div class="progress-card card">
-            <div class="progress-top"><strong>Execution progress</strong><span id="progressLabel">0%</span></div>
-            <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-          </div>
-
-          <div class="workflow-grid">
-            <div>
-              <div class="section-head compact">
-                <div><p class="eyebrow">TASK PLAN</p><h2>Workflow</h2></div>
-              </div>
-              <div id="taskList" class="tasks"></div>
-            </div>
-
-            <aside class="detail-panel card">
-              <p class="eyebrow">TASK DETAIL</p>
-              <div id="detailEmpty" class="detail-empty">
-                <div class="detail-icon">◎</div>
-                <h3>Select a task</h3>
-                <p>Choose a task to see its description, priority, estimate, and next action.</p>
-              </div>
-              <div id="detailContent" class="hidden">
-                <span id="detailCategory" class="category"></span>
-                <h3 id="detailTitle"></h3>
-                <p id="detailDescription" class="detail-description"></p>
-                <div class="detail-meta">
-                  <div><span>Priority</span><strong id="detailPriority"></strong></div>
-                  <div><span>Estimate</span><strong id="detailEstimate"></strong></div>
+              <div class="chat-header">
+                <div>
+                  <p class="eyebrow">UMAIRA AI</p>
+                  <h1 id="chatTitle">New conversation</h1>
                 </div>
-                <button id="detailComplete" class="primary full">Mark complete</button>
+
+                <div class="chat-header-actions"><button id="exportChatBtn" class="ghost" type="button">Ekspor ↥</button>
+<button id="chatHeaderMenuBtn" class="ghost chat-header-menu-btn"
+  type="button" aria-label="Menu obrolan" aria-haspopup="true"
+  aria-expanded="false" title="Menu obrolan">⋯</button>
+<div id="chatHeaderMenu" class="chat-header-menu" hidden>
+  <button type="button" data-header-action="rename">✎ Ganti nama obrolan</button>
+  <button type="button" data-header-action="share">↗ Bagikan obrolan</button>
+  <button type="button" data-header-action="files">▧ Lihat file di obrolan</button>
+  <button type="button" data-header-action="pin">⌖ Sematkan obrolan</button>
+  <button type="button" data-header-action="archive">▣ Arsipkan obrolan</button>
+  <button type="button" data-header-action="clear">⌫ Bersihkan pesan obrolan</button>
+  <button type="button" class="danger" data-header-action="delete">Hapus obrolan</button>
+</div></div>
               </div>
-            </aside>
+
+              <div id="chatMessages" class="chat-messages">
+
+                <div class="chat-empty umaira-empty"><div class="umaira-orb" aria-hidden="true"><img src="assets/umaira-logo.svg?v=umaira-20261015-055713" alt="" width="84" height="84"></div><h2>Selamat datang di Umaira AI ✨</h2><p>Aku siap menemanimu hari ini—mulai dari mencari ide, belajar hal baru, menyelesaikan pekerjaan, hingga membangun proyek impianmu.</p><p>Mau kita mulai dari mana hari ini?</p></div>
+
+              </div>
+
+              <div class="chat-composer-wrap">
+
+                <div class="umaira-chips"><button type="button" class="umaira-chip" data-view-goto="images"><svg class="umaira-chip-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m4.5 17 5-5 3.5 3 2.5-2 4 4"/></svg><span>Buat gambar</span></button><button type="button" class="umaira-chip" data-prompt="Bantu saya brainstorming ide untuk ..."><svg class="umaira-chip-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M8.5 14.5a6 6 0 1 1 7 0c-.9.7-1.5 1.6-1.5 2.5h-4c0-.9-.6-1.8-1.5-2.5Z"/></svg><span>Brainstorm</span></button><button type="button" class="umaira-chip" data-prompt="Buatkan rencana langkah demi langkah untuk ..."><svg class="umaira-chip-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 3.5v-1h6v1M8.5 9h7M8.5 13h7M8.5 17h4"/></svg><span>Buat rencana</span></button></div>
+                <div id="composerMenu" class="composer-menu" hidden>
+                  <button type="button" class="composer-menu-item" id="composerCameraBtn">
+                    <span class="composer-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h3l1.5-2h3L15 7h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+                    <span>
+                      <strong>Kamera</strong>
+                      <small>Ambil foto langsung</small>
+                    </span>
+                  </button>
+
+                  <button type="button" class="composer-menu-item" id="composerImageBtn">
+                    <span class="composer-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m4 17 5-5 4 3 3-3 4 4"/></svg></span>
+                    <span>
+                      <strong>Foto & Gambar</strong>
+                      <small>Pilih gambar dari perangkat</small>
+                    </span>
+                  </button>
+
+                  <button type="button" class="composer-menu-item" id="composerFileBtn">
+                    <span class="composer-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 13h8M8 17h8"/></svg></span>
+                    <span>
+                      <strong>File</strong>
+                      <small>Pilih dokumen atau file</small>
+                    </span>
+                  </button>
+
+                  <button type="button" class="composer-menu-item" id="composerAttachmentBtn">
+                    <span class="composer-menu-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12.5 6.7-6.7a4 4 0 0 1 5.6 5.6l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2"/></svg></span>
+                    <span>
+                      <strong>Lampiran</strong>
+                      <small>Tambahkan lampiran</small>
+                    </span>
+                  </button>
+                </div>
+
+                <div id="composerAttachments" class="composer-attachments"></div>
+                <div id="chatProjectIndicator" class="chat-project-indicator" hidden></div>
+
+                <div class="chat-composer">
+
+                  <button
+                    id="composerPlusBtn"
+                    class="composer-plus"
+                    type="button"
+                    aria-label="Buka fitur Umaira"
+                    aria-expanded="false"
+                  >+</button>
+
+                  <textarea
+                    id="chatInput"
+                    rows="1"
+                    placeholder="Tanyakan apa saja..."
+                    autocomplete="off"
+                  ></textarea>
+
+                  <button
+      id="composerMicBtn"
+      class="composer-mic"
+      type="button"
+      aria-label="Voice input"
+      aria-pressed="false"
+    >🎙️</button>
+
+    <button id="chatSendBtn" class="primary" type="button" aria-label="Send message">
+                    <span>↑</span>
+                  </button>
+
+                </div>
+
+                <input id="composerCameraInput" type="file" accept="image/*" capture="environment" hidden>
+                <input id="composerImageInput" type="file" accept="image/*" multiple hidden>
+                <input id="composerFileInput" type="file" multiple hidden>
+                <input id="composerAttachmentInput" type="file" multiple hidden>
+
+              </div>
+
+              <p class="composer-note">
+                Umaira AI can make mistakes. Check important information.
+              </p>
+
+            </section>
+
           </div>
+
         </section>
 
-        <section id="historySection" class="history card">
-          <div class="section-head compact">
-            <div><p class="eyebrow">RECENT PLANS</p><h2>Your projects</h2></div>
-            <button id="clearHistoryBtn" class="ghost">Clear</button>
+        <section id="featureWorkspace" class="feature-workspace" hidden aria-live="polite">
+          <div class="feature-page-header">
+            <span id="featureEyebrow" class="eyebrow">UMAIRA WORKSPACE</span>
+            <h1 id="featureTitle">Workspace</h1>
+            <p id="featureDescription"></p>
           </div>
-          <div id="historyList" class="history-list"></div>
+          <div id="featurePageContent" class="feature-page-content"></div>
         </section>
-      </section>
-    </main>
+
+      </main>
+
+    </div>
+
   </div>
-  <script src="/app.js"></script>
+
+  <script src="sidebar-controls.js?v=1791959019" defer></script>
+  <script src="umaira-theme.js?v=1791959019" defer></script>
+  <script src="app.js?v=1792005325224" defer></script>
+  <script src="umaira-ui.js?v=mv8wnumc" defer></script>
 </body>
 </html>

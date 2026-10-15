@@ -1,0 +1,938 @@
+/* UMAIRA GLASS OVERRIDE — light lavender */
+:root {
+  color-scheme: light !important;
+  --bg: #f7f5fc !important;
+  --bg-soft: #f1edf9 !important;
+  --panel: rgba(255,255,255,.76) !important;
+  --panel-soft: rgba(255,255,255,.86) !important;
+  --panel-hover: rgba(235,226,250,.92) !important;
+  --border: rgba(135,104,190,.16) !important;
+  --border-strong: rgba(135,104,190,.27) !important;
+  --text: #292238 !important;
+  --text-soft: #49405b !important;
+  --muted: #766b89 !important;
+  --muted-2: #9589a8 !important;
+  --accent: #8d6bc1 !important;
+  --accent-strong: #7851b5 !important;
+  --accent-soft: rgba(157,124,211,.13) !important;
+  --user-bubble: #e9defa !important;
+  --shadow: 0 12px 36px rgba(74,52,112,.10) !important;
+  --umaira-grad: linear-gradient(135deg,#b8a0e8,#9473cc 58%,#8060b8) !important;
+}
+
+html,
+body,
+html body {
+  color: #292238 !important;
+  background:
+    radial-gradient(ellipse at 85% 0%,rgba(210,192,245,.42),transparent 48%),
+    radial-gradient(ellipse at 0% 100%,rgba(230,218,250,.52),transparent 48%),
+    linear-gradient(145deg,#fbfaff,#f3effa) !important;
+  background-attachment: fixed !important;
+}
+
+.app-shell,
+.layout,
+.content,
+.chat-section,
+.chat-layout,
+.chat-main,
+.workspace,
+.workspace-content,
+.workspace-main,
+.feature-workspace {
+  background: transparent !important;
+  color: #292238 !important;
+}
+
+.topbar,
+.sidebar,
+.sidebar-top,
+.sidebar-bottom {
+  background: rgba(255,255,255,.76) !important;
+  color: #292238 !important;
+  border-color: rgba(135,104,190,.17) !important;
+  backdrop-filter: blur(24px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(145%) !important;
+}
+
+.sidebar {
+  background: linear-gradient(160deg,rgba(255,255,255,.91),rgba(248,244,255,.82)) !important;
+  box-shadow: 0 8px 32px rgba(74,52,112,.06) !important;
+}
+
+.sidebar *,
+.topbar *,
+.chat-header,
+.chat-header *,
+.nav-item,
+.nav-group-label,
+.eyebrow,
+.chat-history-row,
+.chat-search,
+.side-card,
+.side-card *,
+.sb-brand,
+.sb-collapse,
+.sb-reopen {
+  color: #49405b !important;
+}
+
+.brand b,
+.nav-item.active .nav-icon,
+.nav-item .nav-icon {
+  color: #8d6bc1 !important;
+}
+
+.nav-item,
+.chat-history-row,
+.chat-search,
+.side-card,
+.sidebar-section,
+.ghost,
+.chat-header .ghost {
+  border-color: rgba(135,104,190,.17) !important;
+}
+
+.nav-item,
+.chat-history-row,
+.chat-search,
+.side-card,
+.ghost,
+.chat-header .ghost {
+  background: rgba(255,255,255,.54) !important;
+}
+
+.nav-item:hover,
+.chat-history-row:hover,
+.sb-collapse:hover,
+.sb-reopen:hover {
+  background: rgba(194,171,232,.20) !important;
+}
+
+.nav-item.active,
+.chat-history-row.active {
+  color: #68499d !important;
+  background: linear-gradient(100deg,rgba(199,177,238,.40),rgba(232,222,250,.58)) !important;
+  border-color: rgba(145,111,198,.25) !important;
+}
+
+.new-chat-btn,
+#chatSendBtn {
+  background: linear-gradient(135deg,#a88bd8,#8665bd) !important;
+  color: #fff !important;
+  border-color: rgba(145,111,198,.30) !important;
+  box-shadow: 0 5px 16px rgba(120,81,181,.18) !important;
+}
+
+.new-chat-btn *,
+#chatSendBtn * {
+  color: #fff !important;
+}
+
+.chat-composer,
+.composer-menu,
+#composerMenu {
+  color: #393047 !important;
+  background: rgba(255,255,255,.84) !important;
+  border: 1px solid rgba(145,111,198,.22) !important;
+  box-shadow: 0 12px 38px rgba(74,52,112,.11) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.chat-composer textarea,
+.chat-composer input,
+#chatInput,
+.composer-menu *,
+#composerMenu * {
+  color: #393047 !important;
+}
+
+.chat-composer textarea::placeholder,
+#chatInput::placeholder {
+  color: #988ca9 !important;
+  opacity: 1 !important;
+}
+
+.composer-plus,
+.composer-mic {
+  color: #7956ad !important;
+  background: rgba(226,215,246,.72) !important;
+  border-color: rgba(145,111,198,.20) !important;
+}
+
+.umaira-chip,
+.umaira-suggest,
+.umaira-feature,
+.umaira-suggest.umaira-feature,
+.project-card,
+.workspace-card,
+.side-card,
+.feature-card,
+.feature-workspace,
+.workspace-panel,
+.workspace-section,
+.project-item,
+.project-list,
+.projects-grid,
+.workspace-grid,
+.modal,
+.dialog,
+[role="dialog"] {
+  color: #393047 !important;
+  background: rgba(255,255,255,.70) !important;
+  border-color: rgba(145,111,198,.20) !important;
+  box-shadow: 0 8px 28px rgba(74,52,112,.06) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.umaira-chip {
+  background: rgba(255,255,255,.76) !important;
+}
+
+.umaira-suggest:hover,
+.umaira-chip:hover,
+.project-card:hover,
+.workspace-card:hover {
+  background: rgba(239,232,251,.94) !important;
+  border-color: rgba(145,111,198,.36) !important;
+}
+
+.umaira-suggest *,
+.umaira-feature *,
+.project-card *,
+.workspace-card *,
+.workspace-panel *,
+.workspace-section *,
+.project-item *,
+.feature-workspace *,
+.modal *,
+.dialog *,
+[role="dialog"] * {
+  color: #49405b;
+}
+
+.umaira-tag {
+  background: rgba(218,204,243,.56) !important;
+  color: #7654a8 !important;
+}
+
+.chat-message.user .chat-bubble {
+  color: #493665 !important;
+  background: #e9defa !important;
+  border: 1px solid rgba(145,111,198,.12) !important;
+}
+
+.chat-message.assistant .chat-bubble {
+  color: #393047 !important;
+  background: rgba(255,255,255,.58) !important;
+  border-color: rgba(145,111,198,.10) !important;
+}
+
+.chat-code-block,
+pre,
+pre code {
+  color: #393047 !important;
+  background: #f0ebf7 !important;
+  border-color: rgba(145,111,198,.20) !important;
+}
+
+input,
+textarea,
+select {
+  color: #393047 !important;
+  background-color: rgba(255,255,255,.78) !important;
+  border-color: rgba(145,111,198,.23) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #988ca9 !important;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-color: #a78ad8 !important;
+}
+
+hr,
+.divider,
+.chat-header {
+  border-color: rgba(135,104,190,.16) !important;
+}
+
+svg {
+  /* Pertahankan warna asli logo dan ikon SVG */
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    background: rgba(255,255,255,.96) !important;
+  }
+
+  .chat-composer,
+  .composer-menu,
+  #composerMenu {
+    background: rgba(255,255,255,.96) !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sidebar,
+  .topbar,
+  .chat-composer,
+  .composer-menu,
+  #composerMenu,
+  .umaira-suggest,
+  .umaira-feature,
+  .project-card,
+  .workspace-card,
+  .workspace-panel,
+  .modal,
+  .dialog {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background-color: #fff !important;
+  }
+}
+
+/* UMAIRA WELCOME — judul solid dan logo transparan */
+html body .umaira-empty h2 {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #51416f !important;
+  -webkit-text-fill-color: #51416f !important;
+  text-shadow: none !important;
+}
+
+html body .umaira-orb {
+  width: 104px !important;
+  height: 104px !important;
+  min-width: 104px !important;
+  min-height: 104px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 24px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(145,111,198,.16) !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.22) !important;
+  box-shadow: 0 8px 28px rgba(100,75,145,.07) !important;
+  animation: none !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
+}
+
+html body .umaira-orb img {
+  width: 76px !important;
+  height: 76px !important;
+  object-fit: contain !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+/* UMAIRA WELCOME — judul solid dan logo transparan */
+html body .umaira-empty h2 {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: #51416f !important;
+  -webkit-text-fill-color: #51416f !important;
+  text-shadow: none !important;
+}
+
+html body .umaira-orb {
+  width: 104px !important;
+  height: 104px !important;
+  min-width: 104px !important;
+  min-height: 104px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 24px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(145,111,198,.16) !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.22) !important;
+  box-shadow: 0 8px 28px rgba(100,75,145,.07) !important;
+  animation: none !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
+}
+
+html body .umaira-orb img {
+  width: 76px !important;
+  height: 76px !important;
+  object-fit: contain !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+/* =====================================================
+   UMAIRA WORKSPACE LIGHT THEME
+   Pustaka, Gambar AI, Proyek
+   ===================================================== */
+
+html body #featureWorkspace,
+html body .feature-workspace {
+  color: #352b48 !important;
+  background: transparent !important;
+  color-scheme: light !important;
+}
+
+html body #featureWorkspace h1,
+html body #featureWorkspace h2,
+html body #featureWorkspace h3,
+html body #featureWorkspace h4,
+html body #featureWorkspace strong,
+html body #featureWorkspace label,
+html body #featureWorkspace .eyebrow {
+  color: #51416f !important;
+}
+
+html body #featureWorkspace p,
+html body #featureWorkspace .image-studio-intro,
+html body #featureWorkspace .library-status,
+html body #featureWorkspace .project-status,
+html body #featureWorkspace .projects-intro p,
+html body #featureWorkspace .project-card p,
+html body #featureWorkspace .project-empty p,
+html body #featureWorkspace .projects-intro h2 {
+  color: #746887 !important;
+}
+
+/* Panel utama semua fitur */
+html body #featureWorkspace .image-studio-panel,
+html body #featureWorkspace .library-panel,
+html body #featureWorkspace .projects-panel,
+html body #featureWorkspace .project-detail,
+html body #featureWorkspace .projects-form,
+html body #featureWorkspace .project-card,
+html body #featureWorkspace .project-empty,
+html body #featureWorkspace .image-result-card,
+html body #featureWorkspace .library-card {
+  color: #352b48 !important;
+  background: rgba(255, 255, 255, .78) !important;
+  border: 1px solid rgba(153, 126, 194, .23) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 28px rgba(91, 67, 130, .07) !important;
+  backdrop-filter: blur(16px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+}
+
+/* Formulir dan kolom input */
+html body #featureWorkspace input,
+html body #featureWorkspace textarea,
+html body #featureWorkspace select,
+html body #featureWorkspace .image-studio-form textarea,
+html body #featureWorkspace .project-field input,
+html body #featureWorkspace .project-field textarea {
+  color: #352b48 !important;
+  background: rgba(255, 255, 255, .92) !important;
+  border: 1px solid rgba(153, 126, 194, .32) !important;
+  border-radius: 12px !important;
+  color-scheme: light !important;
+}
+
+html body #featureWorkspace input::placeholder,
+html body #featureWorkspace textarea::placeholder {
+  color: #9b90ad !important;
+  opacity: 1 !important;
+}
+
+html body #featureWorkspace input:focus,
+html body #featureWorkspace textarea:focus,
+html body #featureWorkspace select:focus {
+  outline: none !important;
+  border-color: #a58ad5 !important;
+  box-shadow: 0 0 0 3px rgba(165, 138, 213, .15) !important;
+}
+
+/* Tombol fitur */
+html body #featureWorkspace .projects-button,
+html body #featureWorkspace .image-studio-submit,
+html body #featureWorkspace button:not(.projects-danger) {
+  color: #51416f !important;
+  border-color: rgba(153, 126, 194, .3) !important;
+  background: rgba(255, 255, 255, .82) !important;
+  box-shadow: 0 3px 12px rgba(91, 67, 130, .05) !important;
+}
+
+html body #featureWorkspace .image-studio-submit {
+  color: #fff !important;
+  background: linear-gradient(135deg, #9c7bd0, #8060b7) !important;
+  border-color: transparent !important;
+}
+
+html body #featureWorkspace .projects-danger {
+  color: #b33e58 !important;
+  background: rgba(255, 242, 246, .9) !important;
+  border-color: rgba(205, 100, 130, .35) !important;
+}
+
+html body #featureWorkspace .projects-button:hover,
+html body #featureWorkspace button:not(.projects-danger):hover {
+  border-color: rgba(153, 126, 194, .55) !important;
+}
+
+/* Area hasil gambar: jangan mengubah gambar itu sendiri */
+html body #featureWorkspace .image-studio-result,
+html body #featureWorkspace .library-grid,
+html body #featureWorkspace .projects-list {
+  color: #352b48 !important;
+  background: transparent !important;
+}
+
+html body #featureWorkspace .image-result-card img,
+html body #featureWorkspace .library-card img {
+  background-color: rgba(255, 255, 255, .6) !important;
+}
+
+html body #featureWorkspace .library-meta {
+  color: #746887 !important;
+}
+
+html body #featureWorkspace .library-delete {
+  color: #b33e58 !important;
+  background: rgba(255, 242, 246, .9) !important;
+  border-color: rgba(205, 100, 130, .3) !important;
+}
+
+/* Status, toolbar, dan detail proyek */
+html body #featureWorkspace .projects-toolbar,
+html body #featureWorkspace .projects-intro,
+html body #featureWorkspace .project-card-content,
+html body #featureWorkspace .project-field {
+  color: #51416f !important;
+  background-color: transparent !important;
+}
+
+@media (max-width: 600px) {
+  html body #featureWorkspace .image-studio-panel,
+  html body #featureWorkspace .library-panel,
+  html body #featureWorkspace .projects-form,
+  html body #featureWorkspace .project-card {
+    border-radius: 15px !important;
+  }
+}
+
+/* UMAIRA SETTINGS AND ACCOUNT */
+#featureWorkspace .umaira-settings-panel {
+  color: #51416f;
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(153,126,194,.25);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 28px rgba(91,67,130,.07);
+}
+#featureWorkspace .umaira-setting-row {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  color: #51416f;
+}
+#featureWorkspace .umaira-setting-select {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px;
+  color: #352b48;
+  background: #fff;
+  border: 1px solid rgba(153,126,194,.35);
+  border-radius: 12px;
+}
+#featureWorkspace .umaira-account-status {
+  padding: 12px;
+  background: rgba(165,138,213,.1);
+  border-radius: 12px;
+}
+
+
+/* UMAIRA SIDEBAR WHITE GLASS + HISTORY MENU POLISH */
+@media (max-width: 760px) {
+  body.sidebar-open .sidebar-backdrop {
+    background: rgba(255, 255, 255, .48) !important;
+    -webkit-backdrop-filter: blur(7px) saturate(120%);
+    backdrop-filter: blur(7px) saturate(120%);
+  }
+}
+
+.sidebar,
+.sidebar-top,
+.sidebar-bottom {
+  background: rgba(255, 255, 255, .96) !important;
+  color: #393047 !important;
+}
+
+@media (min-width: 761px) {
+  .sidebar {
+    background: linear-gradient(160deg, #fff, #faf7ff) !important;
+  }
+}
+
+.sb-brand .sb-logo,
+.brand-mark.umaira-logo {
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 11px;
+  background: #8d6bc1;
+  filter: none !important;
+}
+
+.sidebar .new-chat-btn {
+  background: linear-gradient(135deg, #f4edff, #fff) !important;
+  color: #68499d !important;
+  border: 1px solid rgba(141, 107, 193, .24) !important;
+  box-shadow: 0 3px 12px rgba(104, 73, 157, .08) !important;
+}
+
+.sidebar .new-chat-btn *,
+.sidebar .new-chat-btn span {
+  color: #68499d !important;
+}
+
+.sidebar .new-chat-btn:hover {
+  background: #eee3ff !important;
+}
+
+.sb-collapse,
+.sb-reopen {
+  color: #68499d !important;
+  background: rgba(245, 239, 255, .95) !important;
+  border-color: rgba(141, 107, 193, .2) !important;
+}
+
+.chat-history-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.chat-history-item {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.chat-history-menu-btn {
+  flex: 0 0 34px;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #746487;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chat-history-menu-btn:hover,
+.chat-history-menu-btn:focus-visible {
+  background: #f0e8fc;
+  border-color: rgba(141, 107, 193, .2);
+  outline: none;
+}
+
+.chat-history-icon.is-pinned {
+  color: #8d6bc1;
+  font-weight: 700;
+}
+
+.chat-history-menu {
+  position: fixed;
+  z-index: 999;
+  min-width: 220px;
+  padding: 6px;
+  border: 1px solid rgba(141, 107, 193, .2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 12px 36px rgba(55, 35, 83, .16);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.chat-history-menu[hidden],
+.chat-header-menu[hidden] {
+  display: none !important;
+}
+
+.chat-history-menu button,
+.chat-header-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #393047;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chat-history-menu button:hover,
+.chat-header-menu button:hover {
+  background: #f2ebfc;
+}
+
+.chat-history-menu button.danger {
+  color: #c24158 !important;
+}
+
+.chat-header-actions {
+  position: relative;
+  align-items: center;
+}
+
+.chat-header-actions .chat-header-menu-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, .8) !important;
+  color: #68499d !important;
+  border: 1px solid rgba(141, 107, 193, .22) !important;
+  font-size: 25px !important;
+  line-height: 1;
+}
+
+.chat-header-menu {
+  position: absolute;
+  z-index: 1000;
+  top: calc(100% + 7px);
+  right: 0;
+  width: 230px;
+  padding: 6px;
+  border: 1px solid rgba(141, 107, 193, .2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .98);
+  box-shadow: 0 12px 32px rgba(55, 35, 83, .15);
+}
+
+@media (max-width: 760px) {
+  .chat-header-actions .ghost {
+    padding: 8px 10px !important;
+  }
+  .chat-history-menu {
+    max-width: calc(100vw - 24px);
+  }
+}
+
+
+/* UMAIRA HEADER MENU + LIGHT SIDEBAR PATCH */
+.sidebar,
+.sidebar-top,
+.sidebar-bottom,
+.sidebar-inner,
+.sidebar-content {
+  background: #fff !important;
+  color: #393047 !important;
+}
+.sidebar::before,
+.sidebar::after,
+.sidebar-top::before,
+.sidebar-bottom::before {
+  background: transparent !important;
+}
+.sidebar .chat-history-menu-btn {
+  display: none !important;
+}
+.chat-header-menu button.danger {
+  color: #c24158 !important;
+}
+.chat-header-menu button {
+  min-height: 42px;
+}
+
+
+/* UMAIRA VISUAL RESTORE PATCH V1 */
+
+/* Logo gradasi di welcome screen; logo sidebar memakai file putih terpisah. */
+html body .brand-mark.umaira-logo {
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  filter: none !important;
+  object-fit: contain;
+}
+
+html body .sb-brand .sb-logo {
+  padding: 5px !important;
+  border-radius: 11px !important;
+  background: #8d6bc1 !important;
+  filter: none !important;
+  object-fit: contain;
+}
+
+/* Orb bergerak lembut, tanpa animasi berlebihan. */
+@keyframes umairaOrbFloatRestored {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.025); }
+}
+
+@keyframes umairaLogoGlowRestored {
+  0%, 100% { filter: drop-shadow(0 0 7px rgba(99,102,241,.24)); }
+  50% { filter: drop-shadow(0 0 14px rgba(34,211,238,.48)); }
+}
+
+html body .umaira-orb {
+  animation: umairaOrbFloatRestored 3.6s ease-in-out infinite !important;
+}
+
+html body .umaira-orb img {
+  animation: umairaLogoGlowRestored 3.6s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 8px rgba(99,102,241,.3)) !important;
+}
+
+/* Backdrop terang di HP dan desktop saat sidebar terbuka. */
+html body.sidebar-open .sidebar-backdrop {
+  background: rgba(247, 243, 255, .88) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  backdrop-filter: blur(10px) saturate(125%) !important;
+}
+
+/* Konfirmasi chat memakai dialog Umaira, bukan popup browser. */
+html body .umaira-chat-confirm-overlay {
+  z-index: 100100 !important;
+  background: rgba(48, 35, 68, .34) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+html body .umaira-chat-confirm-dialog {
+  max-width: 370px !important;
+  border: 1px solid rgba(143, 110, 190, .22) !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+  color: #393047 !important;
+  box-shadow: 0 24px 75px rgba(56, 35, 83, .2) !important;
+}
+
+html body .umaira-chat-confirm-dialog h3 {
+  color: #393047 !important;
+}
+
+html body .umaira-chat-confirm-dialog p {
+  color: #756b82 !important;
+}
+
+html body .umaira-chat-confirm-dialog .umaira-confirm-icon {
+  background: rgba(189, 69, 69, .1) !important;
+  color: #b83e53 !important;
+}
+
+html body .umaira-chat-confirm-dialog .umaira-confirm-cancel {
+  border-color: rgba(125, 102, 153, .24) !important;
+  background: #f7f4fb !important;
+  color: #51416f !important;
+}
+
+html body .umaira-chat-confirm-dialog .umaira-confirm-delete {
+  background: #7952b3 !important;
+  color: #fff !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .umaira-orb,
+  html body .umaira-orb img {
+    animation: none !important;
+  }
+}
+
+/* UMAIRA FINAL POLISH: logo atas tanpa kotak + sidebar serba putih */
+html body .topbar .brand-mark.umaira-logo {
+  display: block !important;
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  object-fit: contain !important;
+}
+
+/* Panel sidebar, header, footer, dan ruang sisi luar */
+html body .sidebar,
+html body .sidebar-top,
+html body .sidebar-bottom {
+  background: #ffffff !important;
+  color: #393047 !important;
+}
+
+html body.sidebar-open .sidebar-backdrop {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Cegah latar gelap terlihat pada ruang layout saat sidebar aktif */
+html body.sidebar-open,
+html body.sidebar-open .app-shell,
+html body.sidebar-open .layout {
+  background: #ffffff !important;
+}
+
+/* UMAIRA FIX: area sekitar sidebar saat terbuka di HP */
+@media (max-width: 760px) {
+  html body.sidebar-open .sidebar-backdrop {
+    background: #ffffff !important;
+    opacity: 1 !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.sidebar-open .sidebar {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #393047 !important;
+  }
+
+  html body.sidebar-open .sidebar *,
+  html body.sidebar-open .sidebar .nav-item {
+    color: #393047;
+  }
+
+  html body.sidebar-open .sidebar .nav-item.active {
+    background: #f4effb !important;
+    color: #6945a0 !important;
+  }
+}
+
+/* UMAIRA FIX: pertahankan gradasi logo topbar pada desktop */
+@media (min-width: 768px) {
+  html body .topbar .brand > img.brand-mark.umaira-logo {
+    content: url("assets/umaira-topbar-gradient.svg?v=20261015-gradient3") !important;
+    display: block !important;
+    background: transparent !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    mix-blend-mode: normal !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    object-fit: contain !important;
+  }
+}

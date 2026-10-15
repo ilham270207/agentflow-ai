@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Umaira AI">
+  <defs>
+    <linearGradient id="umg" x1="14" y1="8" x2="50" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset=".55" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <path d="M19 12v22a13 13 0 0 0 26 0V12" fill="none" stroke="url(#umg)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 21l2.6 6.4L41 30l-6.4 2.6L32 39l-2.6-6.4L23 30l6.4-2.6z" fill="#67e8f9"/>
+</svg>

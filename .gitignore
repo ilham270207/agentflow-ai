@@ -1,3 +1,11 @@
 node_modules/
 .env
 .DS_Store
+.env*
+!.env.example
+backups/
+*.backup*
+*.before-*
+data/
+data/umaira-users.json
+.umaira-horde-models.json

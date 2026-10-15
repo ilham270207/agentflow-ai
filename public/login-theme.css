@@ -1,0 +1,11 @@
+/* Tema terang untuk halaman login. Mode gelap tetap memakai gaya asli login.html. */
+html:not([data-uui="dark"]){--bg:#f6f4ff;--card:rgba(255,255,255,.94);--line:rgba(88,28,135,.16);--text:#111111;--muted:#5b5b6b;--accent:#7c3aed;--danger:#dc2626;color-scheme:light}
+html:not([data-uui="dark"]) body::before{background:radial-gradient(60% 50% at 50% 0%,rgba(167,139,250,.38),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.20),transparent 70%)}
+html:not([data-uui="dark"]) .card{box-shadow:0 18px 50px rgba(76,29,149,.14)}
+html:not([data-uui="dark"]) .tabs{background:rgba(124,58,237,.08)}
+html:not([data-uui="dark"]) .tab[aria-selected="true"]{background:#fff;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.10)}
+html:not([data-uui="dark"]) input{background:#fff;color:#111}
+html:not([data-uui="dark"]) input::placeholder{color:#8a8a98}
+html:not([data-uui="dark"]) .pw button{color:#4b4b5a}
+html:not([data-uui="dark"]) .brand img{filter:drop-shadow(0 4px 10px rgba(124,58,237,.30))}
+html:not([data-uui="dark"]) .primary{box-shadow:0 8px 20px rgba(109,40,217,.25)}
