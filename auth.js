@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as fsSync from "node:fs";
 import { OAuth2Client } from "google-auth-library";
+import { kvGet, kvSet, usingDb } from "./db.js";
 
 const router = express.Router();
 
@@ -30,9 +31,6 @@ setInterval(() => {
   const now = Date.now();
   for (const [k, v] of rlStore) if (v.reset < now) rlStore.delete(k);
 }, 10 * 60 * 1000).unref();
-router.use("/login", rlGuard("login", 8, 15 * 60 * 1000, false));
-router.use("/register", rlGuard("register", 5, 60 * 60 * 1000, true));
-router.use("/google", rlGuard("google", 20, 15 * 60 * 1000, false));
 
 
 // ===== UMAIRA AUTH HARDENING =====
@@ -77,10 +75,14 @@ const dataDir = path.join(process.cwd(), "data");
 const usersFile = path.join(dataDir, "umaira-users.json");
 const SESSIONS_FILE = path.join(dataDir, "umaira-sessions.json");
 const sessionKey = (token) => crypto.createHash("sha256").update(String(token)).digest("hex");
+const SESSIONS_BOOT = await kvGet("sessions", {}).catch((err) => {
+  if (usingDb) throw err;
+  return {};
+});
 const sessions = (() => {
   const map = new Map();
   try {
-    const raw = JSON.parse(fsSync.readFileSync(SESSIONS_FILE, "utf8"));
+    const raw = SESSIONS_BOOT && typeof SESSIONS_BOOT === "object" ? SESSIONS_BOOT : {};
     const now = Date.now();
     for (const [k, v] of Object.entries(raw)) {
       if (v && v.expires > now) map.set(k, v);
@@ -90,14 +92,9 @@ const sessions = (() => {
   function persist() {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      try {
-        fsSync.mkdirSync(dataDir, { recursive: true, mode: 0o700 });
-        const tmp = SESSIONS_FILE + ".tmp";
-        fsSync.writeFileSync(tmp, JSON.stringify(Object.fromEntries(map)), { mode: 0o600 });
-        fsSync.renameSync(tmp, SESSIONS_FILE);
-      } catch (err) {
+      kvSet("sessions", Object.fromEntries(map)).catch((err) => {
         console.error("Gagal menyimpan sesi:", err.message);
-      }
+      });
     }, 500);
   }
   setInterval(() => {
@@ -127,20 +124,12 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ||
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 async function readUsers() {
-  try {
-    return JSON.parse(await fs.readFile(usersFile, "utf8"));
-  } catch (err) {
-    if (err.code === "ENOENT") return [];
-    throw err;
-  }
+  const users = await kvGet("users", []);
+  return Array.isArray(users) ? users : [];
 }
 
 async function saveUsers(users) {
-  await fs.mkdir(dataDir, { recursive: true, mode: 0o700 });
-  const temp = usersFile + ".tmp";
-  await fs.writeFile(temp, JSON.stringify(users, null, 2), { mode: 0o600 });
-  await fs.rename(temp, usersFile);
-  await fs.chmod(usersFile, 0o600);
+  await kvSet("users", users);
 }
 
 async function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {

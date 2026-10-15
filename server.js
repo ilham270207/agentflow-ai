@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { authRouter } from "./auth.js";
 import { requireAuth, originGuard, currentUser } from "./auth.js";
 import { readFile as umairaReadFile } from "node:fs/promises";
+import { kvGet, kvSet, fileGet, fileSave, fileDelete } from "./db.js";
 
 dotenv.config();
 
@@ -1481,17 +1482,12 @@ const GALLERY_INDEX = galleryPath.join(GALLERY_ROOT, "gallery.json");
 const GALLERY_MAX_BYTES = 8 * 1024 * 1024;
 
 async function readGalleryIndex() {
-  try {
-    const list = JSON.parse(await galleryFs.readFile(GALLERY_INDEX, "utf8"));
-    return Array.isArray(list) ? list : [];
-  } catch {
-    return [];
-  }
+  const list = await kvGet("gallery-index", []);
+  return Array.isArray(list) ? list : [];
 }
 
 async function writeGalleryIndex(list) {
-  await galleryFs.mkdir(GALLERY_ROOT, { recursive: true });
-  await galleryFs.writeFile(GALLERY_INDEX, JSON.stringify(list, null, 2));
+  await kvSet("gallery-index", list);
 }
 
 function detectImageExt(buf) {
@@ -1507,15 +1503,28 @@ function detectImageExt(buf) {
 
 async function umairaGalleryLegacyOwner() {
   try {
-    const raw = await galleryFs.readFile(galleryPath.join(process.cwd(), "data", "umaira-users.json"), "utf8");
-    const users = JSON.parse(raw);
-    return (users[0] && users[0].id) || null;
+    const users = await kvGet("users", []);
+    return (Array.isArray(users) && users[0] && users[0].id) || null;
   } catch {
     return null;
   }
 }
 
-app.use("/gallery", express.static(GALLERY_DIR, { index: false }));
+app.get("/gallery/:file", async (req, res) => {
+  const name = galleryPath.basename(String(req.params.file || ""));
+  if (!/^[a-f0-9-]{36}\.(webp|png|jpg)$/i.test(name)) return res.status(404).end();
+  try {
+    const f = await fileGet("gallery/" + name);
+    if (!f) return res.status(404).end();
+    res.setHeader("Content-Type", f.mime);
+    res.setHeader("Cache-Control", "private, max-age=86400");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    return res.send(f.data);
+  } catch (err) {
+    console.error("Gallery file error:", err.message);
+    return res.status(500).end();
+  }
+});
 
 app.post("/api/gallery/save", async (req, res) => {
   const jobId = typeof req.body?.jobId === "string" ? req.body.jobId : "";
@@ -1567,8 +1576,7 @@ app.post("/api/gallery/save", async (req, res) => {
 
     const id = galleryUUID();
     const file = `${id}.${ext}`;
-    await galleryFs.mkdir(GALLERY_DIR, { recursive: true });
-    await galleryFs.writeFile(galleryPath.join(GALLERY_DIR, file), buffer);
+    await fileSave("gallery/" + file, buffer, ext === "png" ? "image/png" : ext === "jpg" ? "image/jpeg" : "image/webp");
 
     const list = await readGalleryIndex();
     const item = {
@@ -1590,9 +1598,14 @@ app.post("/api/gallery/save", async (req, res) => {
 });
 
 app.get("/api/gallery", async (req, res) => {
-  const legacyOwner = await umairaGalleryLegacyOwner();
-  const mine = (await readGalleryIndex()).filter(entry => (entry.userId || legacyOwner) === req.user.id);
-  res.json({ items: mine });
+  try {
+    const legacyOwner = await umairaGalleryLegacyOwner();
+    const mine = (await readGalleryIndex()).filter(entry => (entry.userId || legacyOwner) === req.user.id);
+    res.json({ items: mine });
+  } catch (error) {
+    console.error("Gallery list error:", error.message);
+    res.status(500).json({ error: "Gagal memuat Pustaka." });
+  }
 });
 
 app.delete("/api/gallery/:id", async (req, res) => {
@@ -1607,10 +1620,7 @@ app.delete("/api/gallery/:id", async (req, res) => {
     if (!item) {
       return res.status(404).json({ error: "Gambar tidak ditemukan." });
     }
-    await galleryFs.rm(
-      galleryPath.join(GALLERY_DIR, galleryPath.basename(item.file)),
-      { force: true }
-    );
+    await fileDelete("gallery/" + galleryPath.basename(item.file));
     await writeGalleryIndex(list.filter(entry => entry.id !== id));
     return res.json({ ok: true });
   } catch (error) {
