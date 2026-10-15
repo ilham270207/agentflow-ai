@@ -7,18 +7,21 @@ import { readFile as umairaReadFile } from "node:fs/promises";
 dotenv.config();
 
 const app = express();
+if (process.env.NODE_ENV === "production") app.set("trust proxy", 1);
 
 // ===== UMAIRA SECURITY HEADERS =====
 app.disable("x-powered-by");
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  if (process.env.NODE_ENV === "production") res.setHeader("Strict-Transport-Security", "max-age=15552000; includeSubDomains");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
 
 const port = process.env.PORT || 3000;
 
+app.use("/api/auth", express.json({ limit: "20kb" }));
 app.use(express.json({ limit: "15mb" }));
 // ===== UMAIRA PAGE FLOW =====
 app.get(["/", "/index.html"], async (req, res, next) => {
@@ -47,6 +50,9 @@ app.get(["/login", "/login.html"], async (req, res) => {
   res.sendFile(process.cwd() + "/public/login.html");
 });
 
+// ===== UMAIRA LEGAL PAGES =====
+app.get("/privasi", (_req, res) => res.sendFile(process.cwd() + "/public/privasi.html"));
+app.get("/syarat", (_req, res) => res.sendFile(process.cwd() + "/public/syarat.html"));
 app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 
@@ -57,6 +63,38 @@ app.use("/api", (req, res, next) => {
   return requireAuth(req, res, next);
 });
 app.use("/gallery", requireAuth);
+
+// ===== UMAIRA AI USAGE LIMIT =====
+const aiHits = new Map();
+const AI_TEXT_PATHS = new Set(["/chat", "/chat-action", "/plan", "/edit-task", "/regenerate-task"]);
+function aiRule(path) {
+  if (AI_TEXT_PATHS.has(path)) return { name: "chat", label: "pesan AI", max: 40, windowMs: 10 * 60 * 1000 };
+  if (path === "/images/generate") return { name: "gambar", label: "pembuatan gambar", max: 10, windowMs: 60 * 60 * 1000 };
+  return null;
+}
+app.use("/api", async (req, res, next) => {
+  if (req.method !== "POST") return next();
+  const rule = aiRule(req.path);
+  if (!rule) return next();
+  let uid = null;
+  try { uid = (await currentUser(req))?.id; } catch {}
+  const key = rule.name + ":" + (uid || req.ip);
+  const now = Date.now();
+  let b = aiHits.get(key);
+  if (!b || b.reset < now) { b = { n: 0, reset: now + rule.windowMs }; aiHits.set(key, b); }
+  b.n += 1;
+  if (b.n > rule.max) {
+    const waitSec = Math.ceil((b.reset - now) / 1000);
+    res.setHeader("Retry-After", String(waitSec));
+    return res.status(429).json({ error: "Batas " + rule.label + " tercapai. Coba lagi sekitar " + Math.ceil(waitSec / 60) + " menit lagi." });
+  }
+  next();
+});
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, b] of aiHits) if (b.reset < now) aiHits.delete(k);
+}, 10 * 60 * 1000).unref();
+
 
 
 function durationFromGoal(goal) {
@@ -1771,6 +1809,19 @@ app.get("/api/health", (_req, res) => {
     ok: true,
     version: "1.3.0"
   });
+});
+
+// ===== UMAIRA ERROR PAGES =====
+app.use((req, res) => {
+  if (req.path.startsWith("/api/")) return res.status(404).json({ error: "Endpoint tidak ditemukan." });
+  res.status(404).sendFile(process.cwd() + "/public/404.html");
+});
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  if (err && err.type === "entity.too.large") return res.status(413).json({ error: "Data yang dikirim terlalu besar." });
+  if (err && err.type === "entity.parse.failed") return res.status(400).json({ error: "Format data tidak valid." });
+  console.error("[server]", err && err.message);
+  res.status(500).json({ error: "Terjadi kesalahan di server." });
 });
 
 app.listen(port, "0.0.0.0", () => {
