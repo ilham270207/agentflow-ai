@@ -50,6 +50,10 @@ export function initDb() {
 }
 
 function fileFor(key) {
+  if (key.startsWith("workspaces:")) {
+    const id = key.slice("workspaces:".length).replace(/[^a-zA-Z0-9_-]/g, "_");
+    return path.join(DATA_DIR, "umaira-workspaces-" + id + ".json");
+  }
   const f = FILE_MAP[key];
   if (!f) throw new Error("Kunci tidak dikenal: " + key);
   return path.join(DATA_DIR, f);

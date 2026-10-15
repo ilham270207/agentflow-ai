@@ -1,0 +1,105 @@
+/* Umaira composer modern v1 */
+:root{
+  --umaira-accent: var(--accent, #7c5cff);
+  --umaira-accent-2: #ff5fa2;
+}
+.chat-composer-wrap{ padding-bottom:max(8px, env(safe-area-inset-bottom)); }
+
+.chat-composer-wrap .chat-composer{
+  align-items:flex-end;
+  gap:6px;
+  padding:6px;
+  border-radius:28px;
+  background:color-mix(in srgb, currentColor 6%, transparent);
+  border:1px solid color-mix(in srgb, currentColor 14%, transparent);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  backdrop-filter:blur(18px) saturate(1.4);
+  box-shadow:0 8px 28px rgba(0,0,0,.14);
+  transition:border-color .2s, box-shadow .2s;
+}
+.chat-composer-wrap .chat-composer:focus-within{
+  border-color:color-mix(in srgb, var(--umaira-accent) 65%, transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--umaira-accent) 22%, transparent),
+             0 8px 28px rgba(0,0,0,.18);
+}
+.chat-composer-wrap .chat-composer textarea{
+  background:transparent !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  max-height:140px;
+  padding-top:11px;
+  padding-bottom:11px;
+}
+
+/* Dasar tombol mic dan kirim */
+.chat-composer-wrap .chat-composer .composer-mic,
+.chat-composer-wrap .chat-composer #chatSendBtn{
+  position:relative;
+  flex:0 0 auto;
+  width:44px; height:44px; min-width:44px;
+  padding:0; margin:0;
+  border:0; border-radius:50%;
+  display:grid; place-items:center;
+  font-size:0; line-height:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .15s, opacity .2s, box-shadow .2s, background .2s;
+}
+.chat-composer-wrap .chat-composer .composer-mic > *,
+.chat-composer-wrap .chat-composer #chatSendBtn > *{ display:none !important; }
+
+.chat-composer-wrap .chat-composer .composer-mic::before,
+.chat-composer-wrap .chat-composer #chatSendBtn::before{
+  content:"";
+  width:22px; height:22px;
+  background:currentColor;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:center; mask-position:center;
+  -webkit-mask-size:contain; mask-size:contain;
+}
+
+/* Mic */
+.chat-composer-wrap .chat-composer .composer-mic{
+  background:color-mix(in srgb, currentColor 8%, transparent);
+  color:inherit;
+}
+.chat-composer-wrap .chat-composer .composer-mic::before{
+  opacity:.8;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='9' y='3' width='6' height='11' rx='3' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M5 11a7 7 0 0 0 14 0M12 18v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='9' y='3' width='6' height='11' rx='3' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M5 11a7 7 0 0 0 14 0M12 18v3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+.chat-composer-wrap .chat-composer .composer-mic:hover{ background:color-mix(in srgb, currentColor 14%, transparent); }
+.chat-composer-wrap .chat-composer .composer-mic:active{ transform:scale(.92); }
+.chat-composer-wrap .chat-composer .composer-mic.is-recording{
+  background:linear-gradient(135deg,#ff4d6d,#ff2e63);
+  color:#fff;
+  animation:umairaMicPulse 1.4s ease-out infinite;
+}
+.chat-composer-wrap .chat-composer .composer-mic.is-recording::before{ opacity:1; }
+@keyframes umairaMicPulse{
+  0%  { box-shadow:0 0 0 0 rgba(255,46,99,.55); }
+  70% { box-shadow:0 0 0 14px rgba(255,46,99,0); }
+  100%{ box-shadow:0 0 0 0 rgba(255,46,99,0); }
+}
+
+/* Kirim */
+.chat-composer-wrap .chat-composer #chatSendBtn{
+  background:linear-gradient(135deg, var(--umaira-accent), var(--umaira-accent-2));
+  color:#fff;
+  box-shadow:0 6px 16px color-mix(in srgb, var(--umaira-accent) 40%, transparent);
+}
+.chat-composer-wrap .chat-composer #chatSendBtn::before{
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.chat-composer-wrap .chat-composer:not(.has-text) #chatSendBtn{
+  opacity:.45; transform:scale(.92); box-shadow:none; filter:saturate(.6);
+}
+.chat-composer-wrap .chat-composer.has-text #chatSendBtn:hover{ transform:translateY(-1px) scale(1.04); }
+.chat-composer-wrap .chat-composer.has-text #chatSendBtn:active{ transform:scale(.92); }
+
+@media (prefers-reduced-motion:reduce){
+  .chat-composer-wrap .chat-composer .composer-mic.is-recording{ animation:none; }
+  .chat-composer-wrap .chat-composer *{ transition:none !important; }
+}

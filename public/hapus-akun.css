@@ -1,0 +1,6 @@
+#da-form{display:grid;gap:10px;max-width:420px}
+#da-form label{font-size:.9rem;opacity:.8}
+#da-form input{padding:10px 12px;border-radius:10px;font:inherit;color:inherit;background:transparent;border:1px solid color-mix(in srgb,currentColor 28%,transparent)}
+#da-btn{padding:11px 16px;border:0;border-radius:10px;background:#d6334b;color:#fff;font:inherit;cursor:pointer}
+#da-btn:disabled{opacity:.45;cursor:not-allowed}
+#da-msg{min-height:1.4em;color:#d6334b}

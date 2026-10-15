@@ -1,0 +1,64 @@
+// ===== UMAIRA DELETE ACCOUNT =====
+router.post("/delete-account", rlGuard("delete-account", 5, 15 * 60 * 1000, true), async (req, res) => {
+  try {
+    const me = await currentUser(req);
+    if (!me) {
+      return res.status(401).json({ error: "Silakan login terlebih dahulu." });
+    }
+    if (req.body?.confirm !== "HAPUS") {
+      return res.status(400).json({ error: "Ketik HAPUS untuk mengonfirmasi." });
+    }
+    const proof = typeof req.body?.proof === "string" ? req.body.proof.slice(0, 200) : "";
+    if (!proof.trim()) {
+      return res.status(400).json({ error: "Kata sandi atau email konfirmasi wajib diisi." });
+    }
+
+    const users = await readUsers();
+    const user = users.find(u => u.id === me.id);
+    if (!user) {
+      return res.status(404).json({ error: "Akun tidak ditemukan." });
+    }
+
+    let verified = false;
+    if (user.salt && user.hash) {
+      verified = await verifyPassword(proof, user);
+    } else {
+      verified = proof.trim().toLowerCase() === String(user.email || "").toLowerCase();
+    }
+    if (!verified) {
+      return res.status(403).json({ error: "Kata sandi atau email konfirmasi tidak cocok." });
+    }
+
+    const legacyOwner = users[0] && users[0].id;
+    const stored = await kvGet("gallery-index", []);
+    const gallery = Array.isArray(stored) ? stored : [];
+    const owns = entry => (entry.userId || legacyOwner) === user.id;
+
+    let failed = 0;
+    for (const entry of gallery.filter(owns)) {
+      const base = path.basename(String(entry.file || ""));
+      if (!base) continue;
+      try {
+        await fileDelete("gallery/" + base);
+      } catch (err) {
+        if (!err || err.code !== "ENOENT") {
+          failed += 1;
+          console.error("Hapus akun: gagal hapus file galeri:", err && err.message);
+        }
+      }
+    }
+    if (failed > 0) {
+      return res.status(500).json({ error: "Sebagian gambar gagal dihapus. Akun belum dihapus, silakan coba lagi." });
+    }
+
+    await kvSet("gallery-index", gallery.filter(entry => !owns(entry)));
+    await saveUsers(users.filter(u => u.id !== user.id));
+    sessions.deleteByUser(user.id);
+    setCookie(res, "", 0);
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("Hapus akun error:", err && err.message);
+    return res.status(500).json({ error: "Gagal menghapus akun. Silakan coba lagi." });
+  }
+});
+// ===== /UMAIRA DELETE ACCOUNT =====

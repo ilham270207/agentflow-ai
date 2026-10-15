@@ -2082,6 +2082,7 @@ async function applyChatRegenerateTaskToPlanner() {
 
 
 const UMAIRA_CHAT_PROJECT_KEY = "umaira-chat-project-v1";
+window.__umairaChatProjectRerender = () => renderUmairaChatProjectIndicator();
 
 function getUmairaChatProject() {
   try {
@@ -3222,6 +3223,382 @@ function setupChatInputAutoResize() {
 
 
 
+  // ===== UMAIRA CODEX WORKSPACE =====
+  function renderUmairaCodexWorkspace() {
+    featurePageContent.replaceChildren();
+
+    const root = document.createElement("section");
+    root.className = "umaira-codex";
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "umaira-codex-toolbar";
+
+    const language = document.createElement("select");
+    language.className = "umaira-workspace-select";
+    language.setAttribute("aria-label", "Bahasa kode");
+
+    [
+      ["javascript", "JavaScript"],
+      ["json", "JSON"],
+      ["css", "CSS"],
+      ["html", "HTML"],
+      ["text", "Teks biasa"]
+    ].forEach(function (item) {
+      const option = document.createElement("option");
+      option.value = item[0];
+      option.textContent = item[1];
+      language.append(option);
+    });
+
+    const sample = document.createElement("button");
+    sample.type = "button";
+    sample.className = "umaira-workspace-btn secondary";
+    sample.textContent = "Contoh kode";
+
+    toolbar.append(language, sample);
+
+    const editor = document.createElement("textarea");
+    editor.className = "umaira-code-editor";
+    editor.setAttribute("aria-label", "Editor kode");
+    editor.setAttribute("spellcheck", "false");
+    editor.setAttribute("autocapitalize", "off");
+    editor.setAttribute("autocomplete", "off");
+    editor.placeholder = "Tulis atau tempel kode di sini...";
+
+    const actions = document.createElement("div");
+    actions.className = "umaira-codex-actions";
+
+    const check = document.createElement("button");
+    check.type = "button";
+    check.className = "umaira-workspace-btn primary";
+    check.textContent = "Periksa Kode";
+
+    const copy = document.createElement("button");
+    copy.type = "button";
+    copy.className = "umaira-workspace-btn secondary";
+    copy.textContent = "Salin Kode";
+
+    const send = document.createElement("button");
+    send.type = "button";
+    send.className = "umaira-workspace-btn secondary";
+    send.textContent = "Kirim ke Obrolan";
+
+    actions.append(check, copy, send);
+
+    const result = document.createElement("pre");
+    result.className = "umaira-codex-result";
+    result.setAttribute("role", "status");
+    result.textContent = "Siap. Masukkan kode, lalu tekan Periksa Kode.";
+
+    const note = document.createElement("p");
+    note.className = "umaira-codex-note";
+    note.textContent =
+      "Pemeriksaan sintaks tidak menjalankan program. Kode tetap berada di browser saat diperiksa.";
+
+    root.append(toolbar, editor, actions, result, note);
+    featurePageContent.append(root);
+
+    sample.addEventListener("click", function () {
+      const examples = {
+        javascript: 'const greet = (name) => {\n  return "Halo, " + name;\n};\n\nconsole.log(greet("Umaira"));',
+        json: '{\n  "name": "Umaira AI",\n  "version": 1\n}',
+        css: '.card {\n  padding: 16px;\n  border-radius: 12px;\n}',
+        html: '<section>\n  <h1>Halo Umaira</h1>\n  <p>Workspace coding aktif.</p>\n</section>',
+        text: "Tulis catatan kode di sini."
+      };
+      editor.value = examples[language.value] || "";
+      result.textContent = "Contoh dimuat. Tekan Periksa Kode untuk melanjutkan.";
+      editor.focus();
+    });
+
+    check.addEventListener("click", function () {
+      const code = editor.value;
+      const kind = language.value;
+      const messages = [];
+
+      if (!code.trim()) {
+        result.textContent = "Belum ada kode untuk diperiksa.";
+        return;
+      }
+
+      try {
+        if (kind === "javascript") {
+          // Function hanya mengompilasi sintaks; isi kode tidak dipanggil.
+          new Function(code);
+          messages.push("Sintaks JavaScript valid.");
+          messages.push("Catatan: error saat runtime dan kualitas logika belum diuji.");
+          messages.push("Sintaks module seperti import/export perlu pemeriksaan terpisah.");
+        } else if (kind === "json") {
+          JSON.parse(code);
+          messages.push("JSON valid.");
+        } else if (kind === "css") {
+          let depth = 0;
+          let quote = "";
+          let escaped = false;
+          let comment = false;
+
+          for (let i = 0; i < code.length; i++) {
+            const ch = code[i];
+            const next = code[i + 1];
+
+            if (comment) {
+              if (ch === "*" && next === "/") {
+                comment = false;
+                i++;
+              }
+              continue;
+            }
+
+            if (quote) {
+              if (escaped) escaped = false;
+              else if (ch === "\\") escaped = true;
+              else if (ch === quote) quote = "";
+              continue;
+            }
+
+            if (ch === "/" && next === "*") {
+              comment = true;
+              i++;
+            } else if (ch === '"' || ch === "'") {
+              quote = ch;
+            } else if (ch === "{") {
+              depth++;
+            } else if (ch === "}") {
+              depth--;
+              if (depth < 0) throw new Error("Kurung kurawal penutup berlebih.");
+            }
+          }
+
+          if (quote) throw new Error("String CSS belum ditutup.");
+          if (comment) throw new Error("Komentar CSS belum ditutup.");
+          if (depth !== 0) throw new Error("Jumlah kurung kurawal CSS tidak seimbang.");
+          messages.push("Pemeriksaan dasar struktur CSS berhasil.");
+          messages.push("Ini bukan validator CSS lengkap.");
+        } else if (kind === "html") {
+          const template = document.createElement("template");
+          template.innerHTML = code;
+          if (!template.content.childNodes.length) {
+            throw new Error("Tidak ditemukan elemen HTML.");
+          }
+          messages.push("HTML berhasil diparsing oleh browser.");
+          messages.push("Pemeriksaan ini bukan validasi standar HTML lengkap.");
+        } else {
+          messages.push("Teks berhasil diperiksa: " + code.length + " karakter.");
+        }
+
+        result.textContent = "BERHASIL\n\n" + messages.join("\n");
+      } catch (error) {
+        result.textContent = "PERLU DIPERBAIKI\n\n" + (error.message || String(error));
+      }
+    });
+
+    copy.addEventListener("click", async function () {
+      if (!editor.value) {
+        result.textContent = "Tidak ada kode untuk disalin.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(editor.value);
+        result.textContent = "Kode berhasil disalin.";
+      } catch {
+        editor.focus();
+        editor.select();
+        const copied = document.execCommand("copy");
+        result.textContent = copied
+          ? "Kode berhasil disalin."
+          : "Penyalinan otomatis gagal. Pilih kode lalu salin secara manual.";
+      }
+    });
+
+    send.addEventListener("click", function () {
+      if (!editor.value.trim()) {
+        result.textContent = "Tulis kode terlebih dahulu.";
+        return;
+      }
+
+      const chatInput =
+        document.querySelector("#chatSection textarea") ||
+        document.querySelector("#chatSection input:not([type=search])");
+
+      const sendButton = document.getElementById("chatSendBtn");
+
+      if (!chatInput || !sendButton) {
+        result.textContent =
+          "Kolom chat tidak ditemukan. Salin kode lalu buka Obrolan secara manual.";
+        return;
+      }
+
+      const prompt =
+        "Tolong analisis kode " + language.options[language.selectedIndex].text +
+        " berikut. Jelaskan masalahnya dan usulkan perbaikan tanpa mengubah kode asli:\n\n" +
+        editor.value;
+
+      chatInput.value = prompt;
+      chatInput.dispatchEvent(new Event("input", { bubbles: true }));
+      chatInput.dispatchEvent(new Event("change", { bubbles: true }));
+      chatInput.focus();
+
+      if (!chatInput.value.includes(editor.value)) {
+        result.textContent = "Kode gagal dimasukkan ke kolom chat.";
+        return;
+      }
+
+      if (typeof showUmairaToast === "function") {
+        showUmairaToast("Kode disiapkan di kolom Obrolan. Periksa lalu kirim.");
+      }
+
+      if (typeof openView === "function") {
+        openView("chat");
+      } else {
+        navItems.forEach(function (item) {
+          if (item.dataset.view === "chat") item.click();
+        });
+      }
+
+      result.textContent =
+        "Kode sudah dimasukkan ke kolom Obrolan. Tekan tombol kirim untuk mengirimnya ke Umaira.";
+    });
+  }
+
+  // ===== UMAIRA PLUGIN MANAGER =====
+  function renderUmairaPluginWorkspace() {
+    featurePageContent.replaceChildren();
+
+    const root = document.createElement("section");
+    root.className = "umaira-plugin-workspace";
+
+    const intro = document.createElement("p");
+    intro.className = "umaira-plugin-note";
+    intro.textContent =
+      "Kelola alat bawaan Umaira di perangkat ini. Layanan eksternal hanya aktif setelah integrasinya benar-benar dikonfigurasi.";
+    root.append(intro);
+
+    const list = document.createElement("div");
+    list.className = "umaira-plugin-list";
+
+    const storageKey = "umaira-plugin-settings-v1";
+    const definitions = [
+      {
+        id: "codex",
+        name: "Codex — Pemeriksa Kode",
+        detail: "Workspace coding, pemeriksaan sintaks dasar, dan penyalinan kode.",
+        builtIn: true,
+        defaultEnabled: true
+      },
+      {
+        id: "projects",
+        name: "Konteks Proyek",
+        detail: "Memilih proyek tersimpan sebagai konteks untuk obrolan Umaira.",
+        builtIn: true,
+        defaultEnabled: true
+      },
+      {
+        id: "library",
+        name: "Pustaka Lokal",
+        detail: "Membuka dan mengelola gambar yang tersimpan di Pustaka.",
+        builtIn: true,
+        defaultEnabled: true
+      },
+      {
+        id: "external-search",
+        name: "Pencarian Web Eksternal",
+        detail: "Belum terhubung. Memerlukan penyedia pencarian dan konfigurasi server.",
+        builtIn: false,
+        defaultEnabled: false
+      }
+    ];
+
+    let saved = {};
+    try {
+      saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      if (!saved || typeof saved !== "object" || Array.isArray(saved)) saved = {};
+    } catch {
+      saved = {};
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(saved));
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    definitions.forEach(function (plugin) {
+      const card = document.createElement("article");
+      card.className = "umaira-plugin-card";
+
+      const body = document.createElement("div");
+      body.className = "umaira-plugin-body";
+
+      const heading = document.createElement("h2");
+      heading.textContent = plugin.name;
+
+      const description = document.createElement("p");
+      description.textContent = plugin.detail;
+
+      const status = document.createElement("span");
+      status.className = "umaira-plugin-status";
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "umaira-workspace-btn secondary";
+
+      function updateCard() {
+        const enabled = plugin.builtIn &&
+          (typeof saved[plugin.id] === "boolean"
+            ? saved[plugin.id]
+            : plugin.defaultEnabled);
+
+        status.textContent = !plugin.builtIn
+          ? "Belum terhubung"
+          : enabled ? "Aktif di perangkat ini" : "Nonaktif";
+
+        status.dataset.enabled = String(enabled);
+        toggle.textContent = !plugin.builtIn
+          ? "Belum tersedia"
+          : enabled ? "Nonaktifkan" : "Aktifkan";
+        toggle.disabled = !plugin.builtIn;
+      }
+
+      toggle.addEventListener("click", function () {
+        const current = typeof saved[plugin.id] === "boolean"
+          ? saved[plugin.id]
+          : plugin.defaultEnabled;
+
+        saved[plugin.id] = !current;
+
+        if (!saveSettings()) {
+          saved[plugin.id] = current;
+          status.textContent = "Gagal menyimpan pengaturan di perangkat.";
+          return;
+        }
+
+        updateCard();
+        if (typeof showUmairaToast === "function") {
+          showUmairaToast(plugin.name + (saved[plugin.id] ? " diaktifkan." : " dinonaktifkan."));
+        }
+      });
+
+      body.append(heading, description, status);
+      card.append(body, toggle);
+      list.append(card);
+      updateCard();
+    });
+
+    root.append(list);
+
+    const footer = document.createElement("p");
+    footer.className = "umaira-plugin-note";
+    footer.textContent =
+      "Status Plugin disimpan di browser perangkat ini; pengaturan belum disinkronkan antarperangkat.";
+    root.append(footer);
+
+    featurePageContent.append(root);
+  }
+
 // ===== UMAIRA WORKSPACE NAVIGATION =====
 (() => {
   const chatSection = document.getElementById("chatSection");
@@ -3696,7 +4073,13 @@ function setupChatInputAutoResize() {
       }
     };
 
-    const save = items => localStorage.setItem(KEY, JSON.stringify(items));
+    const save = items => {
+      localStorage.setItem(KEY, JSON.stringify(items));
+      window.umairaWorkspacePush?.();
+    };
+    window.__umairaProjectsRerender = () => {
+      if (root.querySelector(".projects-panel, .project-detail")) render();
+    };
 
     const make = (tag, cls, text) => {
       const node = document.createElement(tag);
@@ -3818,7 +4201,7 @@ function setupChatInputAutoResize() {
       const intro = make("div", "projects-intro");
       intro.append(
         make("h2", "", "Workspace Proyek"),
-        make("p", "", "Kelola proyek dan simpan catatannya di browser ini.")
+        make("p", "", "Kelola proyek dan catatannya. Tersimpan di akunmu dan tersinkron di semua perangkat.")
       );
       toolbar.append(intro, button("+ Proyek baru", "projects-button", () => renderForm()));
       panel.append(toolbar);
@@ -4269,6 +4652,15 @@ function setupChatInputAutoResize() {
     }
 
     if (view === "projects") { renderProjectsWorkspace(); return; }
+    if (view === "plugins") {
+      renderUmairaPluginWorkspace();
+      return;
+    }
+
+    if (view === "codex") {
+      renderUmairaCodexWorkspace();
+      return;
+    }
     page.cards.forEach(card => {
       const article = document.createElement("article");
       article.className = "feature-card";

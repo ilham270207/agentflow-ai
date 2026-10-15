@@ -9,3 +9,10 @@ backups/
 data/
 data/umaira-users.json
 .umaira-horde-models.json
+.env
+node_modules/
+data/
+backups/
+*.bak
+*.before-*
+*.tgz

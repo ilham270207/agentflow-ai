@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hapus Akun - Umaira AI</title><link rel="stylesheet" href="/legal.css"><link rel="stylesheet" href="/hapus-akun.css"></head>
+<body><main>
+<nav><a href="/">Beranda</a><a href="/privasi">Kebijakan Privasi</a><a href="/syarat">Syarat Penggunaan</a></nav>
+<h1>Hapus Akun</h1>
+<p class="mut">Tindakan ini permanen dan tidak dapat dibatalkan.</p>
+<p>Yang akan dihapus: akun Anda, seluruh gambar di Pustaka beserta filenya, dan data Umaira yang tersimpan di browser ini. Anda juga akan dikeluarkan dari semua perangkat.</p>
+<div id="da-guest" hidden><p>Anda belum masuk. <a href="/login">Masuk</a> terlebih dahulu untuk menghapus akun.</p></div>
+<div id="da-form" hidden>
+<p>Akun: <b id="da-email"></b></p>
+<label for="da-proof">Kata sandi (akun Google: ketik email Anda)</label>
+<input id="da-proof" type="password" autocomplete="current-password">
+<label for="da-confirm">Ketik HAPUS untuk melanjutkan</label>
+<input id="da-confirm" type="text" autocomplete="off" autocapitalize="characters">
+<button id="da-btn" type="button" disabled>Hapus akun saya</button>
+</div>
+<p id="da-msg" role="alert"></p>
+<script src="/hapus-akun.js"></script>
+</main></body></html>

@@ -1,0 +1,53 @@
+/* Umaira chat-image v1 */
+.umi-imgchat{
+  max-width:min(100%,440px);
+  margin:10px 0;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid color-mix(in srgb, currentColor 14%, transparent);
+  background:color-mix(in srgb, currentColor 5%, transparent);
+  box-shadow:0 6px 20px rgba(0,0,0,.10);
+}
+.umi-imgchat-status{
+  display:flex; align-items:center; gap:10px;
+  font-size:.92rem; opacity:.85; line-height:1.4;
+}
+.umi-imgchat-status:empty{ display:none; }
+.umi-imgchat-spin{
+  flex:0 0 auto; width:16px; height:16px; border-radius:50%;
+  border:2px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color:var(--accent,#7c5cff);
+  animation:umiSpin .8s linear infinite;
+}
+@keyframes umiSpin{ to{ transform:rotate(360deg); } }
+.umi-imgchat-body{ display:grid; gap:10px; }
+.umi-imgchat-body:not(:empty){ margin-top:10px; }
+.umi-imgchat-img{
+  width:100%; height:auto; display:block;
+  border-radius:12px; background:color-mix(in srgb, currentColor 8%, transparent);
+}
+.umi-imgchat-cap{ margin:0; font-size:.85rem; opacity:.7; word-break:break-word; }
+.umi-imgchat-actions{ display:flex; flex-wrap:wrap; gap:8px; }
+.umi-imgchat-actions button{
+  appearance:none; cursor:pointer;
+  padding:8px 14px; border-radius:999px;
+  font:inherit; font-size:.85rem; color:inherit;
+  border:1px solid color-mix(in srgb, currentColor 18%, transparent);
+  background:color-mix(in srgb, currentColor 7%, transparent);
+  transition:transform .15s, background .2s;
+}
+.umi-imgchat-actions button:hover{ background:color-mix(in srgb, currentColor 14%, transparent); }
+.umi-imgchat-actions button:active{ transform:scale(.96); }
+.umi-imgchat-actions button:disabled{ opacity:.55; cursor:default; }
+.umi-imgchat-actions .umi-primary{
+  border:0; color:#fff;
+  background:linear-gradient(135deg, var(--accent,#7c5cff), #ff5fa2);
+}
+.umi-imgchat.is-error .umi-imgchat-status{ color:#ff5d73; opacity:1; }
+.umi-fallback-user{
+  margin:10px 0 10px auto; max-width:85%; width:fit-content;
+  padding:10px 14px; border-radius:18px;
+  background:color-mix(in srgb, var(--accent,#7c5cff) 22%, transparent);
+  word-break:break-word; white-space:pre-wrap;
+}
+@media (prefers-reduced-motion:reduce){ .umi-imgchat-spin{ animation:none; } }
