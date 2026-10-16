@@ -1,29 +1,29 @@
 /* ===== UMAIRA TEMA: putih penuh / hitam penuh, gradasi ungu hanya sebagai aksen ===== */
 :root:root {
-  --u-grad: linear-gradient(135deg, #6d5dfc 0%, #9b5cf6 55%, #c26bf5 100%);
-  --u-grad-soft: linear-gradient(135deg, rgba(109,93,252,.16), rgba(194,107,245,.16));
+  --u-grad: linear-gradient(135deg, #22efe9 0%, #1fe7d3 55%, #36e7cd 100%);
+  --u-grad-soft: linear-gradient(135deg, rgba(34,239,233,.16), rgba(54,231,205,.16));
   --umaira-grad: var(--u-grad);
 }
 :root:root:not([data-uui="dark"]) {
   --bg: #ffffff; --bg-soft: #ffffff; --bg-glass: rgba(255,255,255,.82);
-  --panel: #ffffff; --panel-soft: #f6f6f9; --panel-hover: #f0f0f4;
-  --border: #ececf1; --border-strong: #dcdce4;
-  --text: #0b0b10; --text-soft: #2b2b35; --muted: #6a6a77; --muted-2: #8e8e9a;
-  --accent: #7a5cf0; --accent-strong: #6d5dfc; --accent-soft: rgba(109,93,252,.10);
-  --user-bubble: #f3f3f7;
-  --shadow: 0 8px 28px rgba(15,15,30,.07);
-  --card: #ffffff; --line: #ececf1;
+  --panel: #ffffff; --panel-soft: #f6f9f9; --panel-hover: #f0f4f4;
+  --border: #ecf1f1; --border-strong: #dce4e4;
+  --text: #0b1010; --text-soft: #2c3534; --muted: #6a6a77; --muted-2: #8e8e9a;
+  --accent: #20ddd3; --accent-strong: #22efe9; --accent-soft: rgba(34,239,233,.10);
+  --user-bubble: #f3f7f7;
+  --shadow: 0 8px 28px rgba(13,25,24,.07);
+  --card: #ffffff; --line: #ecf1f1;
   color-scheme: light;
 }
 :root:root[data-uui="dark"] {
   --bg: #000000; --bg-soft: #000000; --bg-glass: rgba(0,0,0,.72);
-  --panel: #09090b; --panel-soft: #111114; --panel-hover: #18181c;
+  --panel: #090b0b; --panel-soft: #111414; --panel-hover: #181c1c;
   --border: rgba(255,255,255,.09); --border-strong: rgba(255,255,255,.16);
-  --text: #f5f5f7; --text-soft: #d9d9df; --muted: #9a9aa6; --muted-2: #6f6f7a;
-  --accent: #a98bff; --accent-strong: #8b6cff; --accent-soft: rgba(139,108,255,.16);
-  --user-bubble: #16161a;
+  --text: #f5f7f7; --text-soft: #d9dfdf; --muted: #9a9aa6; --muted-2: #6f6f7a;
+  --accent: #6ef7ee; --accent-strong: #3af5eb; --accent-soft: rgba(58,245,235,.16);
+  --user-bubble: #161a1a;
   --shadow: 0 18px 50px rgba(0,0,0,.6);
-  --card: #09090b; --line: rgba(255,255,255,.12);
+  --card: #090b0b; --line: rgba(255,255,255,.12);
   color-scheme: dark;
 }
 
@@ -40,7 +40,7 @@
 :root:root .sidebar { background: var(--bg) !important; border-right: 1px solid var(--border) !important; }
 :root:root .new-chat-btn {
   background: var(--u-grad) !important; border: 0 !important; color: #fff !important;
-  box-shadow: 0 8px 24px rgba(109,93,252,.28) !important;
+  box-shadow: 0 8px 24px rgba(34,239,233,.28) !important;
 }
 :root:root .nav-item { position: relative; color: var(--text-soft) !important; background: transparent !important; border-color: transparent !important; }
 :root:root .nav-item:hover { background: var(--panel-hover) !important; }
@@ -63,7 +63,7 @@
 }
 :root:root .umaira-empty p { color: var(--muted); }
 :root:root:not([data-uui="dark"]) .umaira-orb {
-  box-shadow: 0 12px 40px rgba(124,92,246,.30), inset -8px -12px 24px rgba(60,30,160,.45), inset 6px 6px 16px rgba(255,255,255,.35);
+  box-shadow: 0 12px 40px rgba(31,231,220,.30), inset -8px -12px 24px rgba(19,80,76,.45), inset 6px 6px 16px rgba(255,255,255,.35);
 }
 :root:root .umaira-suggest { background: var(--panel); border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text); }
 :root:root .umaira-suggest:hover { border-color: var(--accent); }
@@ -75,7 +75,7 @@
   background: var(--user-bubble) !important; border: 1px solid var(--border) !important; color: var(--text) !important;
 }
 :root:root .chat-message.assistant .chat-bubble { color: var(--text) !important; }
-:root:root .chat-code-block { background: #0d0d12 !important; border: 1px solid rgba(255,255,255,.10) !important; }
+:root:root .chat-code-block { background: #0d1212 !important; border: 1px solid rgba(255,255,255,.10) !important; }
 
 /* kotak input */
 :root:root .chat-composer {
@@ -87,7 +87,7 @@
 :root:root .chat-composer textarea { color: var(--text) !important; }
 :root:root .chat-composer textarea::placeholder { color: var(--muted-2) !important; }
 :root:root .composer-plus, :root:root .composer-mic { background: var(--panel-soft) !important; color: var(--text) !important; }
-:root:root #chatSendBtn { background: var(--u-grad) !important; color: #fff !important; box-shadow: 0 6px 18px rgba(109,93,252,.35) !important; }
+:root:root #chatSendBtn { background: var(--u-grad) !important; color: #fff !important; box-shadow: 0 6px 18px rgba(34,239,233,.35) !important; }
 :root:root .composer-menu { background: var(--panel) !important; border: 1px solid var(--border-strong) !important; }
 :root:root .composer-note { color: var(--muted-2) !important; }
 

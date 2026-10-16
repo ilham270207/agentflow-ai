@@ -7,30 +7,30 @@
 <title>Masuk · Umaira AI</title>
 <link rel="icon" href="/assets/umaira-logo-gradient.svg" type="image/svg+xml">
 <style>
-:root{--bg:#07050f;--card:rgba(22,15,44,.78);--line:rgba(167,139,250,.22);--text:#f5f3ff;--muted:#a79fc4;--accent:#8b5cf6;--danger:#fca5a5}
+:root{--bg:#040909;--card:rgba(11,28,27,.78);--line:rgba(107,241,232,.22);--text:#f4fefe;--muted:#9dc0be;--accent:#1fe7d8;--danger:#fca5a5}
 *{box-sizing:border-box}
 html,body{min-height:100%}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);display:grid;place-items:center;min-height:100vh;padding:24px 16px;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 50% 0%,rgba(124,58,237,.35),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.12),transparent 70%)}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);display:grid;place-items:center;min-height:100vh;padding:24px 16px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 50% 0%,rgba(25,174,161,.35),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.12),transparent 70%)}
 .card{position:relative;width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 24px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:22px;text-align:center}
-.brand img{width:56px;height:56px;filter:drop-shadow(0 0 14px rgba(124,58,237,.55))}
+.brand img{width:56px;height:56px;filter:drop-shadow(0 0 14px rgba(25,174,161,.55))}
 h1{margin:0;font-size:22px;font-weight:600}
 .sub{margin:0;color:var(--muted);font-size:14px}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:18px}
 .tab{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;padding:9px;border-radius:9px;cursor:pointer}
-.tab[aria-selected="true"]{background:rgba(139,92,246,.28);color:var(--text)}
+.tab[aria-selected="true"]{background:rgba(31,231,216,.28);color:var(--text)}
 #googleWrap{display:flex;justify-content:center;min-height:44px}
 .divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:16px 0}
 .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
 label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
 .field{margin-bottom:14px}
-input{width:100%;background:rgba(10,7,22,.7);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-size:16px;padding:12px 14px;outline:none}
-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+input{width:100%;background:rgba(5,13,13,.7);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-size:16px;padding:12px 14px;outline:none}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,231,216,.25)}
 .pw{position:relative}
 .pw input{padding-right:78px}
 .pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--muted);font:inherit;font-size:13px;padding:8px 10px;cursor:pointer;border-radius:8px}
-.primary{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#8b5cf6,#6d28d9);cursor:pointer}
+.primary{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#1fe7d8,#1c7a72);cursor:pointer}
 .primary:disabled{opacity:.6;cursor:default}
 .error{min-height:20px;margin:12px 0 0;color:var(--danger);font-size:13px;text-align:center}
 .foot{margin:14px 0 0;color:var(--muted);font-size:12px;text-align:center}
@@ -39,6 +39,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)
 <script>(function(){try{var p=localStorage.getItem("umaira-theme-preference")||"light";var d=p==="dark"||p==="gelap"||((p==="system"||p==="sistem"||p==="auto")&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-uui",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-uui","light");}})();</script>
 <link rel="stylesheet" href="/login-theme.css">
 <link rel="stylesheet" href="/workspace-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/umaira-teal-glass.css?v=1">
 </head>
 <body>
 <main class="card">

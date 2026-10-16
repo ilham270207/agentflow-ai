@@ -2,13 +2,13 @@
    Untuk menonaktifkan, hapus tautan umaira-ui.css dan umaira-ui.js dari public/index.html. */
 
 :root{
-  --uui-bg:#ffffff;--uui-surface:#ffffff;--uui-soft:#f4f1ff;--uui-line:rgba(88,28,135,.14);
-  --uui-text:#111111;--uui-muted:#5b5b6b;--uui-danger:#dc2626;--uui-ok:#059669;
-  --uui-shadow:0 6px 24px rgba(76,29,149,.10);
+  --uui-bg:#ffffff;--uui-surface:#ffffff;--uui-soft:#f2fefe;--uui-line:rgba(17,67,61,.14);
+  --uui-text:#111111;--uui-muted:#5c6a6a;--uui-danger:#dc2626;--uui-ok:#059669;
+  --uui-shadow:0 6px 24px rgba(18,74,69,.10);
 }
 html[data-uui="dark"]{
-  --uui-bg:#0f0b1d;--uui-surface:#181228;--uui-soft:#221a3a;--uui-line:rgba(167,139,250,.24);
-  --uui-text:#f4f1ff;--uui-muted:#aaa3c6;--uui-shadow:0 6px 24px rgba(0,0,0,.5);
+  --uui-bg:#081413;--uui-surface:#0f1f1d;--uui-soft:#162c2b;--uui-line:rgba(107,241,232,.24);
+  --uui-text:#f2fefe;--uui-muted:#a1c2c0;--uui-shadow:0 6px 24px rgba(0,0,0,.5);
 }
 
 /* Kepadatan tampilan (berlaku untuk elemen berbasis rem) */
@@ -25,8 +25,8 @@ html.uui-inverted img,html.uui-inverted video,html.uui-inverted canvas,html.uui-
 /* Sidebar: semua teks hitam (terang) / putih lembut (gelap) */
 html[data-uui="light"] .sidebar,html[data-uui="light"] .sidebar *{color:#111111!important}
 html[data-uui="light"] .sidebar input::placeholder{color:#6b6b78!important;opacity:1}
-html[data-uui="dark"] .sidebar,html[data-uui="dark"] .sidebar *{color:#f4f1ff!important}
-html[data-uui="dark"] .sidebar input::placeholder{color:#aaa3c6!important;opacity:1}
+html[data-uui="dark"] .sidebar,html[data-uui="dark"] .sidebar *{color:#f2fefe!important}
+html[data-uui="dark"] .sidebar input::placeholder{color:#a1c2c0!important;opacity:1}
 
 /* Logo: satu gaya gradien ungu-biru-cyan di mana pun (tanpa kotak/filter ungu polos) */
 .sb-logo,.sidebar img[src*="umaira-logo"]{
@@ -41,12 +41,12 @@ html[data-uui="dark"] .sidebar input::placeholder{color:#aaa3c6!important;opacit
 .uui-eyebrow{font-size:11px!important;letter-spacing:.03em!important}
 
 /* Item sidebar yang aktif untuk alat baru */
-.sidebar .uui-tools .nav-item.uui-on{background:rgba(124,58,237,.14)!important;box-shadow:inset 3px 0 0 #7c3aed}
+.sidebar .uui-tools .nav-item.uui-on{background:rgba(25,174,161,.14)!important;box-shadow:inset 3px 0 0 #19aea1}
 .uui-tools-label{font-size:12px;font-weight:600;padding:8px 10px 4px}
 
 /* ---------- Panel ---------- */
 .uui-panel{position:fixed;top:0;right:0;bottom:0;left:var(--uui-left,0);z-index:9000;background:var(--uui-bg);color:var(--uui-text);
-  overflow:auto;-webkit-overflow-scrolling:touch;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  overflow:auto;-webkit-overflow-scrolling:touch;font:14px/1.45 'Inter',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   padding:14px 14px 32px;box-sizing:border-box;animation:uuiIn .16s ease-out}
 @keyframes uuiIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .uui-panel,.uui-panel *{box-sizing:border-box}
@@ -65,18 +65,18 @@ html[data-uui="dark"] .sidebar input::placeholder{color:#aaa3c6!important;opacit
 .uui-spread{justify-content:space-between}
 .uui-btn{border:1px solid var(--uui-line);background:var(--uui-surface);color:var(--uui-text);padding:8px 12px;border-radius:10px;font:inherit;font-size:13px;cursor:pointer;line-height:1.2}
 .uui-btn:hover{background:var(--uui-soft)}
-.uui-btn.primary{border:0;color:#fff;background:linear-gradient(135deg,#7c3aed,#2563eb)}
+.uui-btn.primary{border:0;color:#fff;background:linear-gradient(135deg,#19aea1,#2563eb)}
 .uui-btn.primary:hover{filter:brightness(1.06)}
 .uui-btn.danger{color:var(--uui-danger);border-color:rgba(220,38,38,.35)}
-.uui-btn:focus-visible,.uui-x:focus-visible,.uui-in:focus-visible,.uui-seg button:focus-visible{outline:2px solid #7c3aed;outline-offset:2px}
+.uui-btn:focus-visible,.uui-x:focus-visible,.uui-in:focus-visible,.uui-seg button:focus-visible{outline:2px solid #19aea1;outline-offset:2px}
 .uui-in{width:100%;border:1px solid var(--uui-line);background:var(--uui-surface);color:var(--uui-text);border-radius:10px;padding:9px 11px;font:inherit;font-size:14px}
 textarea.uui-in{min-height:84px;resize:vertical}
 .uui-muted{color:var(--uui-muted);font-size:12.5px;margin:0}
 .uui-seg{display:inline-flex;border:1px solid var(--uui-line);border-radius:10px;overflow:hidden}
 .uui-seg button{border:0;background:transparent;color:var(--uui-text);padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}
-.uui-seg button[aria-pressed="true"]{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff}
+.uui-seg button[aria-pressed="true"]{background:linear-gradient(135deg,#19aea1,#2563eb);color:#fff}
 .uui-avatar{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:24px;font-weight:650;flex:none;
-  background:linear-gradient(135deg,#7c3aed,#3b82f6 60%,#22d3ee)}
+  background:linear-gradient(135deg,#19aea1,#3b82f6 60%,#22d3ee)}
 .uui-badge{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:99px;background:var(--uui-soft);color:var(--uui-text)}
 .uui-badge.ok{color:var(--uui-ok)}
 .uui-stats{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(110px,100%),1fr))}
@@ -87,10 +87,10 @@ textarea.uui-in{min-height:84px;resize:vertical}
 .uui-item{display:flex;align-items:center;gap:10px;border:1px solid var(--uui-line);border-radius:12px;padding:9px 11px;background:var(--uui-surface)}
 .uui-item.done .uui-item-t{text-decoration:line-through;color:var(--uui-muted)}
 .uui-item-t{flex:1;min-width:0;overflow-wrap:anywhere}
-.uui-item input[type="checkbox"]{width:18px;height:18px;accent-color:#7c3aed}
+.uui-item input[type="checkbox"]{width:18px;height:18px;accent-color:#19aea1}
 .uui-timer{font-size:46px;font-weight:650;font-variant-numeric:tabular-nums;text-align:center;margin:8px 0 12px}
 .uui-kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;margin:0}
 .uui-kv dt{color:var(--uui-muted)}
 .uui-kv dd{margin:0;overflow-wrap:anywhere}
-.uui-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111;color:#fff;padding:9px 14px;border-radius:10px;font:13px system-ui,sans-serif;z-index:9500;max-width:90vw}
-html[data-uui="dark"] .uui-toast{background:#f4f1ff;color:#111}
+.uui-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111;color:#fff;padding:9px 14px;border-radius:10px;font:13px 'Inter',system-ui,sans-serif;z-index:9500;max-width:90vw}
+html[data-uui="dark"] .uui-toast{background:#f2fefe;color:#111}

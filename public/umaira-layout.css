@@ -6,8 +6,8 @@
   display: inline-grid; place-items: center; width: 38px; height: 38px; cursor: pointer;
   border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,.04); color: var(--text-soft); font-size: 17px;
 }
-.sb-collapse:hover, .sb-reopen:hover { background: rgba(160,100,255,.16); }
-.sb-reopen { display: none; position: fixed; top: 16px; left: 16px; z-index: 45; background: rgba(20,12,36,.9); }
+.sb-collapse:hover, .sb-reopen:hover { background: rgba(45,244,225,.16); }
+.sb-reopen { display: none; position: fixed; top: 16px; left: 16px; z-index: 45; background: rgba(8,22,21,.9); }
 
 .sidebar .new-chat-btn {
   background: rgba(255,255,255,.08) !important; border: 1px solid rgba(255,255,255,.10) !important;
@@ -46,9 +46,9 @@
 .umaira-chip {
   flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; white-space: nowrap;
   padding: 9px 16px; font-size: 13.5px; color: var(--text); border: 1px solid var(--border-strong);
-  border-radius: 999px; background: rgba(10,6,20,.7); touch-action: manipulation;
+  border-radius: 999px; background: rgba(4,11,11,.7); touch-action: manipulation;
 }
-.umaira-chip:hover { background: rgba(139,77,255,.2); }
+.umaira-chip:hover { background: rgba(13,240,221,.2); }
 
 /* input dua baris */
 .chat-composer {
@@ -64,7 +64,7 @@
 
 /* kartu fitur */
 .umaira-feature-cards { grid-template-columns: repeat(3, minmax(0,1fr)); }
-.umaira-suggest.umaira-feature { display: grid !important; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; padding: 14px !important; background: rgba(8,4,16,.7) !important; }
+.umaira-suggest.umaira-feature { display: grid !important; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; padding: 14px !important; background: rgba(2,8,8,.7) !important; }
 .umaira-feature .umaira-tag { justify-self: end; padding: 5px 11px; font-size: 11.5px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--text-soft); }
 .umaira-feature strong { grid-column: 1 / -1; margin-top: 8px; }
 .umaira-feature small { grid-column: 1 / -1; }
@@ -78,14 +78,14 @@
   .sidebar {
     margin: 0 !important; min-height: 0 !important; height: 100% !important; position: static !important; top: auto !important;
     display: flex !important; flex-direction: column; overflow: hidden; border-radius: 26px !important; padding: 16px 14px !important;
-    background: linear-gradient(180deg, #0f0919, #08050f) !important;
+    background: linear-gradient(180deg, #07100f, #040909) !important;
   }
   .sidebar-top { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
   .sidebar-bottom { flex: 0 0 auto; margin-top: 10px; }
   .chat-history-list { max-height: none !important; min-height: 0; }
   .content {
     height: 100% !important; min-height: 0 !important; overflow: hidden; border-radius: 26px; border: 1px solid var(--border);
-    background: radial-gradient(900px 480px at 50% -10%, rgba(139,77,255,.16), transparent 62%), rgba(10,6,20,.55) !important;
+    background: radial-gradient(900px 480px at 50% -10%, rgba(13,240,221,.16), transparent 62%), rgba(4,11,11,.55) !important;
   }
   .chat-section, .chat-layout, .chat-main { height: 100%; min-height: 0; }
   body.sidebar-collapsed .layout { grid-template-columns: minmax(0,1fr) !important; }
