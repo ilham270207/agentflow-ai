@@ -214,7 +214,7 @@ async function currentUser(req) {
 
 // ===== UMAIRA ADMIN USER DIRECTORY =====
 const ADMIN_EMAIL = String(
-  process.env.ADMIN_EMAIL || "danham322@gmail.com"
+  process.env.ADMIN_EMAIL || "__tidak-ada-admin__"
 ).trim().toLowerCase();
 
 router.get("/admin/users", async (req, res) => {

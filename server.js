@@ -21,6 +21,9 @@ app.disable("x-powered-by");
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  if (process.env.NODE_ENV === "production") res.setHeader("Strict-Transport-Security", "max-age=15552000; includeSubDomains");
   if (process.env.NODE_ENV === "production") res.setHeader("Strict-Transport-Security", "max-age=15552000; includeSubDomains");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
@@ -69,7 +72,7 @@ app.get("/admin", async (req, res) => {
     if (!user) return res.redirect("/login");
 
     const adminEmail = String(
-      process.env.ADMIN_EMAIL || "danham322@gmail.com"
+      process.env.ADMIN_EMAIL || "__tidak-ada-admin__"
     ).trim().toLowerCase();
 
     if (String(user.email || "").trim().toLowerCase() !== adminEmail) {
