@@ -1,5 +1,7 @@
 import express from "express";
 import crypto from "node:crypto";
+import nodemailer from "nodemailer";
+import { otpEmail } from "./mailer.js";
 import { promisify } from "node:util";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -53,7 +55,9 @@ setInterval(() => {
 const AUTH_LIMITS = {
   "/login": [10, 10 * 60 * 1000],
   "/register": [5, 60 * 60 * 1000],
-  "/google": [20, 10 * 60 * 1000]
+  "/google": [20, 10 * 60 * 1000],
+  "/forgot-password": [5, 15 * 60 * 1000],
+  "/reset-password": [10, 15 * 60 * 1000]
 };
 function authLimiter(req, res, next) {
   if (req.method !== "POST") return next();
@@ -156,6 +160,45 @@ function setCookie(res, token, maxAge) {
     `umaira_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`);
 }
 
+// ===== UMAIRA PRESENCE =====
+let presenceReady = true;
+const presence = await kvGet("presence", {})
+  .then((v) => (v && typeof v === "object" && !Array.isArray(v) ? v : {}))
+  .catch((err) => {
+    presenceReady = false;
+    console.error("[presence] gagal membaca, pelacakan dimatikan:", err.message);
+    return {};
+  });
+let presenceTimer = null;
+function persistPresence() {
+  if (!presenceReady || presenceTimer) return;
+  presenceTimer = setTimeout(() => {
+    presenceTimer = null;
+    kvSet("presence", presence).catch((err) => console.error("[presence] gagal menyimpan:", err.message));
+  }, 30000);
+}
+if (presenceReady && !presence.__meta) {
+  presence.__meta = { seededAt: Date.now() };
+  for (const u of await readUsers().catch(() => [])) {
+    if (u && u.id && !presence[u.id]) presence[u.id] = { firstSeen: null, lastSeen: 0 };
+  }
+  persistPresence();
+}
+function touchPresence(userId) {
+  if (!presenceReady || !userId) return;
+  const now = Date.now();
+  const p = presence[userId];
+  if (!p) {
+    presence[userId] = { firstSeen: now, lastSeen: now };
+    persistPresence();
+    return;
+  }
+  if (now - (p.lastSeen || 0) < 20000) return;
+  p.lastSeen = now;
+  persistPresence();
+}
+// ===== END UMAIRA PRESENCE =====
+
 async function currentUser(req) {
   const token = cookieToken(req);
   const session = sessions.get(token);
@@ -164,8 +207,81 @@ async function currentUser(req) {
     return null;
   }
   const user = (await readUsers()).find(u => u.id === session.userId);
-  return user ? { id: user.id, name: user.name, email: user.email } : null;
+  if (user) touchPresence(user.id);
+  return user ? { id: user.id, name: user.name, email: user.email, picture: user.picture || "", hasPassword: Boolean(user.salt && user.hash) } : null;
 }
+
+
+// ===== UMAIRA ADMIN USER DIRECTORY =====
+const ADMIN_EMAIL = String(
+  process.env.ADMIN_EMAIL || "danham322@gmail.com"
+).trim().toLowerCase();
+
+router.get("/admin/users", async (req, res) => {
+  try {
+    const sessionUser = await currentUser(req);
+
+    if (!sessionUser) {
+      return res.status(401).json({
+        error: "Silakan login terlebih dahulu."
+      });
+    }
+
+    if (String(sessionUser.email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
+      return res.status(403).json({
+        error: "Akses khusus administrator."
+      });
+    }
+
+    const users = await readUsers();
+    const adminAccount = users.find((u) => u.id === sessionUser.id);
+
+    if (
+      !adminAccount ||
+      !adminAccount.googleSub ||
+      String(adminAccount.email || "").trim().toLowerCase() !== ADMIN_EMAIL
+    ) {
+      return res.status(403).json({
+        error: "Admin wajib login dengan Google terverifikasi untuk email administrator."
+      });
+    }
+
+    res.setHeader("Cache-Control", "no-store");
+    const nowTs = Date.now();
+    const DAY = 24 * 60 * 60 * 1000;
+    const rows = users.map((u) => {
+      const p = presence[u.id] || {};
+      const lastSeen = p.lastSeen || null;
+      const firstSeen = p.firstSeen || null;
+      return {
+        name: String(u.name || "Pengguna"),
+        email: String(u.email || ""),
+        loginMethod: u.googleSub
+          ? "Google"
+          : (u.hash && u.salt ? "Email dan password" : "Akun"),
+        lastSeen,
+        firstSeen,
+        online: Boolean(lastSeen && nowTs - lastSeen < 150 * 1000)
+      };
+    });
+    rows.sort((a, b) => (Number(b.online) - Number(a.online)) || ((b.lastSeen || 0) - (a.lastSeen || 0)));
+    return res.json({
+      total: users.length,
+      online: rows.filter((r) => r.online).length,
+      activeToday: rows.filter((r) => r.lastSeen && nowTs - r.lastSeen < DAY).length,
+      active7d: rows.filter((r) => r.lastSeen && nowTs - r.lastSeen < 7 * DAY).length,
+      newThisWeek: rows.filter((r) => r.firstSeen && nowTs - r.firstSeen < 7 * DAY).length,
+      serverTime: nowTs,
+      users: rows
+    });
+  } catch (err) {
+    console.error("Admin users error:", err?.message || err);
+    return res.status(500).json({
+      error: "Gagal memuat daftar pengguna."
+    });
+  }
+});
+// ===== END UMAIRA ADMIN USER DIRECTORY =====
 
 router.get("/me", async (req, res) => {
   try {
@@ -282,7 +398,15 @@ router.post("/google", async (req, res) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    sessions.set(token, {
+    const pic = typeof payload.picture === "string" && /^https:\/\/[\w.-]+\.googleusercontent\.com\//.test(payload.picture)
+      ? payload.picture.slice(0, 500) : "";
+    if (pic && user.picture !== pic) {
+      user.picture = pic;
+      await saveUsers(users);
+    }
+
+    
+sessions.set(token, {
       userId: user.id,
       expires: Date.now() + SESSION_MS
     });
@@ -296,6 +420,287 @@ router.post("/google", async (req, res) => {
     res.status(401).json({
       error: "Login Google gagal diverifikasi. Silakan coba lagi."
     });
+  }
+});
+
+
+/* ===== UMAIRA EMAIL OTP / PASSWORD RESET ===== */
+const otpTransport = (() => {
+  const user = String(process.env.MAIL_USER || process.env.SMTP_USER || "").trim();
+  const pass = String(process.env.MAIL_APP_PASSWORD || process.env.SMTP_PASS || "").replace(/\s/g, "");
+  if (!user || !pass) return null;
+
+  const port = Number(process.env.SMTP_PORT || 465);
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port,
+    secure: port === 465,
+    auth: { user, pass }
+  });
+})();
+
+const OTP_TTL_MS = 10 * 60 * 1000;
+const OTP_MAX_ATTEMPTS = 5;
+
+async function readPasswordOtps() {
+  const data = await kvGet("passwordResetOtps", {});
+  return data && typeof data === "object" && !Array.isArray(data) ? data : {};
+}
+
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "Masukkan alamat email yang valid." });
+    }
+
+    if (!otpTransport) {
+      return res.status(503).json({ error: "Layanan email belum dikonfigurasi." });
+    }
+
+    const users = await readUsers();
+    const user = users.find(u => u.email === email && u.salt && u.hash);
+
+    // Respons sama agar endpoint tidak membocorkan keberadaan akun.
+    if (!user) {
+      return res.json({ success: true, message: "Jika akun memenuhi syarat, kode akan dikirim ke email tersebut." });
+    }
+
+    const otps = await readPasswordOtps();
+    const prevOtp = otps[email];
+    const nowMs = Date.now();
+    const genericOk = { success: true, message: "Jika akun memenuhi syarat, kode akan dikirim ke email tersebut." };
+    if (prevOtp && prevOtp.sentAt && nowMs - prevOtp.sentAt < 60 * 1000) return res.json(genericOk);
+    let windowStart = nowMs;
+    let sendCount = 0;
+    if (prevOtp && prevOtp.windowStart && nowMs - prevOtp.windowStart < 3600 * 1000) { windowStart = prevOtp.windowStart; sendCount = prevOtp.sendCount || 0; }
+    if (sendCount >= 5) return res.json(genericOk);
+    for (const k of Object.keys(otps)) { if (k !== email && otps[k] && otps[k].expires <= nowMs) delete otps[k]; }
+    const code = String(crypto.randomInt(0, 1000000)).padStart(6, "0");
+    const codeHash = crypto.createHash("sha256").update(email + ":" + code).digest("hex");
+
+    otps[email] = {
+      userId: user.id,
+      codeHash,
+      expires: Date.now() + OTP_TTL_MS,
+      attempts: 0,
+      sentAt: nowMs,
+      windowStart,
+      sendCount: sendCount + 1
+    };
+    await kvSet("passwordResetOtps", otps);
+
+    try {
+      await otpTransport.sendMail({
+        from: otpFromAddress(),
+        to: email,
+        ...otpEmail({ code, purpose: "reset", minutes: OTP_TTL_MS / 60000 })
+      });
+    } catch (err) {
+      delete otps[email];
+      await kvSet("passwordResetOtps", otps);
+      console.error("Gagal mengirim email OTP:", err.message);
+      return res.status(502).json({ error: "Email OTP gagal dikirim. Periksa konfigurasi email." });
+    }
+
+    return res.json({ success: true, message: "Jika akun memenuhi syarat, kode akan dikirim ke email tersebut." });
+  } catch (err) {
+    console.error("Permintaan OTP gagal:", err.message);
+    return res.status(500).json({ error: "Permintaan OTP gagal. Coba lagi." });
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  try {
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    const code = String(req.body?.otp || "").trim();
+    const password = String(req.body?.newPassword || "");
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+        !/^\d{6}$/.test(code) ||
+        password.length < 8 || password.length > 128) {
+      return res.status(400).json({
+        error: "Email, OTP 6 digit, atau kata sandi baru tidak valid. Kata sandi harus 8–128 karakter."
+      });
+    }
+
+    const otps = await readPasswordOtps();
+    const record = otps[email];
+
+    if (!record || record.expires <= Date.now() ||
+        record.attempts >= OTP_MAX_ATTEMPTS) {
+      if (record) {
+        delete otps[email];
+        await kvSet("passwordResetOtps", otps);
+      }
+      return res.status(400).json({ error: "OTP tidak valid atau sudah kedaluwarsa. Minta kode baru." });
+    }
+
+    const submittedHash = crypto.createHash("sha256").update(email + ":" + code).digest();
+    const expectedHash = Buffer.from(record.codeHash, "hex");
+    const valid = expectedHash.length === submittedHash.length &&
+      crypto.timingSafeEqual(expectedHash, submittedHash);
+
+    if (!valid) {
+      record.attempts += 1;
+      if (record.attempts >= OTP_MAX_ATTEMPTS) delete otps[email];
+      await kvSet("passwordResetOtps", otps);
+      return res.status(400).json({ error: "OTP tidak valid atau sudah kedaluwarsa. Minta kode baru." });
+    }
+
+    const users = await readUsers();
+    const user = users.find(u => u.id === record.userId && u.email === email);
+    if (!user) {
+      delete otps[email];
+      await kvSet("passwordResetOtps", otps);
+      return res.status(400).json({ error: "Akun tidak ditemukan. Minta kode baru." });
+    }
+
+    const { salt, hash } = await hashPassword(password);
+    user.salt = salt;
+    user.hash = hash;
+    await saveUsers(users);
+
+    // Konsumsi OTP dan batalkan sesi lama setelah reset berhasil.
+    delete otps[email];
+    await kvSet("passwordResetOtps", otps);
+    sessions.deleteByUser(user.id);
+
+    return res.json({ success: true, message: "Kata sandi berhasil diubah. Silakan login kembali." });
+  } catch (err) {
+    console.error("Reset kata sandi gagal:", err.message);
+    return res.status(500).json({ error: "Reset kata sandi gagal. Coba lagi." });
+  }
+});
+
+/* ===== UMAIRA CHANGE PASSWORD (login + OTP email) ===== */
+async function readChangeOtps() {
+  const data = await kvGet("passwordChangeOtps", {});
+  return data && typeof data === "object" && !Array.isArray(data) ? data : {};
+}
+
+const otpFromAddress = () => process.env.SMTP_FROM ||
+  ('"' + String(process.env.MAIL_FROM_NAME || "Umaira AI").replace(/["<>\r\n]/g, "") + '" <' +
+    (process.env.MAIL_USER || process.env.SMTP_USER) + ">");
+
+router.post("/change-password/request", rlGuard("change-pw-request", 5, 15 * 60 * 1000, true), async (req, res) => {
+  try {
+    const me = await currentUser(req);
+    if (!me) return res.status(401).json({ error: "Silakan login terlebih dahulu." });
+    if (!otpTransport) return res.status(503).json({ error: "Layanan email belum dikonfigurasi." });
+
+    const users = await readUsers();
+    const user = users.find(u => u.id === me.id);
+    if (!user || !user.salt || !user.hash) {
+      return res.status(400).json({ error: "Akun ini masuk lewat Google dan tidak memakai kata sandi." });
+    }
+    const current = String(req.body?.currentPassword || "");
+    if (!current || !(await verifyPassword(current, user))) {
+      return res.status(400).json({ error: "Kata sandi saat ini salah." });
+    }
+
+    const otps = await readChangeOtps();
+    const nowMs = Date.now();
+    const prev = otps[user.id];
+    if (prev && prev.sentAt && nowMs - prev.sentAt < 60 * 1000) {
+      return res.status(429).json({ error: "Tunggu 1 menit sebelum meminta kode lagi." });
+    }
+    let windowStart = nowMs;
+    let sendCount = 0;
+    if (prev && prev.windowStart && nowMs - prev.windowStart < 3600 * 1000) {
+      windowStart = prev.windowStart;
+      sendCount = prev.sendCount || 0;
+    }
+    if (sendCount >= 5) {
+      return res.status(429).json({ error: "Terlalu banyak permintaan kode. Coba lagi dalam 1 jam." });
+    }
+    for (const k of Object.keys(otps)) {
+      if (k !== user.id && otps[k] && otps[k].expires <= nowMs) delete otps[k];
+    }
+
+    const code = String(crypto.randomInt(0, 1000000)).padStart(6, "0");
+    otps[user.id] = {
+      codeHash: crypto.createHash("sha256").update(user.id + ":" + code).digest("hex"),
+      expires: nowMs + OTP_TTL_MS,
+      attempts: 0,
+      sentAt: nowMs,
+      windowStart,
+      sendCount: sendCount + 1
+    };
+    await kvSet("passwordChangeOtps", otps);
+
+    try {
+      const msg = otpEmail({ code, purpose: "ganti", minutes: OTP_TTL_MS / 60000 });
+      await otpTransport.sendMail({ from: otpFromAddress(), to: user.email, subject: msg.subject, text: msg.text, html: msg.html, attachments: msg.attachments });
+    } catch (err) {
+      delete otps[user.id];
+      await kvSet("passwordChangeOtps", otps);
+      console.error("Gagal mengirim email OTP ganti kata sandi:", err.message);
+      return res.status(502).json({ error: "Email OTP gagal dikirim. Coba lagi nanti." });
+    }
+
+    const parts = user.email.split("@");
+    return res.json({ success: true, message: "Kode dikirim ke " + parts[0].slice(0, 2) + "***@" + parts[1] + "." });
+  } catch (err) {
+    console.error("Permintaan OTP ganti kata sandi gagal:", err.message);
+    return res.status(500).json({ error: "Permintaan kode gagal. Coba lagi." });
+  }
+});
+
+router.post("/change-password/confirm", rlGuard("change-pw-confirm", 10, 15 * 60 * 1000, true), async (req, res) => {
+  try {
+    const me = await currentUser(req);
+    if (!me) return res.status(401).json({ error: "Silakan login terlebih dahulu." });
+
+    const code = String(req.body?.otp || "").trim();
+    const password = String(req.body?.newPassword || "");
+    if (!/^\d{6}$/.test(code) || password.length < 8 || password.length > 128) {
+      return res.status(400).json({ error: "Kode 6 digit atau kata sandi baru tidak valid. Kata sandi harus 8–128 karakter." });
+    }
+
+    const otps = await readChangeOtps();
+    const record = otps[me.id];
+    const invalidMsg = "Kode tidak valid atau sudah kedaluwarsa. Minta kode baru.";
+    if (!record || record.expires <= Date.now() || record.attempts >= OTP_MAX_ATTEMPTS) {
+      if (record) { delete otps[me.id]; await kvSet("passwordChangeOtps", otps); }
+      return res.status(400).json({ error: invalidMsg });
+    }
+
+    const submitted = crypto.createHash("sha256").update(me.id + ":" + code).digest();
+    const expected = Buffer.from(record.codeHash, "hex");
+    const valid = expected.length === submitted.length && crypto.timingSafeEqual(expected, submitted);
+    if (!valid) {
+      record.attempts += 1;
+      if (record.attempts >= OTP_MAX_ATTEMPTS) delete otps[me.id];
+      await kvSet("passwordChangeOtps", otps);
+      return res.status(400).json({ error: invalidMsg });
+    }
+
+    const users = await readUsers();
+    const user = users.find(u => u.id === me.id);
+    if (!user || !user.salt || !user.hash) {
+      return res.status(400).json({ error: "Akun ini tidak memakai kata sandi." });
+    }
+    if (await verifyPassword(password, user)) {
+      return res.status(400).json({ error: "Kata sandi baru harus berbeda dari yang lama." });
+    }
+
+    const { salt, hash } = await hashPassword(password);
+    user.salt = salt;
+    user.hash = hash;
+    await saveUsers(users);
+
+    delete otps[me.id];
+    await kvSet("passwordChangeOtps", otps);
+    sessions.deleteByUser(user.id);
+    const token = crypto.randomBytes(32).toString("hex");
+    sessions.set(token, { userId: user.id, expires: Date.now() + SESSION_MS });
+    setCookie(res, token, SESSION_MS / 1000);
+
+    return res.json({ success: true, message: "Kata sandi berhasil diubah. Perangkat lain sudah dikeluarkan." });
+  } catch (err) {
+    console.error("Ganti kata sandi gagal:", err.message);
+    return res.status(500).json({ error: "Ganti kata sandi gagal. Coba lagi." });
   }
 });
 

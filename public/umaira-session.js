@@ -56,4 +56,18 @@
     }, function () {});
     return p;
   };
+  // ===== UMAIRA PRESENCE HEARTBEAT =====
+  function ping() {
+    if (document.visibilityState !== "visible") return;
+    origFetch.call(window, "/api/auth/me", {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    }).catch(function () {});
+  }
+  setInterval(ping, 60000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") ping();
+  });
+  // ===== END UMAIRA PRESENCE HEARTBEAT =====
 })();

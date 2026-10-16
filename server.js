@@ -2,6 +2,7 @@ import { createWorkspaceDataRouter, buildPluginContext } from "./workspace-data.
 import { createScheduledRouter, startScheduler } from "./workspace-scheduler.js";
 import { createFilesRouter, buildFileContext } from "./workspace-files.js";
 import { createChatsRouter } from "./workspace-chats.js";
+import { createChatImagesRouter, createImageEditMiddleware } from "./workspace-chatimg.js";
 import { createWorkspaceRouter } from "./workspace.js";
 import express from "express";
 import dotenv from "dotenv";
@@ -59,6 +60,33 @@ app.get(["/login", "/login.html"], async (req, res) => {
 // ===== UMAIRA LEGAL PAGES =====
 app.get("/privasi", (_req, res) => res.sendFile(process.cwd() + "/public/privasi.html"));
 app.get("/syarat", (_req, res) => res.sendFile(process.cwd() + "/public/syarat.html"));
+
+// ===== UMAIRA ADMIN PAGE =====
+app.get("/admin", async (req, res) => {
+  try {
+    const user = await currentUser(req);
+
+    if (!user) return res.redirect("/login");
+
+    const adminEmail = String(
+      process.env.ADMIN_EMAIL || "danham322@gmail.com"
+    ).trim().toLowerCase();
+
+    if (String(user.email || "").trim().toLowerCase() !== adminEmail) {
+      return res.status(403).type("text").send(
+        "Akses ditolak. Halaman ini khusus administrator Umaira AI."
+      );
+    }
+
+    res.setHeader("Cache-Control", "no-store");
+    return res.redirect("/?admin=1");
+  } catch (err) {
+    console.error("Admin page error:", err?.message || err);
+    return res.status(500).type("text").send("Gagal membuka halaman admin.");
+  }
+});
+// ===== END UMAIRA ADMIN PAGE =====
+
 app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 
@@ -73,6 +101,8 @@ app.use("/api/workspaces", createWorkspaceRouter({ currentUser: (req) => current
 app.use("/api/wsdata/scheduled", createScheduledRouter({ currentUser: (req) => currentUser(req) }));
 app.use("/api/wsdata/files", createFilesRouter({ currentUser: (req) => currentUser(req) }));
 app.use("/api/wsdata/chats", createChatsRouter({ currentUser: (req) => currentUser(req) }));
+app.use("/api/chat-images", createChatImagesRouter({ currentUser: (req) => currentUser(req) }));
+app.use("/api/chat", createImageEditMiddleware({ currentUser: (req) => currentUser(req) }));
 app.use("/api/wsdata", createWorkspaceDataRouter({ currentUser: (req) => currentUser(req) }));
 startScheduler();
 app.use("/api/chat", async (req, res, next) => {

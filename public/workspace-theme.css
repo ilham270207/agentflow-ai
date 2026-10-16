@@ -1,0 +1,108 @@
+/* ===== UMAIRA TEMA: putih penuh / hitam penuh, gradasi ungu hanya sebagai aksen ===== */
+:root:root {
+  --u-grad: linear-gradient(135deg, #6d5dfc 0%, #9b5cf6 55%, #c26bf5 100%);
+  --u-grad-soft: linear-gradient(135deg, rgba(109,93,252,.16), rgba(194,107,245,.16));
+  --umaira-grad: var(--u-grad);
+}
+:root:root:not([data-uui="dark"]) {
+  --bg: #ffffff; --bg-soft: #ffffff; --bg-glass: rgba(255,255,255,.82);
+  --panel: #ffffff; --panel-soft: #f6f6f9; --panel-hover: #f0f0f4;
+  --border: #ececf1; --border-strong: #dcdce4;
+  --text: #0b0b10; --text-soft: #2b2b35; --muted: #6a6a77; --muted-2: #8e8e9a;
+  --accent: #7a5cf0; --accent-strong: #6d5dfc; --accent-soft: rgba(109,93,252,.10);
+  --user-bubble: #f3f3f7;
+  --shadow: 0 8px 28px rgba(15,15,30,.07);
+  --card: #ffffff; --line: #ececf1;
+  color-scheme: light;
+}
+:root:root[data-uui="dark"] {
+  --bg: #000000; --bg-soft: #000000; --bg-glass: rgba(0,0,0,.72);
+  --panel: #09090b; --panel-soft: #111114; --panel-hover: #18181c;
+  --border: rgba(255,255,255,.09); --border-strong: rgba(255,255,255,.16);
+  --text: #f5f5f7; --text-soft: #d9d9df; --muted: #9a9aa6; --muted-2: #6f6f7a;
+  --accent: #a98bff; --accent-strong: #8b6cff; --accent-soft: rgba(139,108,255,.16);
+  --user-bubble: #16161a;
+  --shadow: 0 18px 50px rgba(0,0,0,.6);
+  --card: #09090b; --line: rgba(255,255,255,.12);
+  color-scheme: dark;
+}
+
+/* dasar */
+:root:root body { background: var(--bg) !important; background-image: none !important; color: var(--text); }
+:root:root .app-shell, :root:root .content, :root:root .chat-section, :root:root .chat-layout { background: transparent !important; }
+:root:root .topbar {
+  background: var(--bg-glass) !important; border-bottom: 1px solid var(--border) !important;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+:root:root .brand b { background: var(--u-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* sidebar */
+:root:root .sidebar { background: var(--bg) !important; border-right: 1px solid var(--border) !important; }
+:root:root .new-chat-btn {
+  background: var(--u-grad) !important; border: 0 !important; color: #fff !important;
+  box-shadow: 0 8px 24px rgba(109,93,252,.28) !important;
+}
+:root:root .nav-item { position: relative; color: var(--text-soft) !important; background: transparent !important; border-color: transparent !important; }
+:root:root .nav-item:hover { background: var(--panel-hover) !important; }
+:root:root .nav-item.active { background: var(--panel-soft) !important; border-color: var(--border) !important; color: var(--text) !important; }
+:root:root .nav-item.active::before {
+  content: ""; position: absolute; left: -1px; top: 24%; bottom: 24%; width: 3px; border-radius: 3px; background: var(--u-grad);
+}
+:root:root .sidebar .uui-tools .nav-item.uui-on { background: var(--panel-soft) !important; box-shadow: none !important; }
+:root:root .chat-search { background: var(--panel-soft) !important; border: 1px solid var(--border) !important; color: var(--text) !important; }
+:root:root .chat-history-row.active { background: var(--panel-soft) !important; border-color: var(--border) !important; }
+:root:root .side-card { background: var(--panel-soft) !important; border: 1px solid var(--border) !important; }
+:root:root .ghost, :root:root .chat-header .ghost {
+  background: transparent !important; border: 1px solid var(--border-strong) !important; color: var(--text-soft) !important;
+}
+
+/* layar awal */
+:root:root .umaira-empty h2 {
+  background: linear-gradient(90deg, var(--text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+:root:root .umaira-empty p { color: var(--muted); }
+:root:root:not([data-uui="dark"]) .umaira-orb {
+  box-shadow: 0 12px 40px rgba(124,92,246,.30), inset -8px -12px 24px rgba(60,30,160,.45), inset 6px 6px 16px rgba(255,255,255,.35);
+}
+:root:root .umaira-suggest { background: var(--panel); border: 1px solid var(--border); box-shadow: var(--shadow); color: var(--text); }
+:root:root .umaira-suggest:hover { border-color: var(--accent); }
+:root:root .umaira-suggest-icon { background: var(--u-grad-soft); border: 1px solid var(--border); color: var(--accent); }
+:root:root .umaira-suggest small { color: var(--muted); }
+
+/* pesan */
+:root:root .chat-message.user .chat-bubble {
+  background: var(--user-bubble) !important; border: 1px solid var(--border) !important; color: var(--text) !important;
+}
+:root:root .chat-message.assistant .chat-bubble { color: var(--text) !important; }
+:root:root .chat-code-block { background: #0d0d12 !important; border: 1px solid rgba(255,255,255,.10) !important; }
+
+/* kotak input */
+:root:root .chat-composer {
+  background: var(--panel) !important; border: 1px solid var(--border-strong) !important; box-shadow: var(--shadow) !important;
+}
+:root:root .chat-composer:focus-within {
+  border-color: var(--accent) !important; box-shadow: var(--shadow), 0 0 0 3px var(--accent-soft) !important;
+}
+:root:root .chat-composer textarea { color: var(--text) !important; }
+:root:root .chat-composer textarea::placeholder { color: var(--muted-2) !important; }
+:root:root .composer-plus, :root:root .composer-mic { background: var(--panel-soft) !important; color: var(--text) !important; }
+:root:root #chatSendBtn { background: var(--u-grad) !important; color: #fff !important; box-shadow: 0 6px 18px rgba(109,93,252,.35) !important; }
+:root:root .composer-menu { background: var(--panel) !important; border: 1px solid var(--border-strong) !important; }
+:root:root .composer-note { color: var(--muted-2) !important; }
+
+/* panel pengaturan (uui) dan modul workspace */
+:root:root .uui-btn.primary, :root:root .uui-seg button[aria-pressed="true"] { background: var(--u-grad) !important; color: #fff !important; }
+:root:root .uui-item input[type="checkbox"], :root:root .wsm-card input[type="checkbox"] { accent-color: var(--accent-strong); }
+:root:root .wsm-btn.primary { background: var(--u-grad); border-color: transparent; color: #fff; }
+:root:root .wsm-msg.user { background: var(--user-bubble); }
+:root:root .wsm-panel select, :root:root .wsm-panel textarea,
+:root:root .wsm-panel input[type="text"], :root:root .wsm-panel input[type="time"], :root:root .wsm-panel input[type="datetime-local"] {
+  border-color: var(--border-strong); color: var(--text);
+}
+:root:root :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* halaman login */
+:root:root main.card { background: var(--card); border-color: var(--line); }
+:root:root main.card .primary { background: var(--u-grad) !important; color: #fff !important; border: 0 !important; }
+:root:root main.card .tab[aria-selected="true"] { border-color: var(--accent); }

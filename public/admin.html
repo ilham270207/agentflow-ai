@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin Umaira AI</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10131a; --panel:#191e28; --line:#2b3342; --text:#eef2f8; --muted:#9aa7b9; --accent:#9b8cff; --danger:#ffb3b3; --ok:#4ade80; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui,-apple-system,sans-serif; }
+    main { width:min(100% - 28px,1100px); margin:28px auto; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+    h1 { margin:0; font-size:25px; letter-spacing:-.5px; }
+    h2 { margin:0; font-size:17px; }
+    p { color:var(--muted); }
+    .eyebrow { color:var(--accent); font-size:12px; font-weight:700; letter-spacing:1.5px; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:18px; min-width:0; }
+    .number { font-size:32px; font-weight:750; margin-top:6px; }
+    .number.online { color:var(--ok); }
+    .muted { color:var(--muted); font-size:13px; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:24px 0 12px; }
+    button, .back { border:1px solid var(--line); border-radius:10px; padding:10px 14px; color:var(--text); background:#242b39; font:inherit; text-decoration:none; cursor:pointer; }
+    button:disabled { opacity:.55; cursor:wait; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; text-align:left; }
+    th, td { padding:13px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+    td.wrap { white-space:normal; overflow-wrap:anywhere; }
+    th { color:var(--muted); font-size:12px; font-weight:650; }
+    .status { padding:12px 14px; color:var(--muted); }
+    .error { color:var(--danger); }
+    .method { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:3px 8px; font-size:12px; }
+    .dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:#556070; margin-right:7px; }
+    .dot.on { background:var(--ok); box-shadow:0 0 8px var(--ok); }
+    @media (max-width:520px) {
+      main { width:calc(100% - 20px); margin:18px auto; }
+      h1 { font-size:22px; }
+      .panel { padding:14px; }
+      th, td { padding:11px 7px; font-size:13px; }
+      .number { font-size:27px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="eyebrow">UMAIRA AI / ADMIN</div>
+        <h1>Panel Administrator</h1>
+        <p>Pengguna terdaftar dan aktivitas terbaru.</p>
+      </div>
+      <a class="back" href="/">Kembali ke Umaira</a>
+    </header>
+
+    <section class="stats" aria-label="Statistik pengguna">
+      <div class="panel"><div class="muted">Total akun</div><div class="number" id="sTotal">—</div></div>
+      <div class="panel"><div class="muted">Online sekarang</div><div class="number online" id="sOnline">—</div></div>
+      <div class="panel"><div class="muted">Aktif 24 jam</div><div class="number" id="sDay">—</div></div>
+      <div class="panel"><div class="muted">Aktif 7 hari</div><div class="number" id="sWeek">—</div></div>
+      <div class="panel"><div class="muted">Pendaftar baru 7 hari</div><div class="number" id="sNew">—</div></div>
+    </section>
+
+    <div class="toolbar">
+      <div>
+        <h2>Daftar pengguna</h2>
+        <div class="muted" id="updatedAt">Menunggu respons server</div>
+      </div>
+      <button id="refreshBtn" type="button">Muat ulang</button>
+    </div>
+
+    <section class="panel">
+      <div id="message" class="status" role="status">Mengambil data pengguna…</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Status</th><th>Nama</th><th>Email</th><th>Metode akun</th><th>Terakhir aktif</th><th>Pertama terlihat</th></tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+    </section>
+    <p class="muted">Online = aktif dalam 2,5 menit terakhir (tab Umaira terbuka dan terlihat). Akun yang sudah ada sebelum pelacakan dipasang ditandai "Sebelum pelacakan" pada kolom Pertama terlihat.</p>
+  </main>
+
+  <script>
+    var el = function (id) { return document.getElementById(id); };
+    var skew = 0;
+
+    function ago(ts) {
+      if (!ts) return 'Belum pernah';
+      var s = Math.floor((Date.now() + skew - ts) / 1000);
+      if (s < 60) return 'Baru saja';
+      var m = Math.floor(s / 60); if (m < 60) return m + ' menit lalu';
+      var h = Math.floor(m / 60); if (h < 24) return h + ' jam lalu';
+      var d = Math.floor(h / 24); if (d < 30) return d + ' hari lalu';
+      return new Date(ts).toLocaleDateString('id-ID');
+    }
+    function dateOnly(ts) {
+      if (!ts) return 'Sebelum pelacakan';
+      return new Date(ts).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    function addCell(row, value, cls) {
+      var cell = document.createElement('td');
+      if (cls) cell.className = cls;
+      cell.textContent = value;
+      row.appendChild(cell);
+      return cell;
+    }
+
+    async function loadUsers(silent) {
+      el('refreshBtn').disabled = true;
+      if (!silent) { el('message').className = 'status'; el('message').textContent = 'Mengambil data pengguna…'; }
+      try {
+        var response = await fetch('/api/auth/admin/users', {
+          method: 'GET', credentials: 'same-origin', cache: 'no-store',
+          headers: { Accept: 'application/json' }
+        });
+        var result = await response.json().catch(function () { return {}; });
+        if (!response.ok) {
+          if (response.status === 401) { window.location.href = '/login'; return; }
+          throw new Error(result.error || 'Tidak dapat mengakses data admin.');
+        }
+        if (result.serverTime) skew = result.serverTime - Date.now();
+
+        el('sTotal').textContent = String(result.total);
+        el('sOnline').textContent = String(result.online || 0);
+        el('sDay').textContent = String(result.activeToday || 0);
+        el('sWeek').textContent = String(result.active7d || 0);
+        el('sNew').textContent = String(result.newThisWeek || 0);
+        el('updatedAt').textContent = 'Diperbarui ' + new Date().toLocaleTimeString('id-ID');
+
+        var body = el('usersBody');
+        body.replaceChildren();
+        if (!result.users.length) {
+          el('message').className = 'status';
+          el('message').textContent = 'Belum ada akun yang terdaftar.';
+        } else {
+          el('message').className = 'status';
+          el('message').textContent = 'Menampilkan ' + result.users.length + ' akun.';
+          result.users.forEach(function (u) {
+            var row = document.createElement('tr');
+            var st = document.createElement('td');
+            var dot = document.createElement('span');
+            dot.className = 'dot' + (u.online ? ' on' : '');
+            st.appendChild(dot);
+            st.appendChild(document.createTextNode(u.online ? 'Online' : 'Offline'));
+            row.appendChild(st);
+            addCell(row, u.name || 'Pengguna', 'wrap');
+            addCell(row, u.email || '—', 'wrap');
+            var mc = addCell(row, '');
+            var badge = document.createElement('span');
+            badge.className = 'method';
+            badge.textContent = u.loginMethod || 'Akun';
+            mc.appendChild(badge);
+            addCell(row, ago(u.lastSeen));
+            addCell(row, dateOnly(u.firstSeen));
+            body.appendChild(row);
+          });
+        }
+      } catch (error) {
+        el('message').className = 'status error';
+        el('message').textContent = error.message || 'Gagal memuat data.';
+      } finally {
+        el('refreshBtn').disabled = false;
+      }
+    }
+
+    el('refreshBtn').addEventListener('click', function () { loadUsers(false); });
+    setInterval(function () { if (document.visibilityState === 'visible') loadUsers(true); }, 20000);
+    loadUsers(false);
+  </script>
+</body>
+</html>

@@ -52,3 +52,20 @@
   .wsm-codeblock pre { font-size: 12px; }
   .wsm-card { padding: 10px 12px; }
 }
+.wsm-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; display: block; }
+.nav-icon.wsm-ico { display: inline-flex; align-items: center; justify-content: center; font-size: 0; line-height: 0; }
+.nav-icon.wsm-ico svg { width: 20px; height: 20px; display: block; }
+.wsm-chat-images { display: grid; gap: 6px; margin: 0 0 8px; max-width: 340px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+.wsm-chat-images.wsm-n1 { max-width: 300px; grid-template-columns: 1fr; }
+.wsm-chat-img { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 14px; overflow: hidden; display: block; }
+.wsm-chat-img img { display: block; width: 100%; height: auto; max-height: 320px; object-fit: cover; border-radius: 14px; }
+.wsm-fig { display: block; margin: 10px 0; }
+.wsm-fig .wsm-chat-img { display: inline-block; max-width: min(100%, 420px); }
+.wsm-fig .wsm-chat-img img { max-height: none; object-fit: contain; }
+.wsm-dl { display: inline-block; margin-top: 6px; padding: 6px 12px; border-radius: 999px; font-size: 12px; cursor: pointer;
+  border: 1px solid rgba(128,128,128,.4); background: rgba(128,128,128,.12); color: inherit; text-decoration: none; }
+.wsm-lightbox { position: fixed; inset: 0; z-index: 99998; background: rgba(0,0,0,.86); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px; padding: 16px; }
+.wsm-lightbox img { max-width: 94vw; max-height: 80vh; border-radius: 12px; object-fit: contain; }
+.wsm-lb-bar { display: flex; gap: 10px; }
+.wsm-lb-bar .wsm-dl { color: #fff; margin: 0; }

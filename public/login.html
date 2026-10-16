@@ -38,6 +38,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)
 </style>
 <script>(function(){try{var p=localStorage.getItem("umaira-theme-preference")||"light";var d=p==="dark"||p==="gelap"||((p==="system"||p==="sistem"||p==="auto")&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-uui",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-uui","light");}})();</script>
 <link rel="stylesheet" href="/login-theme.css">
+<link rel="stylesheet" href="/workspace-theme.css">
 </head>
 <body>
 <main class="card">
@@ -73,10 +74,40 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)
         <button type="button" id="togglePw" aria-label="Tampilkan kata sandi">Lihat</button>
       </div>
     </div>
-    <button class="primary" id="submitBtn" type="submit">Masuk</button>
+    <p class="forgot" id="forgotRow"><button type="button" id="forgotBtn" class="linkbtn">Lupa kata sandi?</button></p>
+    
+<button class="primary" id="submitBtn" type="submit">Masuk</button>
     <p class="error" id="error" role="alert" aria-live="polite"></p>
   </form>
-  <p class="foot">Obrolan dan galeri Anda tersimpan terpisah untuk setiap akun.</p>
+  <section id="resetPanel" hidden>
+    <div class="brand">
+      <h1>Atur ulang kata sandi</h1>
+      <p class="sub">Masukkan email akunmu. Kami kirim kode 6 digit ke email itu.</p>
+    </div>
+    <form id="resetForm" novalidate>
+      <div class="field">
+        <label for="rEmail">Email</label>
+        <input id="rEmail" type="email" autocomplete="email" inputmode="email" placeholder="nama@email.com">
+      </div>
+      <div id="rStep2" hidden>
+        <div class="field">
+          <label for="rCode">Kode 6 digit</label>
+          <input id="rCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456">
+        </div>
+        <div class="field">
+          <label for="rPass">Kata sandi baru</label>
+          <input id="rPass" type="password" autocomplete="new-password" maxlength="128" placeholder="Minimal 8 karakter">
+        </div>
+      </div>
+      <button class="primary" id="rSubmit" type="submit">Kirim kode</button>
+      <button type="button" id="rResend" class="linkbtn" hidden>Kirim ulang kode</button>
+      <button type="button" id="rBack" class="linkbtn">Kembali ke halaman masuk</button>
+      <p class="error" id="rError" role="alert" aria-live="polite"></p>
+      <p class="ok" id="rOk" role="status"></p>
+    </form>
+  </section>
+  
+<p class="foot">Obrolan dan galeri Anda tersimpan terpisah untuk setiap akun.</p>
 </main>
 
 <script>
@@ -174,6 +205,101 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)
       .catch(function () { $("googleSection").hidden = true; });
   }
   initGoogle();
+
+  /* ===== LUPA KATA SANDI (OTP lewat email) ===== */
+  var rStep = 1;
+  var rTimer = null;
+  function rErr(m) { $("rError").textContent = m || ""; if (m) $("rOk").textContent = ""; }
+  function rOk(m) { $("rOk").textContent = m || ""; if (m) $("rError").textContent = ""; }
+  function rBusy(on, label) {
+    $("rSubmit").disabled = on;
+    $("rSubmit").textContent = on ? "Memproses..." : label;
+  }
+  function showReset(on) {
+    var main = document.querySelector("main.card");
+    [main.querySelector(".brand"), main.querySelector(".tabs"), $("googleSection"), $("authForm")].forEach(function (el) {
+      if (el) el.style.display = on ? "none" : "";
+    });
+    $("resetPanel").hidden = !on;
+    if (on) {
+      $("rEmail").value = $("email").value.trim();
+      $("rEmail").readOnly = false;
+      $("rStep2").hidden = true;
+      $("rResend").hidden = true;
+      $("rCode").value = "";
+      $("rPass").value = "";
+      rStep = 1;
+      rErr("");
+      rOk("");
+      $("rSubmit").textContent = "Kirim kode";
+      $("rEmail").focus();
+    }
+  }
+  function rCooldown() {
+    var left = 60;
+    clearInterval(rTimer);
+    $("rResend").hidden = false;
+    $("rResend").disabled = true;
+    $("rResend").textContent = "Kirim ulang kode (60 dtk)";
+    rTimer = setInterval(function () {
+      left -= 1;
+      if (left <= 0) {
+        clearInterval(rTimer);
+        $("rResend").disabled = false;
+        $("rResend").textContent = "Kirim ulang kode";
+      } else {
+        $("rResend").textContent = "Kirim ulang kode (" + left + " dtk)";
+      }
+    }, 1000);
+  }
+
+  $("forgotBtn").addEventListener("click", function () { showReset(true); });
+  $("rBack").addEventListener("click", function () { showReset(false); });
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () { $("forgotRow").hidden = t.getAttribute("data-mode") !== "login"; });
+  });
+
+  $("rResend").addEventListener("click", function () {
+    var email = $("rEmail").value.trim().toLowerCase();
+    $("rResend").disabled = true;
+    post("/api/auth/forgot-password", { email: email }).then(function (d) {
+      rOk(d.message || "Kode dikirim ulang.");
+      rCooldown();
+    }).catch(function (err) { rErr(err.message); $("rResend").disabled = false; });
+  });
+
+  $("resetForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    rErr("");
+    var email = $("rEmail").value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return rErr("Format email belum benar.");
+    if (rStep === 1) {
+      rBusy(true);
+      post("/api/auth/forgot-password", { email: email }).then(function (d) {
+        rStep = 2;
+        $("rStep2").hidden = false;
+        $("rEmail").readOnly = true;
+        rBusy(false, "Ubah kata sandi");
+        rOk(d.message || "Kode dikirim ke email.");
+        rCooldown();
+        $("rCode").focus();
+      }).catch(function (err) { rErr(err.message); rBusy(false, "Kirim kode"); });
+      return;
+    }
+    var code = $("rCode").value.trim();
+    var pw = $("rPass").value;
+    if (!/^\d{6}$/.test(code)) return rErr("Masukkan kode 6 digit dari email.");
+    if (pw.length < 8 || pw.length > 128) return rErr("Kata sandi baru harus 8–128 karakter.");
+    rBusy(true);
+    post("/api/auth/reset-password", { email: email, otp: code, newPassword: pw }).then(function () {
+      showReset(false);
+      setMode("login");
+      $("email").value = email;
+      $("password").value = "";
+      $("subtitle").textContent = "Kata sandi berhasil diubah. Silakan masuk.";
+    }).catch(function (err) { rErr(err.message); rBusy(false, "Ubah kata sandi"); });
+  });
+
 
   window.addEventListener("pageshow", function (e) {
     if (!e.persisted) return;

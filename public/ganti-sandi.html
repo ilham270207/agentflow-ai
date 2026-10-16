@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Ganti kata sandi - Umaira AI</title>
+<link rel="icon" href="/assets/umaira-logo-gradient.svg" type="image/svg+xml">
+<style>
+:root{--bg:#07050f;--card:rgba(22,15,44,.78);--line:rgba(167,139,250,.22);--text:#f5f3ff;--muted:#a79fc4;--accent:#8b5cf6;--danger:#fca5a5}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);display:grid;place-items:center;min-height:100vh;padding:24px 16px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 50% at 50% 0%,rgba(124,58,237,.35),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.12),transparent 70%)}
+.card{position:relative;width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 24px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:22px;text-align:center}
+.brand img{width:56px;height:56px;filter:drop-shadow(0 0 14px rgba(124,58,237,.55))}
+h1{margin:0;font-size:22px;font-weight:600}
+.sub{margin:0;color:var(--muted);font-size:14px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;margin-bottom:18px}
+.tab{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;padding:9px;border-radius:9px;cursor:pointer}
+.tab[aria-selected="true"]{background:rgba(139,92,246,.28);color:var(--text)}
+#googleWrap{display:flex;justify-content:center;min-height:44px}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:16px 0}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+.field{margin-bottom:14px}
+input{width:100%;background:rgba(10,7,22,.7);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;font-size:16px;padding:12px 14px;outline:none}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,.25)}
+.pw{position:relative}
+.pw input{padding-right:78px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--muted);font:inherit;font-size:13px;padding:8px 10px;cursor:pointer;border-radius:8px}
+.primary{width:100%;border:0;border-radius:12px;padding:13px;font:inherit;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#8b5cf6,#6d28d9);cursor:pointer}
+.primary:disabled{opacity:.6;cursor:default}
+.error{min-height:20px;margin:12px 0 0;color:var(--danger);font-size:13px;text-align:center}
+.foot{margin:14px 0 0;color:var(--muted);font-size:12px;text-align:center}
+[hidden]{display:none!important}
+</style>
+<script>(function(){try{var p=localStorage.getItem("umaira-theme-preference")||"light";var d=p==="dark"||p==="gelap"||((p==="system"||p==="sistem"||p==="auto")&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-uui",d?"dark":"light");}catch(e){document.documentElement.setAttribute("data-uui","light");}})();</script>
+<link rel="stylesheet" href="/login-theme.css">
+<link rel="stylesheet" href="/workspace-theme.css">
+</head>
+<body>
+<main class="card">
+  <div class="brand">
+    <img src="/assets/umaira-logo-gradient.svg" alt="Umaira" width="56" height="56">
+    <h1>Ganti kata sandi</h1>
+    <p class="sub" id="cpSub">Demi keamanan, kami kirim kode verifikasi ke email akunmu.</p>
+  </div>
+  <form id="cpForm" novalidate>
+    <div class="field">
+      <label for="cpCurrent">Kata sandi saat ini</label>
+      <input id="cpCurrent" type="password" autocomplete="current-password" maxlength="128" placeholder="Kata sandi saat ini">
+    </div>
+    <div id="cpStep2" hidden>
+      <div class="field">
+        <label for="cpCode">Kode 6 digit</label>
+        <input id="cpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456">
+      </div>
+      <div class="field">
+        <label for="cpNew">Kata sandi baru</label>
+        <input id="cpNew" type="password" autocomplete="new-password" maxlength="128" placeholder="Minimal 8 karakter">
+      </div>
+    </div>
+    <button class="primary" id="cpSubmit" type="submit">Kirim kode</button>
+    <button type="button" id="cpResend" class="linkbtn" hidden>Kirim ulang kode</button>
+    <p class="error" id="cpError" role="alert" aria-live="polite"></p>
+    <p class="ok" id="cpOk" role="status"></p>
+  </form>
+  <p class="foot"><a href="/">Kembali ke obrolan</a></p>
+</main>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var step = 1;
+  var timer = null;
+  function err(m) { $("cpError").textContent = m || ""; if (m) $("cpOk").textContent = ""; }
+  function ok(m) { $("cpOk").textContent = m || ""; if (m) $("cpError").textContent = ""; }
+  function busy(on, label) {
+    $("cpSubmit").disabled = on;
+    $("cpSubmit").textContent = on ? "Memproses..." : label;
+  }
+  function post(url, body) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) {
+        if (!r.ok) throw new Error(d.error || "Terjadi kesalahan. Coba lagi.");
+        return d;
+      });
+    });
+  }
+  function cooldown() {
+    var left = 60;
+    clearInterval(timer);
+    $("cpResend").hidden = false;
+    $("cpResend").disabled = true;
+    $("cpResend").textContent = "Kirim ulang kode (60 dtk)";
+    timer = setInterval(function () {
+      left -= 1;
+      if (left <= 0) {
+        clearInterval(timer);
+        $("cpResend").disabled = false;
+        $("cpResend").textContent = "Kirim ulang kode";
+      } else {
+        $("cpResend").textContent = "Kirim ulang kode (" + left + " dtk)";
+      }
+    }, 1000);
+  }
+
+  fetch("/api/auth/me", { credentials: "same-origin" })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.user) { location.replace("/login"); return; }
+      if (!d.user.hasPassword) {
+        $("cpForm").hidden = true;
+        $("cpSub").textContent = "Akun ini masuk lewat Google dan tidak memakai kata sandi, jadi tidak ada yang perlu diganti.";
+      }
+    }).catch(function () {});
+
+  $("cpResend").addEventListener("click", function () {
+    $("cpResend").disabled = true;
+    post("/api/auth/change-password/request", { currentPassword: $("cpCurrent").value }).then(function (d) {
+      ok(d.message || "Kode dikirim ulang.");
+      cooldown();
+    }).catch(function (e) { err(e.message); $("cpResend").disabled = false; });
+  });
+
+  $("cpForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    err("");
+    if (step === 1) {
+      var current = $("cpCurrent").value;
+      if (!current) return err("Masukkan kata sandi saat ini.");
+      busy(true);
+      post("/api/auth/change-password/request", { currentPassword: current }).then(function (d) {
+        step = 2;
+        $("cpStep2").hidden = false;
+        $("cpCurrent").readOnly = true;
+        busy(false, "Ubah kata sandi");
+        ok(d.message || "Kode dikirim ke email.");
+        cooldown();
+        $("cpCode").focus();
+      }).catch(function (e2) { err(e2.message); busy(false, "Kirim kode"); });
+      return;
+    }
+    var code = $("cpCode").value.trim();
+    var pw = $("cpNew").value;
+    if (!/^\d{6}$/.test(code)) return err("Masukkan kode 6 digit dari email.");
+    if (pw.length < 8 || pw.length > 128) return err("Kata sandi baru harus 8–128 karakter.");
+    busy(true);
+    post("/api/auth/change-password/confirm", { otp: code, newPassword: pw }).then(function (d) {
+      clearInterval(timer);
+      $("cpForm").querySelectorAll(".field, #cpStep2, #cpSubmit, #cpResend").forEach(function (el) { el.hidden = true; });
+      $("cpSub").textContent = "Selesai.";
+      ok(d.message || "Kata sandi berhasil diubah.");
+    }).catch(function (e3) { err(e3.message); busy(false, "Ubah kata sandi"); });
+  });
+})();
+</script>
+</body>
+</html>

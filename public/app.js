@@ -4385,6 +4385,162 @@ function setupChatInputAutoResize() {
     form.append(submit, toggle, logout);
     panel.append(form);
 
+    const adminSection = document.createElement("section");
+    adminSection.className = "umaira-admin-directory";
+    adminSection.hidden = true;
+    adminSection.setAttribute("aria-labelledby", "umairaAdminTitle");
+
+    const adminHeader = document.createElement("div");
+    adminHeader.className = "umaira-admin-header";
+
+    const adminHeadingWrap = document.createElement("div");
+    const adminHeading = document.createElement("h3");
+    adminHeading.id = "umairaAdminTitle";
+    adminHeading.textContent = "Administrator";
+
+    const adminDescription = document.createElement("p");
+    adminDescription.className = "umaira-admin-description";
+    adminDescription.textContent = "Pengelolaan akun Umaira AI";
+
+    adminHeadingWrap.append(adminHeading, adminDescription);
+
+    const adminRefresh = document.createElement("button");
+    adminRefresh.type = "button";
+    adminRefresh.className = "ghost umaira-admin-refresh";
+    adminRefresh.textContent = "Muat Ulang";
+    adminRefresh.addEventListener("click", () => {
+      void loadAdminDirectory();
+    });
+
+    adminHeader.append(adminHeadingWrap, adminRefresh);
+
+    const adminStats = document.createElement("div");
+    adminStats.className = "umaira-admin-stats";
+
+    const adminTotalLabel = document.createElement("span");
+    adminTotalLabel.textContent = "Total pengguna";
+
+    const adminTotal = document.createElement("strong");
+    adminTotal.textContent = "—";
+
+    adminStats.append(adminTotalLabel, adminTotal);
+
+    const adminListHeading = document.createElement("h4");
+    adminListHeading.className = "umaira-admin-list-heading";
+    adminListHeading.textContent = "Daftar akun";
+
+    const adminList = document.createElement("div");
+    adminList.className = "umaira-admin-list";
+    adminList.setAttribute("aria-live", "polite");
+
+    adminSection.append(
+      adminHeader,
+      adminStats,
+      adminListHeading,
+      adminList
+    );
+    panel.append(adminSection);
+
+    let adminRequestVersion = 0;
+
+    async function loadAdminDirectory() {
+      const requestVersion = ++adminRequestVersion;
+      adminSection.hidden = true;
+
+      if (!accountUser) return;
+
+      adminRefresh.disabled = true;
+      adminRefresh.textContent = "Memuat...";
+
+      try {
+        const response = await fetch("/api/auth/admin/users", {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: { Accept: "application/json" }
+        });
+
+        if (!response.ok) {
+          let reason = "Gagal memuat panel Administrator (HTTP " + response.status + ").";
+          try {
+            const errorResult = await response.json();
+            if (errorResult && typeof errorResult.error === "string") {
+              reason = errorResult.error + " (HTTP " + response.status + ").";
+            }
+          } catch {}
+
+          if (requestVersion === adminRequestVersion && accountUser) {
+            adminList.replaceChildren();
+            adminTotal.textContent = "—";
+            const errorMessage = document.createElement("p");
+            errorMessage.className = "umaira-admin-empty";
+            errorMessage.textContent = reason;
+            adminList.append(errorMessage);
+            adminSection.hidden = false;
+          }
+          return;
+        }
+
+        const result = await response.json();
+
+        if (
+          requestVersion !== adminRequestVersion ||
+          !accountUser ||
+          !Array.isArray(result.users)
+        ) {
+          return;
+        }
+
+        adminList.replaceChildren();
+        adminTotal.textContent = String(
+          Number.isFinite(result.total) ? result.total : result.users.length
+        );
+
+        if (result.users.length === 0) {
+          const empty = document.createElement("p");
+          empty.className = "umaira-admin-empty";
+          empty.textContent = "Belum ada akun untuk ditampilkan.";
+          adminList.append(empty);
+        } else {
+          result.users.forEach((user) => {
+            const item = document.createElement("article");
+            item.className = "umaira-admin-user";
+
+            const details = document.createElement("div");
+            details.className = "umaira-admin-user-details";
+
+            const userName = document.createElement("strong");
+            userName.className = "umaira-admin-user-name";
+            userName.textContent = String(user.name || "Pengguna");
+
+            const userEmail = document.createElement("span");
+            userEmail.className = "umaira-admin-user-email";
+            userEmail.textContent = String(user.email || "Email tidak tersedia");
+
+            const method = document.createElement("span");
+            method.className = "umaira-admin-login-method";
+            method.textContent = String(user.loginMethod || "Akun");
+
+            details.append(userName, userEmail);
+            item.append(details, method);
+            adminList.append(item);
+          });
+        }
+
+        adminSection.hidden = false;
+      } catch {
+        if (requestVersion === adminRequestVersion) {
+          adminSection.hidden = true;
+        }
+      } finally {
+        if (requestVersion === adminRequestVersion) {
+          adminRefresh.disabled = false;
+          adminRefresh.textContent = "Muat Ulang";
+        }
+      }
+    }
+
+
     function setMode(next) {
       mode = next;
       const registering = mode === "register";
@@ -4398,20 +4554,31 @@ function setupChatInputAutoResize() {
 
     function showUser(user) {
       accountUser = user || null;
-  const navAccountLabel = document.getElementById("navAccountLabel");
-  if (navAccountLabel) {
-    navAccountLabel.textContent = accountUser
-      ? accountUser.name
-      : "Login / Akun";
-  }
+
+      const navAccountLabel = document.getElementById("navAccountLabel");
+      if (navAccountLabel) {
+        navAccountLabel.textContent = accountUser
+          ? accountUser.name
+          : "Login / Akun";
+      }
+
       status.textContent = accountUser
         ? "Login sebagai " + accountUser.name + " (" + accountUser.email + ")"
         : "Status: belum login";
+
       form.hidden = Boolean(accountUser);
       logout.hidden = !accountUser;
       googleSection.hidden = Boolean(accountUser) || !googleAvailable;
-    }
 
+      adminRequestVersion += 1;
+      adminSection.hidden = true;
+      adminList.replaceChildren();
+      adminTotal.textContent = "—";
+
+      if (accountUser) {
+        void loadAdminDirectory();
+      }
+    }
     async function setupGoogleLogin() {
       try {
         const configResponse = await fetch("/api/auth/google/config", {

@@ -4465,3 +4465,165 @@ pre code {
     min-height: 240px;
   }
 }
+
+
+/* UMAIRA ACCOUNT ADMIN DIRECTORY */
+.umaira-admin-directory {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+  margin-top: 28px;
+  padding: clamp(16px, 3vw, 24px);
+  color: var(--text, #30283b);
+  background: var(--panel, rgba(255,255,255,.78));
+  border: 1px solid var(--border, rgba(151,119,196,.22));
+  border-radius: 20px;
+  box-shadow: var(--shadow, 0 10px 35px rgba(91,66,126,.09));
+}
+
+.umaira-admin-directory[hidden] {
+  display: none !important;
+}
+
+.umaira-admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.umaira-admin-header h3,
+.umaira-admin-list-heading {
+  margin: 0;
+  color: var(--text, inherit);
+}
+
+.umaira-admin-header h3 {
+  font-size: 19px;
+  letter-spacing: -.025em;
+}
+
+.umaira-admin-description {
+  margin: 6px 0 0;
+  color: var(--muted, #766d83);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.umaira-admin-refresh {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--border, rgba(151,119,196,.25));
+  border-radius: 11px;
+}
+
+.umaira-admin-refresh:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.umaira-admin-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  background: var(--panel-2, rgba(248,245,255,.92));
+  border: 1px solid var(--border, rgba(151,119,196,.18));
+  border-radius: 15px;
+}
+
+.umaira-admin-stats span {
+  color: var(--muted, #766d83);
+  font-size: 13px;
+}
+
+.umaira-admin-stats strong {
+  color: var(--text, inherit);
+  font-size: 30px;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.umaira-admin-list-heading {
+  font-size: 15px;
+}
+
+.umaira-admin-list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.umaira-admin-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  background: var(--bg-soft, rgba(128,128,128,.045));
+  border: 1px solid var(--border, rgba(151,119,196,.18));
+  border-radius: 13px;
+}
+
+.umaira-admin-user-details {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.umaira-admin-user-name {
+  color: var(--text, inherit);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.umaira-admin-user-email {
+  color: var(--muted, #766d83);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.umaira-admin-login-method {
+  flex: 0 0 auto;
+  max-width: 45%;
+  padding: 5px 9px;
+  color: var(--text, inherit);
+  background: var(--accent-soft, rgba(139,92,246,.12));
+  border-radius: 999px;
+  font-size: 11px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.umaira-admin-empty {
+  margin: 0;
+  padding: 16px;
+  color: var(--muted, #766d83);
+  border: 1px dashed var(--border, rgba(151,119,196,.25));
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .umaira-admin-directory {
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  .umaira-admin-header {
+    align-items: flex-start;
+  }
+
+  .umaira-admin-user {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .umaira-admin-login-method {
+    max-width: 100%;
+  }
+}

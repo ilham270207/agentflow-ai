@@ -9,3 +9,10 @@ html:not([data-uui="dark"]) input::placeholder{color:#8a8a98}
 html:not([data-uui="dark"]) .pw button{color:#4b4b5a}
 html:not([data-uui="dark"]) .brand img{filter:drop-shadow(0 4px 10px rgba(124,58,237,.30))}
 html:not([data-uui="dark"]) .primary{box-shadow:0 8px 20px rgba(109,40,217,.25)}
+
+.forgot { margin: -4px 0 12px; text-align: right; font-size: 13px; }
+.linkbtn { background: none; border: 0; color: inherit; opacity: .8; text-decoration: underline;
+  cursor: pointer; font: inherit; padding: 6px 0; }
+.linkbtn:disabled { opacity: .45; cursor: default; text-decoration: none; }
+#resetPanel .linkbtn { display: block; margin: 6px auto 0; }
+.ok { color: #1a9d6a; font-size: 13px; min-height: 1.2em; margin: 8px 0 0; text-align: center; }

@@ -7,7 +7,8 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const FILE_MAP = {
   users: "umaira-users.json",
   sessions: "umaira-sessions.json",
-  "gallery-index": "gallery.json"
+  "gallery-index": "gallery.json",
+  presence: "umaira-presence.json"
 };
 const MIME = { webp: "image/webp", png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg" };
 

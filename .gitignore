@@ -16,3 +16,9 @@ backups/
 *.bak
 *.before-*
 *.tgz
+
+# file sementara
+patch-*.mjs
+patch-snippets/
+.umi-tmp/
+test-mail.mjs
