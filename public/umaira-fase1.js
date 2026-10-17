@@ -111,9 +111,11 @@
 
   /* ---------- kisi lampiran ---------- */
   function pick(id) {
-    var i = document.getElementById(id);
+    var map = { composerImageInput: "composerImageBtn", composerCameraInput: "composerCameraBtn", composerFileInput: "composerFileBtn" };
+    var btn = document.getElementById(map[id] || ""), inp = document.getElementById(id);
     closeSheet();
-    if (i) i.click(); else tip("Belum tersedia", "Input untuk ini tidak ditemukan.", "warn");
+    var t = btn || inp;
+    if (t) t.click(); else tip("Belum tersedia", "Tombol untuk ini tidak ditemukan.", "warn");
   }
   function kisi() {
     var web = localStorage.getItem(K.web) === "1";
