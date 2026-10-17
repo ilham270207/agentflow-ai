@@ -23,3 +23,60 @@ html:root:root .chat-message-actions .uu1-speak.uu-on{color:var(--accent,#6d5dfc
 .uu1-time{align-self:center;margin-left:6px;font-size:11.5px;opacity:.55;white-space:nowrap}
 @keyframes uu1up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){.uu1-sheet{animation:none}}
+
+/* v2: menu lampiran netral, mengikuti tema (tanpa ungu) */
+html:root:root .uu1-sheet {
+  background: #ffffff !important;
+  color: #18181b !important;
+  border-color: rgba(0,0,0,.10) !important;
+  box-shadow: 0 -12px 40px rgba(0,0,0,.14);
+}
+html:root:root .uu1-tile,
+html:root:root .uu1-item,
+html:root:root .uu1-field {
+  background: #f4f4f5 !important;
+  border-color: rgba(0,0,0,.10) !important;
+  color: #18181b !important;
+}
+html:root:root .uu1-ic {
+  background: #ffffff !important;
+  color: #18181b !important;
+  border: 1px solid rgba(0,0,0,.12);
+  box-shadow: none !important;
+}
+html:root:root .uu1-tile.on,
+html:root:root .uu1-item.on { border-color: #18181b !important; }
+html:root:root .uu1-tile.on .uu1-ic {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border-color: #18181b;
+  box-shadow: none !important;
+}
+html:root:root .uu1-grip { background: rgba(0,0,0,.22) !important; }
+
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-sheet {
+  background: #0a0a0b !important;
+  color: #f4f4f5 !important;
+  border-color: rgba(255,255,255,.14) !important;
+  box-shadow: 0 -12px 40px rgba(0,0,0,.6);
+}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-tile,
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-item,
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-field {
+  background: #18181b !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: #f4f4f5 !important;
+}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-ic {
+  background: #0a0a0b !important;
+  color: #f4f4f5 !important;
+  border-color: rgba(255,255,255,.16);
+}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-tile.on,
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-item.on { border-color: #f4f4f5 !important; }
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-tile.on .uu1-ic {
+  background: #f4f4f5 !important;
+  color: #0a0a0b !important;
+  border-color: #f4f4f5;
+}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]):root:root .uu1-grip { background: rgba(255,255,255,.28) !important; }
