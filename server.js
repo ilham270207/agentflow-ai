@@ -929,6 +929,21 @@ const UMAIRA_SYSTEM_PROMPT = [
   "- Jangan mengubah setiap percakapan menjadi daftar tugas atau rencana. Bahas rencana hanya jika pengguna memintanya, dan manfaatkan konteks proyek hanya bila relevan."
 ].join("\n");
 
+function cleanUmairaReply(text) {
+  if (typeof text !== "string") return text;
+  let t = text.trim();
+  t = t.replace(/^(tentu saja|tentu|baiklah|baik|oke|siap|pertanyaan (yang )?(bagus|menarik))\s*[!,.:]+\s*/i, "");
+  const lines = t.split("\n");
+  while (lines.length > 1 && !lines[lines.length - 1].trim()) lines.pop();
+  const last = lines[lines.length - 1];
+  if (lines.length > 1 && last.length < 200 &&
+      /semoga.*(membantu|bermanfaat)|jangan ragu|silakan (bertanya|tanya)|ada (lagi )?yang (bisa|ingin) (saya|aku)/i.test(last)) {
+    lines.pop();
+  }
+  t = lines.join("\n").trim();
+  return t ? t.charAt(0).toUpperCase() + t.slice(1) : text.trim();
+}
+
 async function tryGeminiChat(
   messages,
   projectContext = "",
@@ -1032,7 +1047,7 @@ async function tryGeminiChat(
       return null;
     }
 
-    return text;
+    return cleanUmairaReply(text);
 
   } catch (error) {
     console.error(
@@ -1159,7 +1174,7 @@ async function tryOpenRouterChat(
     // Router gratis kadang memilih model pemeriksa keamanan yang hanya
     // mengeluarkan "User Safety: safe". Itu bukan jawaban, jadi coba ulang.
     if (umairaText && !/^\s*User Safety\s*:/i.test(umairaText)) {
-      return umairaText;
+      return cleanUmairaReply(umairaText);
     }
     console.warn("OpenRouter: jawaban kosong atau keluaran model keamanan, percobaan", umairaAttempt);
   }
@@ -1182,8 +1197,8 @@ async function tryAIChat(
       file.data.length > 0
     );
 
-  // Gunakan Gemini terlebih dahulu untuk analisis gambar.
-  if (hasImageAttachments && process.env.GEMINI_API_KEY) {
+  // Gunakan Gemini terlebih dahulu untuk semua chat; OpenRouter hanya cadangan.
+  if (process.env.GEMINI_API_KEY) {
     const geminiResponse = await tryGeminiChat(
       messages,
       projectContext,
@@ -1195,11 +1210,11 @@ async function tryAIChat(
     }
 
     console.warn(
-      "Gemini gagal menganalisis gambar; mencoba OpenRouter."
+      "Gemini gagal menjawab; mencoba OpenRouter sebagai cadangan."
     );
   }
 
-  // Chat teks tetap menggunakan OpenRouter.
+  // Cadangan jika Gemini gagal.
   return await tryOpenRouterChat(
     messages,
     projectContext,
