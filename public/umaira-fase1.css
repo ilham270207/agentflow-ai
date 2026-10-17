@@ -1,0 +1,26 @@
+/* Umaira fase 1 */
+#composerMenu{display:none!important}
+.uu1-back{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.42);display:flex;align-items:flex-end;justify-content:center}
+.uu1-sheet{width:min(100%,520px);max-height:86vh;overflow:auto;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;background:rgba(255,255,255,.92);color:#18181b;border:1px solid rgba(0,0,0,.08);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);animation:uu1up .22s ease-out}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uu1-sheet{background:rgba(20,20,24,.9);color:#f4f4f5;border-color:rgba(255,255,255,.14)}
+.uu1-grip{width:38px;height:4px;border-radius:4px;background:rgba(127,127,127,.4);margin:0 auto 12px}
+.uu1-sheet h3{margin:0 0 12px;font-size:16px}
+.uu1-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.uu1-tile{display:grid;justify-items:center;gap:6px;padding:12px 2px 10px;border-radius:18px;border:1px solid rgba(127,127,127,.25);background:rgba(127,127,127,.08);color:inherit;font:inherit;font-size:12px;line-height:1.25;cursor:pointer;text-align:center}
+.uu1-ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#8b5cf6,#3b82f6 60%,#22d3ee)}
+.uu1-ic svg{width:21px;height:21px}
+.uu1-tile.on{border-color:rgba(139,92,246,.7)}
+.uu1-tile.on .uu1-ic{box-shadow:0 0 0 3px rgba(139,92,246,.35)}
+.uu1-list{display:grid;gap:8px}
+.uu1-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(127,127,127,.25);background:rgba(127,127,127,.06);color:inherit;font:inherit;font-size:14px;cursor:pointer;text-align:left}
+.uu1-item.on{border-color:rgba(139,92,246,.7)}
+.uu1-label{display:block;margin:12px 0 6px;font-size:13px;opacity:.75}
+.uu1-field{width:100%;padding:11px 14px;border-radius:14px;border:1px solid rgba(127,127,127,.3);background:rgba(127,127,127,.08);color:inherit;font:inherit;font-size:14px;outline:0}
+.uu1-row{display:flex;gap:8px;flex-wrap:wrap}
+.uu1-end{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+html:root:root .chat-message-actions .uu1-speak::before{display:none}
+html:root:root .chat-message-actions .uu1-speak svg{width:19px;height:19px}
+html:root:root .chat-message-actions .uu1-speak.uu-on{color:var(--accent,#6d5dfc);opacity:1}
+.uu1-time{align-self:center;margin-left:6px;font-size:11.5px;opacity:.55;white-space:nowrap}
+@keyframes uu1up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.uu1-sheet{animation:none}}
