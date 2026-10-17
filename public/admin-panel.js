@@ -9,7 +9,8 @@
     dl: '<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',
     copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/>',
     grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
-    chev: '<path d="M6 9l6 6 6-6"/>'
+    chev: '<path d="M6 9l6 6 6-6"/>',
+    log: '<path d="M7 4h10a2 2 0 012 2v14l-3-2-2 2-2-2-2 2-2-2-3 2V6a2 2 0 012-2z"/><path d="M9 9h6M9 13h4"/>'
   };
   function ic(n, s) { s = s || 20; return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + P[n] + '</svg>'; }
   function h(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
@@ -45,6 +46,10 @@
     us.forEach(function (u) {
       var open = !!S.open[u.email], card = h('div', 'ap-user' + (open ? ' open' : '')), row = h('div', 'ap-row');
       var av = h('div', 'ap-av', (u.name || u.email || '?').trim().charAt(0).toUpperCase()); av.appendChild(h('i', 'ap-st' + (u.online ? ' on' : '')));
+      if (u.picture && /^https:\/\/[\w.-]+\.googleusercontent\.com\//.test(u.picture)) {
+        var im = h('img', 'ap-pic'); im.alt = ''; im.referrerPolicy = 'no-referrer'; im.loading = 'lazy';
+        im.onerror = function () { im.remove(); }; im.src = u.picture; av.appendChild(im);
+      }
       var m = h('div', 'ap-um'), n = h('div', 'ap-un');
       n.append(h('span', null, u.name || 'Pengguna'), h('span', 'ap-badge', mth(u)));
       m.append(n, h('div', 'ap-ut', u.online ? 'Online sekarang' : (u.lastSeen ? 'Aktif ' + ago(u.lastSeen) : 'Belum ada aktivitas')));
@@ -103,7 +108,7 @@
     tt.append(tr, h('small', null, (window.__UMAIRA_USER__ && window.__UMAIRA_USER__.email) || 'Administrator'));
     hd.append(lg, tt,
       btn('moon', 'Ganti tema', function () { var t = root.dataset.theme === 'dark' ? 'light' : 'dark'; root.dataset.theme = t; try { localStorage.setItem('umaira-admin-theme', t); } catch (e) {} }),
-      btn('refresh', 'Muat ulang', function () { refresh(); }), btn('x', 'Tutup', close));
+      btn('log', 'Log Aktivitas', function () { if (window.__aaOpen) window.__aaOpen(); }), btn('refresh', 'Muat ulang', function () { refresh(); }), btn('x', 'Tutup', close));
     var main = h('div', 'ap-main'), wrap = h('div', 'ap-wrap');
     S.heroEl = h('div', 'ap-hero');
     var sw = h('label', 'ap-search'), inp = h('input'), ctl = h('div', 'ap-ctl');

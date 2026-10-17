@@ -10,6 +10,7 @@ import { authRouter } from "./auth.js";
 import { requireAuth, originGuard, currentUser } from "./auth.js";
 import { readFile as umairaReadFile } from "node:fs/promises";
 import { kvGet, kvSet, fileGet, fileSave, fileDelete } from "./db.js";
+import { auditApiMiddleware } from "./audit.js"; // UMAIRA AUDIT API
 
 dotenv.config();
 
@@ -95,6 +96,7 @@ app.use("/api/auth", authRouter);
 
 // ===== UMAIRA API GUARD =====
 app.use("/api", originGuard);
+app.use("/api", auditApiMiddleware({ currentUser: (req) => currentUser(req) })); // UMAIRA AUDIT API
 app.use("/api", (req, res, next) => {
   if (req.path === "/health" || req.path === "/auth" || req.path.startsWith("/auth/")) return next();
   return requireAuth(req, res, next);

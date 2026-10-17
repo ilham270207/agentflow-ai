@@ -8,8 +8,13 @@ import path from "node:path";
 import * as fsSync from "node:fs";
 import { OAuth2Client } from "google-auth-library";
 import { kvGet, kvSet, usingDb, fileDelete } from "./db.js";
+import { auditAuthMiddleware, listAudit, exportAuditCsv } from "./audit.js"; // UMAIRA AUDIT LOG
 
 const router = express.Router();
+
+// ===== UMAIRA AUDIT LOG =====
+router.use(auditAuthMiddleware({ currentUser: (r) => currentUser(r), readUsers: () => readUsers() }));
+// ===== END UMAIRA AUDIT LOG =====
 
 // ===== UMAIRA RATE LIMIT =====
 const rlStore = new Map();
@@ -256,6 +261,7 @@ router.get("/admin/users", async (req, res) => {
       return {
         name: String(u.name || "Pengguna"),
         email: String(u.email || ""),
+        picture: String(u.picture || ""),
         loginMethod: u.googleSub
           ? "Google"
           : (u.hash && u.salt ? "Email dan password" : "Akun"),
@@ -282,6 +288,44 @@ router.get("/admin/users", async (req, res) => {
   }
 });
 // ===== END UMAIRA ADMIN USER DIRECTORY =====
+
+// ===== UMAIRA AUDIT LOG ENDPOINT =====
+router.get("/admin/audit", async (req, res) => {
+  try {
+    const sessionUser = await currentUser(req);
+    if (!sessionUser) return res.status(401).json({ error: "Silakan login terlebih dahulu." });
+    if (String(sessionUser.email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Akses khusus administrator." });
+    }
+    const users = await readUsers();
+    const adminAccount = users.find((u) => u.id === sessionUser.id);
+    if (!adminAccount || !adminAccount.googleSub ||
+        String(adminAccount.email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Admin wajib login dengan Google terverifikasi untuk email administrator." });
+    }
+    res.setHeader("Cache-Control", "no-store");
+    const q = req.query || {};
+    if (String(q.format || "") === "csv") {
+      const csv = await exportAuditCsv({ range: String(q.range || "7d"), group: String(q.group || "all"), q: String(q.q || "") });
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader("Content-Disposition", 'attachment; filename="log-aktivitas-umaira.csv"');
+      return res.send(csv);
+    }
+    const out = await listAudit({
+      range: String(q.range || "7d"),
+      group: String(q.group || "all"),
+      q: String(q.q || ""),
+      limit: Number(q.limit) || 50,
+      offset: Number(q.offset) || 0
+    });
+    return res.json(out);
+  } catch (err) {
+    console.error("Admin audit error:", err?.message || err);
+    return res.status(500).json({ error: "Gagal memuat log aktivitas." });
+  }
+});
+// ===== END UMAIRA AUDIT LOG ENDPOINT =====
+
 
 router.get("/me", async (req, res) => {
   try {

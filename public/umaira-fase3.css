@@ -1,0 +1,10 @@
+/* Umaira fase 3: Ingatan (netral) */
+.uu3-mem{display:flex;align-items:flex-start;gap:8px;padding:10px 8px 10px 14px;border-radius:14px;border:1px solid rgba(127,127,127,.25);background:rgba(127,127,127,.08)}
+.uu3-mem span{flex:1;min-width:0;font-size:14px;line-height:1.5;word-break:break-word;padding-top:4px}
+.uu3-mem button{flex:none;width:32px;height:32px;border:0;border-radius:10px;background:transparent;color:inherit;opacity:.6;display:grid;place-items:center;cursor:pointer;padding:0}
+.uu3-mem button:hover{opacity:1;background:rgba(127,127,127,.18)}
+.uu3-mem svg{width:17px;height:17px}
+.uu3-list{display:grid;gap:8px;margin-top:12px}
+.uu3-empty{margin:14px 2px;font-size:13.5px;line-height:1.55;opacity:.7}
+.uu3-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;opacity:.65}
+.uu3-sw{font-size:12.5px;opacity:.75}

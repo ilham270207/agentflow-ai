@@ -8,7 +8,8 @@ const FILE_MAP = {
   users: "umaira-users.json",
   sessions: "umaira-sessions.json",
   "gallery-index": "gallery.json",
-  presence: "umaira-presence.json"
+  presence: "umaira-presence.json",
+  "audit-log": "umaira-audit.json"
 };
 const MIME = { webp: "image/webp", png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg" };
 

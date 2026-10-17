@@ -24,3 +24,5 @@ patch-snippets/
 test-mail.mjs
 node_modules
 *.log
+.env
+node_modules
