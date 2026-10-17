@@ -16,7 +16,7 @@
 .umi-imgchat-spin{
   flex:0 0 auto; width:16px; height:16px; border-radius:50%;
   border:2px solid color-mix(in srgb, currentColor 25%, transparent);
-  border-top-color:var(--accent,#21f3e9);
+  border-top-color:var(--accent,#4b2ce8);
   animation:umiSpin .8s linear infinite;
 }
 @keyframes umiSpin{ to{ transform:rotate(360deg); } }
@@ -41,13 +41,13 @@
 .umi-imgchat-actions button:disabled{ opacity:.55; cursor:default; }
 .umi-imgchat-actions .umi-primary{
   border:0; color:#fff;
-  background:linear-gradient(135deg, var(--accent,#21f3e9), #ff5fa2);
+  background:linear-gradient(135deg, var(--accent,#4b2ce8), #ff5fa2);
 }
 .umi-imgchat.is-error .umi-imgchat-status{ color:#ff5d73; opacity:1; }
 .umi-fallback-user{
   margin:10px 0 10px auto; max-width:85%; width:fit-content;
   padding:10px 14px; border-radius:18px;
-  background:color-mix(in srgb, var(--accent,#21f3e9) 22%, transparent);
+  background:color-mix(in srgb, var(--accent,#4b2ce8) 22%, transparent);
   word-break:break-word; white-space:pre-wrap;
 }
 @media (prefers-reduced-motion:reduce){ .umi-imgchat-spin{ animation:none; } }

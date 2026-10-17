@@ -36,7 +36,7 @@
     const panel = make("section", "wsm-panel");
     const status = make("p", "wsm-status", "Memuat tugas...");
     panel.append(
-      make("h2", "", "Terjadwal"),
+      make("h2", "", "Pengingat"),
       make("p", "wsm-hint", "Tugas dijalankan oleh server pada waktu WIB yang kamu pilih, walaupun halaman ditutup (selama server aktif). Hasilnya tersimpan di sini."),
       status
     );

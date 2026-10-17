@@ -55,7 +55,7 @@ function saveChatHistory(items) {
   );
 }
 
-function createConversation(title = "New conversation") {
+function createConversation(title = "Obrolan baru") {
   const conversation = {
     id: `chat-${Date.now()}`,
     title,
@@ -136,7 +136,8 @@ function addChatMessage(role, content, attachments = []) {
     message.attachments = attachments.map(file => ({
       name: String(file.name || "Attachment"),
       mimeType: String(file.mimeType || file.type || "application/octet-stream"),
-      size: Number(file.size || 0)
+      size: Number(file.size || 0),
+      thumb: file.thumb || (window.__uuThumbData || {})[String(file.name || "") + "|" + Number(file.size || 0)] || undefined
     }));
   }
 
@@ -154,7 +155,7 @@ function clearCurrentConversation() {
   if (!currentConversation) return;
 
   currentConversation.messages = [];
-  currentConversation.title = "New conversation";
+  currentConversation.title = "Obrolan baru";
   currentConversation.updatedAt = Date.now();
 
   persistConversation();
@@ -1105,6 +1106,8 @@ function renderMessageAttachments(attachments) {
     <div class="chat-attachments">
       ${attachments.map(file => {
         const isImage = String(file.mimeType || "").startsWith("image/");
+        const uuTh = file.thumb || (window.__uuThumbs || {})[(file.name || "") + "|" + (file.size || 0)];
+        if (isImage && uuTh) { return '<div class="chat-attachment-item uu-msg-thumb"><img src="' + uuTh + '" alt=""></div>'; }
         const icon = isImage ? "🖼️" : getAttachmentIcon({
           type: String(file.mimeType || "")
         });
@@ -1132,7 +1135,7 @@ function renderChatMessages() {
 
   if (!messages.length) {
     container.innerHTML = `
-      <div class="chat-empty umaira-empty"><div class="umaira-orb" aria-hidden="true"><img src="assets/umaira-logo.svg" alt="" width="84" height="84"></div><h2>Selamat datang di Umaira AI ✨</h2><p>Aku siap menemanimu hari ini—mulai dari mencari ide, belajar hal baru, menyelesaikan pekerjaan, hingga membangun proyek impianmu.</p><p>Mau kita mulai dari mana hari ini?</p></div>
+      <div class="chat-empty umaira-empty"><div class="umaira-orb" aria-hidden="true"><img src="assets/umaira-mark-v3.svg" alt="" width="84" height="84"></div><h2>Selamat datang di Umaira AI ✨</h2><p>Aku siap menemanimu hari ini—mulai dari mencari ide, belajar hal baru, menyelesaikan pekerjaan, hingga membangun proyek impianmu.</p><p>Mau kita mulai dari mana hari ini?</p></div>
     `;
     return;
   }
@@ -1430,7 +1433,7 @@ function renderChatHistory() {
         <button type="button" class="chat-history-item" data-chat-id="${id}">
           <span class="chat-history-icon ${c.pinned ? "is-pinned" : ""}">${c.pinned ? "⌖" : "◈"}</span>
           <span class="chat-history-content">
-            <span class="chat-history-title">${escapeHtml(c.title || "New conversation")}</span>
+            <span class="chat-history-title">${escapeHtml(c.title || "Obrolan baru")}</span>
             <span class="chat-history-meta">${escapeHtml(formatChatTime(c.updatedAt))}${count ? ` · ${count} pesan` : ""}</span>
           </span>
         </button>
@@ -1518,7 +1521,7 @@ function umairaBindChatHistory(container) {
       container.querySelectorAll(".chat-history-menu").forEach(m => { m.hidden = true; });
 
       if (action === "rename") {
-        const next = window.prompt("Nama obrolan baru:", conversation.title || "New conversation");
+        const next = window.prompt("Nama obrolan baru:", conversation.title || "Obrolan baru");
         if (!next || !next.trim()) return;
         conversation.title = next.trim().slice(0, 80);
         saveChatHistory(historyNow);
@@ -1535,7 +1538,7 @@ function umairaBindChatHistory(container) {
           umairaPickAfterRemoval();
         }
       } else if (action === "delete") {
-        if (!window.confirm(`Hapus percakapan "${conversation.title || "New conversation"}"?`)) return;
+        if (!window.confirm(`Hapus percakapan "${conversation.title || "Obrolan baru"}"?`)) return;
         deleteConversation(id);
         if (!currentConversation) umairaPickAfterRemoval();
       } else if (action === "share") {
@@ -1569,7 +1572,7 @@ function umairaBindChatHistory(container) {
       if (currentConversation) {
         renderChatMessages();
         const title = $("chatTitle");
-        if (title) title.textContent = currentConversation.title || "New conversation";
+        if (title) title.textContent = currentConversation.title || "Obrolan baru";
       }
       return;
     }
@@ -1583,7 +1586,7 @@ function umairaBindChatHistory(container) {
       renderChatMessages();
       renderChatHistory();
       const title = $("chatTitle");
-      if (title) title.textContent = conversation.title || "New conversation";
+      if (title) title.textContent = conversation.title || "Obrolan baru";
       document.body.classList.remove("sidebar-open");
     }
   });
@@ -1600,7 +1603,7 @@ function ensureConversation() {
 
   if (title) {
     title.textContent =
-      currentConversation?.title || "New conversation";
+      currentConversation?.title || "Obrolan baru";
   }
 }
 
@@ -2196,7 +2199,7 @@ async function sendChatMessage() {
 
   if (
     currentConversation.messages.length === 1 &&
-    currentConversation.title === "New conversation"
+    currentConversation.title === "Obrolan baru"
   ) {
     currentConversation.title =
       content.length > 42
@@ -2367,7 +2370,7 @@ function initChat() {
   renderChatHistory();
 
   $("chatTitle").textContent =
-    currentConversation?.title || "New conversation";
+    currentConversation?.title || "Obrolan baru";
 
   sendButton.addEventListener("click", () => {
     console.log("UMAIRA DEBUG: SEND BUTTON CLICKED");
@@ -2386,7 +2389,7 @@ function initChat() {
     renderChatMessages();
     renderChatHistory();
 
-    $("chatTitle").textContent = "New conversation";
+    $("chatTitle").textContent = "Obrolan baru";
     input.focus();
   });
 
@@ -2413,7 +2416,7 @@ function initChat() {
     if (!conversation) return;
 
     if (action === "rename") {
-      const next = window.prompt("Nama obrolan baru:", conversation.title || "New conversation");
+      const next = window.prompt("Nama obrolan baru:", conversation.title || "Obrolan baru");
       if (!next || !next.trim()) return;
       conversation.title = next.trim().slice(0, 80);
       saveChatHistory(historyNow);
@@ -2458,14 +2461,14 @@ function initChat() {
       if (!(await umairaShowConfirm({ title: "Bersihkan pesan?", message: "Semua pesan dalam obrolan ini akan dihapus. Tindakan ini tidak dapat dibatalkan.", confirmLabel: "Bersihkan" }))) return;
       clearCurrentConversation();
     } else if (action === "delete") {
-      if (!(await umairaShowConfirm({ title: "Hapus obrolan?", message: "Obrolan \u201c" + (conversation.title || "New conversation") + "\u201d akan dihapus. Tindakan ini tidak dapat dibatalkan.", confirmLabel: "Hapus obrolan" }))) return;
+      if (!(await umairaShowConfirm({ title: "Hapus obrolan?", message: "Obrolan \u201c" + (conversation.title || "Obrolan baru") + "\u201d akan dihapus. Tindakan ini tidak dapat dibatalkan.", confirmLabel: "Hapus obrolan" }))) return;
       deleteConversation(id);
       if (!currentConversation || currentConversation.id === id) umairaPickAfterRemoval();
     }
 
     renderChatMessages();
     renderChatHistory();
-    $("chatTitle").textContent = currentConversation?.title || "New conversation";
+    $("chatTitle").textContent = currentConversation?.title || "Obrolan baru";
     input.focus();
   });
 
@@ -2743,6 +2746,18 @@ function renderComposerAttachments() {
     const icon = document.createElement("div");
     icon.className = "attachment-icon";
     icon.textContent = getAttachmentIcon(file);
+    if (file && String(file.type || "").startsWith("image/")) {
+      try {
+        const uuKey = file.name + "|" + file.size;
+        const uuCache = (window.__uuThumbs = window.__uuThumbs || {});
+        const uuUrl = uuCache[uuKey] || (uuCache[uuKey] = URL.createObjectURL(file));
+        const uuImg = document.createElement("img");
+        uuImg.src = uuUrl; uuImg.alt = "";
+        icon.textContent = ""; icon.appendChild(uuImg);
+        chip.classList.add("uu-thumb");
+        if (window.uuMakeThumb) window.uuMakeThumb(file);
+      } catch (e) {}
+    }
 
     const info = document.createElement("div");
     info.className = "attachment-info";
@@ -3634,7 +3649,7 @@ function setupChatInputAutoResize() {
       ]
     },
     library: {
-      title: "Pustaka",
+      title: "Koleksi",
       description: "Tempat terpusat untuk aset, gambar, dan file milikmu.",
       cards: [
         ["▧", "Gambar tersimpan", "Galeri akan menampilkan gambar hasil generasi dan gambar yang kamu simpan.", "Fondasi UI tersedia"],
@@ -3642,7 +3657,7 @@ function setupChatInputAutoResize() {
       ]
     },
     scheduled: {
-      title: "Terjadwal",
+      title: "Pengingat",
       description: "Kelola pengingat dan pekerjaan yang ingin dijalankan pada waktu tertentu.",
       cards: [
         ["◷", "Pengingat", "Fitur jadwal akan memerlukan penyimpanan dan mekanisme penjadwalan di backend.", "Belum diaktifkan"],
@@ -3650,7 +3665,7 @@ function setupChatInputAutoResize() {
       ]
     },
     plugins: {
-      title: "Plugin",
+      title: "Ekstensi",
       description: "Pusat integrasi untuk menghubungkan Umaira dengan layanan eksternal.",
       cards: [
         ["⧉", "Integrasi layanan", "Daftar plugin dan proses koneksi akan ditambahkan setelah sistem integrasi dibuat.", "Belum diaktifkan"],
@@ -3658,7 +3673,7 @@ function setupChatInputAutoResize() {
       ]
     },
     projects: {
-      title: "Proyek",
+      title: "Ruang proyek",
       description: "Ruang untuk mengelola konteks, catatan, dan pekerjaan setiap proyek.",
       cards: [
         ["▣", "Konteks proyek", "Planner dan workflow lama tetap dipertahankan. Integrasi ke workspace ini akan dilakukan bertahap.", "Planner dipertahankan"],
@@ -3666,7 +3681,7 @@ function setupChatInputAutoResize() {
       ]
     },
     codex: {
-      title: "Codex Workspace",
+      title: "Lab kode",
       description: "Ruang kerja coding untuk menulis, memahami, dan memperbaiki kode.",
       cards: [
         ["{ }", "Asisten coding", "Gunakan chat Umaira yang sudah ada untuk bertanya tentang kode. Workspace coding khusus akan dibuat berikutnya.", "Chat tersedia"],

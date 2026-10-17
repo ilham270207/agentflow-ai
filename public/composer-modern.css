@@ -1,6 +1,6 @@
 /* Umaira composer modern v1 */
 :root{
-  --umaira-accent: var(--accent, #21f3e9);
+  --umaira-accent: var(--accent, #4b2ce8);
   --umaira-accent-2: #ff5fa2;
 }
 .chat-composer-wrap{ padding-bottom:max(8px, env(safe-area-inset-bottom)); }

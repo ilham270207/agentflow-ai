@@ -2,6 +2,12 @@ import express from "express";
 import { kvGet, kvSet } from "./db.js";
 
 export const PLUGIN_CATALOG = [
+  { id: "guru", name: "Mode Guru", description: "Umaira membimbing dengan pertanyaan balik dan petunjuk bertahap, bukan langsung memberi jawaban." },
+  { id: "santai", name: "Gaya Santai", description: "Umaira menjawab akrab dan ringan, seperti ngobrol dengan teman." },
+  { id: "langkah", name: "Langkah demi Langkah", description: "Jawaban disusun berurutan dan bernomor supaya mudah diikuti." },
+  { id: "jujur", name: "Jujur dan Teliti", description: "Umaira mengakui jika tidak yakin dan tidak mengarang fakta, angka, atau sumber." },
+  { id: "terjemah", name: "Penerjemah Otomatis", description: "Jika kamu menulis dalam bahasa lain, jawaban ditambah terjemahan Indonesia." },
+  { id: "kreatif", name: "Mode Kreatif", description: "Umaira memberi beberapa ide berbeda dan sudut pandang yang tidak biasa." },
   { id: "waktu", name: "Waktu & Tanggal", description: "Umaira tahu tanggal dan jam saat ini (WIB), jadi jawaban soal waktu akurat." },
   { id: "kalkulator", name: "Kalkulator", description: "Hitungan di pesanmu dihitung server dengan tepat, lalu hasilnya diberikan ke AI." },
   { id: "ringkas", name: "Jawaban Ringkas", description: "AI menjawab singkat dan langsung ke inti." },
@@ -114,6 +120,12 @@ export async function buildPluginContext(uid, messages) {
   if (enabled.has("ringkas")) lines.push("Jawab dengan ringkas dan langsung ke inti.");
   if (enabled.has("formal")) lines.push("Gunakan bahasa Indonesia baku, sopan, dan profesional.");
   if (enabled.has("pengembang")) lines.push("Jawab secara teknis, beri langkah yang jelas dan contoh kode bila relevan.");
+  if (enabled.has("guru")) lines.push("Bertindaklah sebagai guru: ajukan satu pertanyaan pemantik dan beri petunjuk bertahap sebelum memberi jawaban penuh.");
+  if (enabled.has("santai")) lines.push("Gunakan gaya santai dan akrab, kalimat pendek, tetap sopan.");
+  if (enabled.has("langkah")) lines.push("Susun jawaban sebagai langkah bernomor yang berurutan dan jelas.");
+  if (enabled.has("jujur")) lines.push("Jika tidak yakin, katakan terus terang. Jangan mengarang fakta, angka, kutipan, atau sumber.");
+  if (enabled.has("terjemah")) lines.push("Jika pesan terakhir pengguna tidak berbahasa Indonesia, jawab dalam bahasa itu lalu tambahkan terjemahan Indonesia singkat di akhir.");
+  if (enabled.has("kreatif")) lines.push("Berikan beberapa alternatif ide yang berbeda satu sama lain dan sertakan satu sudut pandang tak terduga.");
   return lines.length ? "[Plugin Umaira aktif]\n" + lines.map((l) => "- " + l).join("\n") : "";
 }
 

@@ -6,15 +6,16 @@
   <meta name="description" content="Umaira AI — your personal AI assistant.">
   <meta name="theme-color" content="#f5fcfb">
   <title>Umaira AI</title>
-  <link rel="stylesheet" href="style.css?v=1792051251">
-  <link rel="stylesheet" href="umaira-theme.css?v=1791959019">
-  <link rel="stylesheet" href="umaira-layout.css?v=1791959019">
-  <link rel="stylesheet" href="umaira-glass-override.css?v=20261014T162358Z">
-  <link rel="stylesheet" href="umaira-ui.css?v=mv8wnumc">
-  <link rel="stylesheet" href="/composer-modern.css?v=1">
-  <link rel="stylesheet" href="/chat-image.css?v=1">
-  <link rel="stylesheet" href="/admin-panel.css">
+  <link rel="stylesheet" href="style.css?v=h8">
+  <link rel="stylesheet" href="umaira-theme.css?v=h8">
+  <link rel="stylesheet" href="umaira-layout.css?v=h8">
+  <link rel="stylesheet" href="umaira-glass-override.css?v=h8">
+  <link rel="stylesheet" href="umaira-ui.css?v=h8">
+  <link rel="stylesheet" href="/composer-modern.css?v=h8">
+  <link rel="stylesheet" href="/chat-image.css?v=h8">
+  <link rel="stylesheet" href="/admin-panel.css?v=h8">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="umaira-plus.css?v=1">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
       <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Buka/tutup sidebar" aria-expanded="true">☰</button>
       <a class="brand" href="#" aria-label="Umaira AI">
         <img
-          src="assets/umaira-topbar-gradient.svg?v=20261015-gradient2"
+          src="assets/umaira-mark-v3.svg"
           alt=""
           class="brand-mark umaira-logo"
           width="38"
@@ -45,27 +46,27 @@
       <aside class="sidebar">
         <div class="sidebar-top">
 
-          <div class="sb-head"><a class="sb-brand" href="#" aria-label="Umaira AI"><img src="assets/umaira-logo.svg?v=umaira-20261015-055713" alt="" class="sb-logo" width="34" height="34"><span>Umaira</span></a><button type="button" id="sidebarCollapseBtn" class="sb-collapse" aria-label="Ciutkan sidebar" title="Ciutkan sidebar">◧</button></div>
+          <div class="sb-head"><a class="sb-brand" href="#" aria-label="Umaira AI"><img src="assets/umaira-mark-v3.svg" alt="" class="sb-logo" width="34" height="34"><span>Umaira</span></a><button type="button" id="sidebarCollapseBtn" class="sb-collapse" aria-label="Ciutkan sidebar" title="Ciutkan sidebar">◧</button></div>
           <button id="newChatBtn" class="new-chat-btn">
             <span>＋</span>
-            <span>Obrolan baru</span>
+            <span>Mulai baru</span>
           </button>
 
           <nav class="primary-nav" aria-label="Navigasi Umaira">
-            <p class="nav-group-label">Fitur</p>
-            <button class="nav-item active" type="button" data-view="chat" aria-current="page"><span class="nav-icon">◈</span><span>Obrolan</span></button>
-            <button class="nav-item" type="button" id="navArchiveBtn"><span class="nav-icon">▣</span><span>Arsip</span></button>
-            <button class="nav-item" type="button" data-view="library"><span class="nav-icon">▤</span><span>Pustaka</span></button>
-            <button class="nav-item" type="button" data-view="scheduled"><span class="nav-icon">◷</span><span>Terjadwal</span></button>
-            <p class="nav-group-label">Workspace</p>
-            <button class="nav-item" type="button" data-view="images"><span class="nav-icon">▧</span><span>Gambar AI</span></button>
-            <button class="nav-item" type="button" data-view="plugins"><span class="nav-icon">⧉</span><span>Plugin</span></button>
-            <button class="nav-item" type="button" data-view="projects"><span class="nav-icon">▣</span><span>Proyek</span></button>
-            <button class="nav-item" type="button" data-view="codex"><span class="nav-icon">{ }</span><span>Codex</span></button>
+            <p class="nav-group-label">Jelajah</p>
+            <button class="nav-item active" type="button" data-view="chat" aria-current="page"><span class="nav-icon">◈</span><span>Ruang chat</span></button>
+            <button class="nav-item" type="button" id="navArchiveBtn"><span class="nav-icon">▣</span><span>Simpanan</span></button>
+            <button class="nav-item" type="button" data-view="library"><span class="nav-icon">▤</span><span>Koleksi</span></button>
+            <button class="nav-item" type="button" data-view="scheduled"><span class="nav-icon">◷</span><span>Pengingat</span></button>
+            <p class="nav-group-label">Studio</p>
+            <button class="nav-item" type="button" data-view="images"><span class="nav-icon">▧</span><span>Studio gambar</span></button>
+            <button class="nav-item" type="button" data-view="plugins"><span class="nav-icon">⧉</span><span>Ekstensi</span></button>
+            <button class="nav-item" type="button" data-view="projects"><span class="nav-icon">▣</span><span>Ruang proyek</span></button>
+            <button class="nav-item" type="button" data-view="codex"><span class="nav-icon">{ }</span><span>Lab kode</span></button>
           </nav>
 
           <div class="sidebar-section">
-            <p class="eyebrow">Riwayat</p>
+            <p class="eyebrow">Percakapan lalu</p>
             <input id="chatSearchInput" class="chat-search" type="search" placeholder="Cari obrolan..." autocomplete="off" aria-label="Cari obrolan">
             <div id="chatHistoryList" class="chat-history-list"></div>
           </div>
@@ -105,19 +106,19 @@
   type="button" aria-label="Menu obrolan" aria-haspopup="true"
   aria-expanded="false" title="Menu obrolan">⋯</button>
 <div id="chatHeaderMenu" class="chat-header-menu" hidden>
-  <button type="button" data-header-action="rename">✎ Ganti nama obrolan</button>
-  <button type="button" data-header-action="share">↗ Bagikan obrolan</button>
-  <button type="button" data-header-action="files">▧ Lihat file di obrolan</button>
-  <button type="button" data-header-action="pin">⌖ Sematkan obrolan</button>
-  <button type="button" data-header-action="archive">▣ Arsipkan obrolan</button>
-  <button type="button" data-header-action="clear">⌫ Bersihkan pesan obrolan</button>
-  <button type="button" class="danger" data-header-action="delete">Hapus obrolan</button>
+  <button type="button" data-header-action="rename">Ubah judul</button>
+  <button type="button" data-header-action="share">Kirim tautan</button>
+  <button type="button" data-header-action="files">Berkas dan gambar</button>
+  <button type="button" data-header-action="pin">Tandai penting</button>
+  <button type="button" data-header-action="archive">Simpan ke simpanan</button>
+  <button type="button" data-header-action="clear">Kosongkan isi</button>
+  <button type="button" class="danger" data-header-action="delete">Buang percakapan</button>
 </div></div>
               </div>
 
               <div id="chatMessages" class="chat-messages">
 
-                <div class="chat-empty umaira-empty"><div class="umaira-orb" aria-hidden="true"><img src="assets/umaira-logo.svg?v=umaira-20261015-055713" alt="" width="84" height="84"></div><h2>Selamat datang di Umaira AI ✨</h2><p>Aku siap menemanimu hari ini—mulai dari mencari ide, belajar hal baru, menyelesaikan pekerjaan, hingga membangun proyek impianmu.</p><p>Mau kita mulai dari mana hari ini?</p></div>
+                <div class="chat-empty umaira-empty"><div class="umaira-orb" aria-hidden="true"><img src="assets/umaira-mark-v3.svg" alt="" width="84" height="84"></div><h2>Selamat datang di Umaira AI ✨</h2><p>Aku siap menemanimu hari ini—mulai dari mencari ide, belajar hal baru, menyelesaikan pekerjaan, hingga membangun proyek impianmu.</p><p>Mau kita mulai dari mana hari ini?</p></div>
 
               </div>
 
@@ -224,24 +225,29 @@
 
   </div>
 
-  <script src="sidebar-controls.js?v=1791959019" defer></script>
-  <script src="umaira-theme.js?v=1791959019" defer></script>
-  <script src="app.js?v=1792051251" defer></script>
-  <script src="umaira-ui.js?v=mv8wnumc" defer></script>
-  <script src="/composer-modern.js?v=1"></script>
-  <script src="/chat-image.js?v=2"></script>
-<link rel="stylesheet" href="/workspace-modules.css">
-<link rel="stylesheet" href="/workspace-theme.css">
-<link rel="stylesheet" href="/umaira-teal-glass.css?v=1">
-<script src="/workspace-sync.js"></script>
-<script src="/workspace-modules.js"></script>
-<script src="/workspace-scheduled.js"></script>
-<script src="/workspace-files.js"></script>
-<script src="/workspace-badge.js"></script>
-<script src="/workspace-chats.js"></script>
-<script src="/workspace-chatimg.js"></script>
-<script src="/workspace-icons.js"></script>
-<script src="/workspace-profile.js"></script>
-  <script src="/admin-panel.js" defer></script>
+  <script src="sidebar-controls.js?v=h8" defer></script>
+  <script src="umaira-theme.js?v=h8" defer></script>
+  <script src="app.js?v=h8" defer></script>
+  <script src="umaira-ui.js?v=h8" defer></script>
+  <script src="/composer-modern.js?v=h8"></script>
+  <script src="/chat-image.js?v=h8"></script>
+<link rel="stylesheet" href="/workspace-modules.css?v=h8">
+<link rel="stylesheet" href="/workspace-theme.css?v=h8">
+<link rel="stylesheet" href="/umaira-teal-glass.css?v=h8">
+  <link rel="stylesheet" href="umaira-icons2.css?v=h8">
+<script src="/workspace-sync.js?v=h8"></script>
+<script src="/workspace-modules.js?v=h8"></script>
+<script src="/workspace-scheduled.js?v=h8"></script>
+<script src="/workspace-files.js?v=h8"></script>
+<script src="/workspace-badge.js?v=h8"></script>
+<script src="/workspace-chats.js?v=h8"></script>
+<script src="/workspace-chatimg.js?v=h8"></script>
+<script src="/workspace-icons.js?v=h8"></script>
+<script src="/workspace-profile.js?v=h8"></script>
+  <script src="/admin-panel.js?v=h8" defer></script>
+  <script src="umaira-icons2.js?v=h8"></script>
+  <script src="umaira-icons3.js?v=h8"></script>
+  <script src="umaira-plus.js?v=1"></script>
+  <script src="umaira-plus2.js?v=1"></script>
 </body>
 </html>

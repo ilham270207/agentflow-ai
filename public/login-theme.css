@@ -1,14 +1,14 @@
 /* Tema terang untuk halaman login. Mode gelap tetap memakai gaya asli login.html. */
-html:not([data-uui="dark"]){--bg:#f5fefe;--card:rgba(255,255,255,.94);--line:rgba(17,67,61,.16);--text:#111111;--muted:#5c6a6a;--accent:#19aea1;--danger:#dc2626;color-scheme:light}
-html:not([data-uui="dark"]) body::before{background:radial-gradient(60% 50% at 50% 0%,rgba(107,241,232,.38),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(34,211,238,.20),transparent 70%)}
-html:not([data-uui="dark"]) .card{box-shadow:0 18px 50px rgba(18,74,69,.14)}
-html:not([data-uui="dark"]) .tabs{background:rgba(25,174,161,.08)}
+html:not([data-uui="dark"]){--bg:#f7f5fe;--card:rgba(255,255,255,.94);--line:rgba(27,20,65,.16);--text:#111111;--muted:#5c6a6a;--accent:#3720a7;--danger:#dc2626;color-scheme:light}
+html:not([data-uui="dark"]) body::before{background:radial-gradient(60% 50% at 50% 0%,rgba(134,114,234,.38),transparent 70%),radial-gradient(40% 40% at 90% 100%,rgba(75,44,228,.20),transparent 70%)}
+html:not([data-uui="dark"]) .card{box-shadow:0 18px 50px rgba(29,21,71,.14)}
+html:not([data-uui="dark"]) .tabs{background:rgba(55,32,167,.08)}
 html:not([data-uui="dark"]) .tab[aria-selected="true"]{background:#fff;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.10)}
 html:not([data-uui="dark"]) input{background:#fff;color:#111}
 html:not([data-uui="dark"]) input::placeholder{color:#8a8a98}
 html:not([data-uui="dark"]) .pw button{color:#4c5959}
-html:not([data-uui="dark"]) .brand img{filter:drop-shadow(0 4px 10px rgba(25,174,161,.30))}
-html:not([data-uui="dark"]) .primary{box-shadow:0 8px 20px rgba(28,122,114,.25)}
+html:not([data-uui="dark"]) .brand img{filter:drop-shadow(0 4px 10px rgba(55,32,167,.30))}
+html:not([data-uui="dark"]) .primary{box-shadow:0 8px 20px rgba(47,33,117,.25)}
 
 .forgot { margin: -4px 0 12px; text-align: right; font-size: 13px; }
 .linkbtn { background: none; border: 0; color: inherit; opacity: .8; text-decoration: underline;

@@ -1,0 +1,47 @@
+/* Umaira plus v1 */
+html:root:root .brand b, html:root:root .brand span b, html:root:root .brand .ai {
+  background: linear-gradient(135deg,#8b5cf6 0%,#3b82f6 55%,#22d3ee 100%) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; color: transparent !important;
+}
+html:root:root .brand img, html:root:root .sb-logo, html:root:root .brand-mark {
+  filter: drop-shadow(0 4px 10px rgba(109,93,252,.35)) !important;
+}
+.uup-stack{position:fixed;z-index:99999;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);width:min(92vw,380px);display:grid;gap:10px;pointer-events:none}
+.uup-toast{pointer-events:auto;display:flex;align-items:center;gap:12px;padding:12px 10px 12px 12px;border-radius:18px;background:rgba(255,255,255,.88);color:#18181b;border:1px solid rgba(0,0,0,.08);box-shadow:0 18px 40px rgba(20,20,60,.22);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);animation:uupIn .22s ease-out}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uup-toast{background:rgba(24,24,28,.84);color:#f4f4f5;border-color:rgba(255,255,255,.14)}
+.uup-ti{flex:none;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#8b5cf6,#3b82f6 60%,#22d3ee)}
+.uup-warn .uup-ti{background:linear-gradient(135deg,#f59e0b,#ef4444)}
+.uup-ok .uup-ti{background:linear-gradient(135deg,#10b981,#22d3ee)}
+.uup-tt{flex:1;min-width:0;display:grid;gap:2px}
+.uup-tt strong{font-size:14px;font-weight:600;line-height:1.35}
+.uup-tt small{font-size:12.5px;opacity:.7;line-height:1.4}
+.uup-tx{flex:none;width:30px;height:30px;border-radius:10px;border:0;background:transparent;color:inherit;opacity:.55;display:grid;place-items:center;cursor:pointer;padding:0}
+.uup-tx svg{width:16px;height:16px}
+.uup-leave{opacity:0;transform:translateY(-6px);transition:.2s}
+@keyframes uupIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.uup-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 14px}
+.uup-search{flex:1 1 180px;min-width:0;padding:10px 14px;border-radius:14px;border:1px solid rgba(127,127,127,.3);background:rgba(127,127,127,.08);color:inherit;font:inherit;font-size:14px;outline:0}
+.uup-pill{padding:8px 14px;border-radius:999px;border:1px solid rgba(127,127,127,.3);background:transparent;color:inherit;font:inherit;font-size:13px;cursor:pointer}
+.uup-pill.on{background:#18181b;color:#fff;border-color:transparent}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uup-pill.on{background:#f4f4f5;color:#0a0a0b}
+.uup-count{font-size:12.5px;opacity:.65;margin-left:auto}
+.uup-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.uup-chips::-webkit-scrollbar{display:none}
+.uup-chips .uup-pill{white-space:nowrap}
+.uup-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:1px solid rgba(127,127,127,.3);background:transparent;color:inherit;font:inherit;font-size:13px;cursor:pointer}
+.uup-btn svg{width:17px;height:17px}
+.uup-main{background:#18181b;color:#fff;border-color:transparent}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uup-main{background:#f4f4f5;color:#0a0a0b}
+.uup-out{margin:8px 0;border-radius:14px;border:1px solid rgba(127,127,127,.3);overflow:hidden;font-size:12.5px}
+.uup-out header{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 4px 12px;background:rgba(127,127,127,.12);font-weight:600}
+.uup-body{max-height:240px;overflow:auto}
+.uup-body pre{margin:0;padding:3px 12px;white-space:pre-wrap;word-break:break-word;font-size:12.5px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.uup-body .e{color:#ef4444}.uup-body .w{color:#f59e0b}
+.uup-body iframe{width:100%;height:260px;border:0;background:#fff;display:block}
+.uup-modal{position:fixed;inset:0;z-index:99998;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.45)}
+.uup-card{width:min(92vw,360px);padding:20px;border-radius:22px;background:#fff;color:#18181b;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uup-card{background:#18181b;color:#f4f4f5}
+.uup-card h3{margin:0 0 6px;font-size:17px}.uup-card p{margin:0 0 16px;opacity:.75;font-size:14px;line-height:1.5}
+.uup-row{display:flex;gap:8px;justify-content:flex-end}
+@media (prefers-reduced-motion:reduce){.uup-toast{animation:none}}

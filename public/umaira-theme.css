@@ -1,12 +1,12 @@
 /* Umaira theme - desain orisinal */
 :root {
-  --bg: #040909; --bg-soft: #060f0e; --panel: #081413; --panel-soft: #0b1b1a; --panel-hover: #0e2523;
-  --border: rgba(129,248,237,.13); --border-strong: rgba(129,248,237,.28);
-  --text: #f3fefd; --text-soft: #d4efec; --muted: #8ab5b2; --muted-2: #658e8b;
-  --accent: #7ef8ed; --accent-strong: #0df0dd; --accent-soft: rgba(13,240,221,.16);
-  --user-bubble: #13302d;
+  --bg: #050409; --bg-soft: #08060f; --panel: #0a0913; --panel-soft: #0e0c1a; --panel-hover: #130f24;
+  --border: rgba(153,135,242,.13); --border-strong: rgba(153,135,242,.28);
+  --text: #f5f4fd; --text-soft: #d9d5ee; --muted: #938cb3; --muted-2: #6d678c;
+  --accent: #9684f2; --accent-strong: #3a18e5; --accent-soft: rgba(58,24,229,.16);
+  --user-bubble: #19142f;
   --shadow: 0 24px 70px rgba(0,0,0,.45);
-  --umaira-grad: linear-gradient(135deg, #19aea1 0%, #155b54 55%, #0e403b 100%);
+  --umaira-grad: linear-gradient(135deg, #3720a7 0%, #231858 55%, #18113e 100%);
 }
 
 html body, html body * {
@@ -21,44 +21,44 @@ html body pre, html body code, html body pre *, html body code *, html body .cha
 
 html body {
   background:
-    radial-gradient(900px 520px at 85% -8%, rgba(13,240,221,.30), transparent 62%),
+    radial-gradient(900px 520px at 85% -8%, rgba(58,24,229,.30), transparent 62%),
     radial-gradient(800px 560px at -8% 105%, rgba(236,72,153,.14), transparent 58%),
     radial-gradient(700px 480px at 55% 118%, rgba(59,91,255,.20), transparent 62%),
-    #040909 !important;
+    #050409 !important;
   background-attachment: fixed !important;
 }
 .app-shell { background: transparent !important; }
 
 /* topbar */
-.topbar { background: rgba(4,11,11,.72) !important; border-bottom: 1px solid var(--border) !important; }
+.topbar { background: rgba(5,4,11,.72) !important; border-bottom: 1px solid var(--border) !important; }
 .brand span { font-size: 17px; }
 .brand b { color: var(--accent); }
 
 /* sidebar */
 .sidebar {
-  background: linear-gradient(180deg, rgba(12,29,28,.92), rgba(5,13,13,.94)) !important;
+  background: linear-gradient(180deg, rgba(15,13,28,.92), rgba(7,5,13,.94)) !important;
   border-right: 1px solid var(--border) !important;
 }
 .new-chat-btn {
   display: flex !important; align-items: center; gap: 10px;
-  border: 1px solid rgba(148,249,239,.35) !important; border-radius: 16px !important;
+  border: 1px solid rgba(168,153,244,.35) !important; border-radius: 16px !important;
   background: var(--umaira-grad) !important; color: #fff !important;
-  box-shadow: 0 8px 26px rgba(25,174,161,.35), inset 0 1px 0 rgba(255,255,255,.18);
+  box-shadow: 0 8px 26px rgba(55,32,167,.35), inset 0 1px 0 rgba(255,255,255,.18);
 }
 .new-chat-btn:hover { filter: brightness(1.12); }
 .nav-group-label, .eyebrow { color: var(--muted) !important; letter-spacing: .12em !important; font-size: 10.5px !important; }
 .nav-item { border-radius: 13px !important; border: 1px solid transparent !important; color: var(--text-soft) !important; background: transparent !important; }
-.nav-item:hover { background: rgba(45,244,225,.10) !important; }
+.nav-item:hover { background: rgba(85,55,234,.10) !important; }
 .nav-item.active {
-  background: linear-gradient(90deg, rgba(13,240,221,.30), rgba(13,240,221,.08)) !important;
-  border-color: rgba(129,248,237,.28) !important; color: #fff !important;
+  background: linear-gradient(90deg, rgba(58,24,229,.30), rgba(58,24,229,.08)) !important;
+  border-color: rgba(153,135,242,.28) !important; color: #fff !important;
 }
 .chat-search { border-radius: 14px !important; background: rgba(255,255,255,.04) !important; }
 .chat-history-row { border-radius: 13px !important; }
-.chat-history-row.active { background: rgba(13,240,221,.18) !important; border-color: rgba(129,248,237,.28) !important; }
+.chat-history-row.active { background: rgba(58,24,229,.18) !important; border-color: rgba(153,135,242,.28) !important; }
 .side-card {
   border: 1px solid var(--border-strong) !important; border-radius: 18px !important;
-  background: linear-gradient(160deg, rgba(13,240,221,.20), rgba(236,72,153,.06) 60%, rgba(255,255,255,.02)) !important;
+  background: linear-gradient(160deg, rgba(58,24,229,.20), rgba(236,72,153,.06) 60%, rgba(255,255,255,.02)) !important;
 }
 
 /* area chat */
@@ -73,27 +73,27 @@ html body {
   width: 104px; height: 104px; margin: 0 auto 24px; border-radius: 50%;
   background:
     radial-gradient(circle at 30% 26%, rgba(255,255,255,.95) 0 2%, rgba(255,255,255,0) 9%),
-    radial-gradient(circle at 36% 32%, #bcfbf3 0, #21f3e0 30%, #165c57 62%, #061a19 100%);
-  box-shadow: 0 0 44px rgba(30,243,224,.60), 0 0 100px rgba(29,163,153,.32),
-    inset -10px -14px 28px rgba(4,20,19,.65), inset 8px 8px 20px rgba(203,252,241,.22);
+    radial-gradient(circle at 36% 32%, #c9bff8 0, #4b2ce8 30%, #241959 62%, #0a0719 100%);
+  box-shadow: 0 0 44px rgba(73,41,232,.60), 0 0 100px rgba(56,36,156,.32),
+    inset -10px -14px 28px rgba(7,5,19,.65), inset 8px 8px 20px rgba(213,205,250,.22);
   animation: umairaFloat 6s ease-in-out infinite;
 }
 @keyframes umairaFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @media (prefers-reduced-motion: reduce) { .umaira-orb { animation: none; } }
 .umaira-empty h2 {
   margin: 0 0 8px; font-size: clamp(24px, 5vw, 36px); line-height: 1.2;
-  background: linear-gradient(90deg, #fff, #bdfcf5 70%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  background: linear-gradient(90deg, #fff, #cac0f9 70%); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .umaira-empty p { margin: 0 auto 26px; max-width: 520px; color: var(--muted); font-size: 14.5px; line-height: 1.6; }
 .umaira-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; text-align: left; }
 .umaira-suggest {
   display: flex; flex-direction: column; gap: 6px; padding: 14px; cursor: pointer;
   border: 1px solid var(--border-strong); border-radius: 20px; color: var(--text);
-  background: linear-gradient(160deg, rgba(13,240,221,.18), rgba(255,255,255,.03));
+  background: linear-gradient(160deg, rgba(58,24,229,.18), rgba(255,255,255,.03));
   box-shadow: 0 10px 30px rgba(0,0,0,.28); transition: transform .18s ease, border-color .18s ease;
   touch-action: manipulation;
 }
-.umaira-suggest:hover { transform: translateY(-2px); border-color: rgba(148,249,239,.5); }
+.umaira-suggest:hover { transform: translateY(-2px); border-color: rgba(168,153,244,.5); }
 .umaira-suggest-icon {
   display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 11px;
   background: rgba(255,255,255,.07); border: 1px solid var(--border); color: var(--accent); font-size: 14px;
@@ -106,31 +106,31 @@ html body {
 
 /* bubble */
 .chat-message.user .chat-bubble {
-  background: linear-gradient(135deg, rgba(25,174,161,.55), rgba(18,74,69,.55)) !important;
-  border: 1px solid rgba(148,249,239,.28) !important; color: #fff !important;
+  background: linear-gradient(135deg, rgba(55,32,167,.55), rgba(29,21,71,.55)) !important;
+  border: 1px solid rgba(168,153,244,.28) !important; color: #fff !important;
 }
 .chat-message.assistant .chat-bubble { color: var(--text-soft) !important; }
 .copy-response-button, .regenerate-button { border-radius: 999px !important; }
-.chat-code-block { border: 1px solid var(--border-strong) !important; border-radius: 16px !important; background: rgba(2,7,7,.7) !important; }
+.chat-code-block { border: 1px solid var(--border-strong) !important; border-radius: 16px !important; background: rgba(3,2,7,.7) !important; }
 
 /* kotak input kapsul */
 .chat-composer {
   border: 1px solid var(--border-strong) !important; border-radius: 999px !important;
-  background: rgba(10,26,24,.86) !important;
+  background: rgba(13,11,25,.86) !important;
   box-shadow: 0 14px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.02) inset;
   padding: 6px !important; align-items: center;
 }
-.chat-composer:focus-within { border-color: rgba(148,249,239,.6) !important; box-shadow: 0 14px 40px rgba(0,0,0,.4), 0 0 28px rgba(13,240,221,.28); }
+.chat-composer:focus-within { border-color: rgba(168,153,244,.6) !important; box-shadow: 0 14px 40px rgba(0,0,0,.4), 0 0 28px rgba(58,24,229,.28); }
 .chat-composer textarea { background: transparent !important; border: 0 !important; color: var(--text) !important; }
 .composer-plus, .composer-mic {
   border-radius: 50% !important; border: 0 !important; background: rgba(255,255,255,.07) !important; color: var(--text) !important;
 }
-.composer-mic { background: rgba(198,252,248,.9) !important; color: #124a45 !important; }
+.composer-mic { background: rgba(209,201,249,.9) !important; color: #1d1547 !important; }
 #chatSendBtn {
   border-radius: 50% !important; border: 0 !important; color: #fff !important;
-  background: var(--umaira-grad) !important; box-shadow: 0 6px 20px rgba(25,174,161,.5);
+  background: var(--umaira-grad) !important; box-shadow: 0 6px 20px rgba(55,32,167,.5);
 }
-.composer-menu { border-radius: 20px !important; border: 1px solid var(--border-strong) !important; background: rgba(8,22,21,.97) !important; }
+.composer-menu { border-radius: 20px !important; border: 1px solid var(--border-strong) !important; background: rgba(11,9,21,.97) !important; }
 .composer-note { color: var(--muted-2) !important; }
 
 /* desktop: panel sidebar melayang */

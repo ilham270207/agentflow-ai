@@ -1,33 +1,33 @@
 /* UMAIRA GLASS OVERRIDE — light lavender */
 :root {
   color-scheme: light !important;
-  --bg: #f5fcfb !important;
-  --bg-soft: #eef8f8 !important;
+  --bg: #f6f5fc !important;
+  --bg-soft: #f0eef8 !important;
   --panel: rgba(255,255,255,.76) !important;
   --panel-soft: rgba(255,255,255,.86) !important;
-  --panel-hover: rgba(227,249,247,.92) !important;
-  --border: rgba(79,167,159,.16) !important;
-  --border-strong: rgba(79,167,159,.27) !important;
-  --text: #213433 !important;
-  --text-soft: #415a58 !important;
+  --panel-hover: rgba(231,228,248,.92) !important;
+  --border: rgba(97,83,163,.16) !important;
+  --border-strong: rgba(97,83,163,.27) !important;
+  --text: #252233 !important;
+  --text-soft: #464259 !important;
   --muted: #6d8885 !important;
   --muted-2: #8ba6a4 !important;
-  --accent: #4faca3 !important;
-  --accent-strong: #428e87 !important;
-  --accent-soft: rgba(87,191,181,.13) !important;
-  --user-bubble: #dff9f6 !important;
-  --shadow: 0 12px 36px rgba(44,87,83,.10) !important;
-  --umaira-grad: linear-gradient(135deg,#86dcd5,#4fb7ae 58%,#4d9d96) !important;
+  --accent: #6254a7 !important;
+  --accent-strong: #51468a !important;
+  --accent-soft: rgba(108,92,186,.13) !important;
+  --user-bubble: #e4e0f8 !important;
+  --shadow: 0 12px 36px rgba(53,46,85,.10) !important;
+  --umaira-grad: linear-gradient(135deg,#978ad8,#6454b2 58%,#5d5199) !important;
 }
 
 html,
 body,
 html body {
-  color: #213433 !important;
+  color: #252233 !important;
   background:
-    radial-gradient(ellipse at 85% 0%,rgba(195,242,238,.42),transparent 48%),
-    radial-gradient(ellipse at 0% 100%,rgba(220,248,246,.52),transparent 48%),
-    linear-gradient(145deg,#faffff,#f0f9f9) !important;
+    radial-gradient(ellipse at 85% 0%,rgba(204,197,240,.42),transparent 48%),
+    radial-gradient(ellipse at 0% 100%,rgba(226,221,247,.52),transparent 48%),
+    linear-gradient(145deg,#fbfaff,#f2f0f9) !important;
   background-attachment: fixed !important;
 }
 
@@ -42,7 +42,7 @@ html body {
 .workspace-main,
 .feature-workspace {
   background: transparent !important;
-  color: #213433 !important;
+  color: #252233 !important;
 }
 
 .topbar,
@@ -50,15 +50,15 @@ html body {
 .sidebar-top,
 .sidebar-bottom {
   background: rgba(255,255,255,.76) !important;
-  color: #213433 !important;
-  border-color: rgba(79,167,159,.17) !important;
+  color: #252233 !important;
+  border-color: rgba(97,83,163,.17) !important;
   backdrop-filter: blur(24px) saturate(145%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(145%) !important;
 }
 
 .sidebar {
-  background: linear-gradient(160deg,rgba(255,255,255,.91),rgba(245,254,254,.82)) !important;
-  box-shadow: 0 8px 32px rgba(44,87,83,.06) !important;
+  background: linear-gradient(160deg,rgba(255,255,255,.91),rgba(247,245,254,.82)) !important;
+  box-shadow: 0 8px 32px rgba(53,46,85,.06) !important;
 }
 
 .sidebar *,
@@ -75,13 +75,13 @@ html body {
 .sb-brand,
 .sb-collapse,
 .sb-reopen {
-  color: #415a58 !important;
+  color: #464259 !important;
 }
 
 .brand b,
 .nav-item.active .nav-icon,
 .nav-item .nav-icon {
-  color: #4faca3 !important;
+  color: #6254a7 !important;
 }
 
 .nav-item,
@@ -91,7 +91,7 @@ html body {
 .sidebar-section,
 .ghost,
 .chat-header .ghost {
-  border-color: rgba(79,167,159,.17) !important;
+  border-color: rgba(97,83,163,.17) !important;
 }
 
 .nav-item,
@@ -107,22 +107,22 @@ html body {
 .chat-history-row:hover,
 .sb-collapse:hover,
 .sb-reopen:hover {
-  background: rgba(154,222,216,.20) !important;
+  background: rgba(168,157,219,.20) !important;
 }
 
 .nav-item.active,
 .chat-history-row.active {
-  color: #3e7b75 !important;
-  background: linear-gradient(100deg,rgba(166,231,225,.40),rgba(223,249,246,.58)) !important;
-  border-color: rgba(79,178,168,.25) !important;
+  color: #4a4178 !important;
+  background: linear-gradient(100deg,rgba(179,169,228,.40),rgba(228,224,248,.58)) !important;
+  border-color: rgba(99,84,173,.25) !important;
 }
 
 .new-chat-btn,
 #chatSendBtn {
-  background: linear-gradient(135deg,#6cc7be,#4da49c) !important;
+  background: linear-gradient(135deg,#7e71c2,#5e51a0) !important;
   color: #fff !important;
-  border-color: rgba(79,178,168,.30) !important;
-  box-shadow: 0 5px 16px rgba(66,142,135,.18) !important;
+  border-color: rgba(99,84,173,.30) !important;
+  box-shadow: 0 5px 16px rgba(81,70,138,.18) !important;
 }
 
 .new-chat-btn *,
@@ -133,10 +133,10 @@ html body {
 .chat-composer,
 .composer-menu,
 #composerMenu {
-  color: #314644 !important;
+  color: #353245 !important;
   background: rgba(255,255,255,.84) !important;
-  border: 1px solid rgba(79,178,168,.22) !important;
-  box-shadow: 0 12px 38px rgba(44,87,83,.11) !important;
+  border: 1px solid rgba(99,84,173,.22) !important;
+  box-shadow: 0 12px 38px rgba(53,46,85,.11) !important;
   backdrop-filter: blur(24px) saturate(150%) !important;
   -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
 }
@@ -146,7 +146,7 @@ html body {
 #chatInput,
 .composer-menu *,
 #composerMenu * {
-  color: #314644 !important;
+  color: #353245 !important;
 }
 
 .chat-composer textarea::placeholder,
@@ -157,9 +157,9 @@ html body {
 
 .composer-plus,
 .composer-mic {
-  color: #4c908a !important;
-  background: rgba(217,244,242,.72) !important;
-  border-color: rgba(79,178,168,.20) !important;
+  color: #5a4f8d !important;
+  background: rgba(222,218,243,.72) !important;
+  border-color: rgba(99,84,173,.20) !important;
 }
 
 .umaira-chip,
@@ -180,10 +180,10 @@ html body {
 .modal,
 .dialog,
 [role="dialog"] {
-  color: #314644 !important;
+  color: #353245 !important;
   background: rgba(255,255,255,.70) !important;
-  border-color: rgba(79,178,168,.20) !important;
-  box-shadow: 0 8px 28px rgba(44,87,83,.06) !important;
+  border-color: rgba(99,84,173,.20) !important;
+  box-shadow: 0 8px 28px rgba(53,46,85,.06) !important;
   backdrop-filter: blur(18px) saturate(135%) !important;
   -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
 }
@@ -196,8 +196,8 @@ html body {
 .umaira-chip:hover,
 .project-card:hover,
 .workspace-card:hover {
-  background: rgba(233,250,249,.94) !important;
-  border-color: rgba(79,178,168,.36) !important;
+  background: rgba(236,234,249,.94) !important;
+  border-color: rgba(99,84,173,.36) !important;
 }
 
 .umaira-suggest *,
@@ -211,40 +211,40 @@ html body {
 .modal *,
 .dialog *,
 [role="dialog"] * {
-  color: #415a58;
+  color: #464259;
 }
 
 .umaira-tag {
-  background: rgba(206,241,238,.56) !important;
-  color: #4c8c86 !important;
+  background: rgba(213,208,239,.56) !important;
+  color: #594f89 !important;
 }
 
 .chat-message.user .chat-bubble {
-  color: #315653 !important;
-  background: #dff9f6 !important;
-  border: 1px solid rgba(79,178,168,.12) !important;
+  color: #383354 !important;
+  background: #e4e0f8 !important;
+  border: 1px solid rgba(99,84,173,.12) !important;
 }
 
 .chat-message.assistant .chat-bubble {
-  color: #314644 !important;
+  color: #353245 !important;
   background: rgba(255,255,255,.58) !important;
-  border-color: rgba(79,178,168,.10) !important;
+  border-color: rgba(99,84,173,.10) !important;
 }
 
 .chat-code-block,
 pre,
 pre code {
-  color: #314644 !important;
-  background: #ecf6f5 !important;
-  border-color: rgba(79,178,168,.20) !important;
+  color: #353245 !important;
+  background: #eeedf5 !important;
+  border-color: rgba(99,84,173,.20) !important;
 }
 
 input,
 textarea,
 select {
-  color: #314644 !important;
+  color: #353245 !important;
   background-color: rgba(255,255,255,.78) !important;
-  border-color: rgba(79,178,168,.23) !important;
+  border-color: rgba(99,84,173,.23) !important;
 }
 
 input::placeholder,
@@ -256,13 +256,13 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline-color: #6ac6be !important;
+  outline-color: #7c6fc1 !important;
 }
 
 hr,
 .divider,
 .chat-header {
-  border-color: rgba(79,167,159,.16) !important;
+  border-color: rgba(97,83,163,.16) !important;
 }
 
 svg {
@@ -306,8 +306,8 @@ html body .umaira-empty h2 {
   background-image: none !important;
   -webkit-background-clip: border-box !important;
   background-clip: border-box !important;
-  color: #3e6561 !important;
-  -webkit-text-fill-color: #3e6561 !important;
+  color: #464063 !important;
+  -webkit-text-fill-color: #464063 !important;
   text-shadow: none !important;
 }
 
@@ -321,10 +321,10 @@ html body .umaira-orb {
   justify-content: center !important;
   margin: 0 auto 24px !important;
   padding: 0 !important;
-  border: 1px solid rgba(79,178,168,.16) !important;
+  border: 1px solid rgba(99,84,173,.16) !important;
   border-radius: 50% !important;
   background: rgba(255,255,255,.22) !important;
-  box-shadow: 0 8px 28px rgba(67,121,117,.07) !important;
+  box-shadow: 0 8px 28px rgba(78,70,118,.07) !important;
   animation: none !important;
   overflow: hidden !important;
   backdrop-filter: blur(12px) saturate(130%) !important;
@@ -345,8 +345,8 @@ html body .umaira-empty h2 {
   background-image: none !important;
   -webkit-background-clip: border-box !important;
   background-clip: border-box !important;
-  color: #3e6561 !important;
-  -webkit-text-fill-color: #3e6561 !important;
+  color: #464063 !important;
+  -webkit-text-fill-color: #464063 !important;
   text-shadow: none !important;
 }
 
@@ -360,10 +360,10 @@ html body .umaira-orb {
   justify-content: center !important;
   margin: 0 auto 24px !important;
   padding: 0 !important;
-  border: 1px solid rgba(79,178,168,.16) !important;
+  border: 1px solid rgba(99,84,173,.16) !important;
   border-radius: 50% !important;
   background: rgba(255,255,255,.22) !important;
-  box-shadow: 0 8px 28px rgba(67,121,117,.07) !important;
+  box-shadow: 0 8px 28px rgba(78,70,118,.07) !important;
   animation: none !important;
   overflow: hidden !important;
   backdrop-filter: blur(12px) saturate(130%) !important;
@@ -385,7 +385,7 @@ html body .umaira-orb img {
 
 html body #featureWorkspace,
 html body .feature-workspace {
-  color: #2a4240 !important;
+  color: #2f2b41 !important;
   background: transparent !important;
   color-scheme: light !important;
 }
@@ -397,7 +397,7 @@ html body #featureWorkspace h4,
 html body #featureWorkspace strong,
 html body #featureWorkspace label,
 html body #featureWorkspace .eyebrow {
-  color: #3e6561 !important;
+  color: #464063 !important;
 }
 
 html body #featureWorkspace p,
@@ -421,11 +421,11 @@ html body #featureWorkspace .project-card,
 html body #featureWorkspace .project-empty,
 html body #featureWorkspace .image-result-card,
 html body #featureWorkspace .library-card {
-  color: #2a4240 !important;
+  color: #2f2b41 !important;
   background: rgba(255, 255, 255, .78) !important;
-  border: 1px solid rgba(107,179,172,.23) !important;
+  border: 1px solid rgba(121,111,175,.23) !important;
   border-radius: 18px !important;
-  box-shadow: 0 8px 28px rgba(60,109,104,.07) !important;
+  box-shadow: 0 8px 28px rgba(70,62,107,.07) !important;
   backdrop-filter: blur(16px) saturate(135%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
 }
@@ -437,9 +437,9 @@ html body #featureWorkspace select,
 html body #featureWorkspace .image-studio-form textarea,
 html body #featureWorkspace .project-field input,
 html body #featureWorkspace .project-field textarea {
-  color: #2a4240 !important;
+  color: #2f2b41 !important;
   background: rgba(255, 255, 255, .92) !important;
-  border: 1px solid rgba(107,179,172,.32) !important;
+  border: 1px solid rgba(121,111,175,.32) !important;
   border-radius: 12px !important;
   color-scheme: light !important;
 }
@@ -454,23 +454,23 @@ html body #featureWorkspace input:focus,
 html body #featureWorkspace textarea:focus,
 html body #featureWorkspace select:focus {
   outline: none !important;
-  border-color: #6dc4bc !important;
-  box-shadow: 0 0 0 3px rgba(109,196,188,.15) !important;
+  border-color: #7e71c0 !important;
+  box-shadow: 0 0 0 3px rgba(126,113,192,.15) !important;
 }
 
 /* Tombol fitur */
 html body #featureWorkspace .projects-button,
 html body #featureWorkspace .image-studio-submit,
 html body #featureWorkspace button:not(.projects-danger) {
-  color: #3e6561 !important;
-  border-color: rgba(107,179,172,.3) !important;
+  color: #464063 !important;
+  border-color: rgba(121,111,175,.3) !important;
   background: rgba(255, 255, 255, .82) !important;
-  box-shadow: 0 3px 12px rgba(60,109,104,.05) !important;
+  box-shadow: 0 3px 12px rgba(70,62,107,.05) !important;
 }
 
 html body #featureWorkspace .image-studio-submit {
   color: #fff !important;
-  background: linear-gradient(135deg, #58bcb3, #4d9d96) !important;
+  background: linear-gradient(135deg, #6c5db7, #5d5199) !important;
   border-color: transparent !important;
 }
 
@@ -482,14 +482,14 @@ html body #featureWorkspace .projects-danger {
 
 html body #featureWorkspace .projects-button:hover,
 html body #featureWorkspace button:not(.projects-danger):hover {
-  border-color: rgba(107,179,172,.55) !important;
+  border-color: rgba(121,111,175,.55) !important;
 }
 
 /* Area hasil gambar: jangan mengubah gambar itu sendiri */
 html body #featureWorkspace .image-studio-result,
 html body #featureWorkspace .library-grid,
 html body #featureWorkspace .projects-list {
-  color: #2a4240 !important;
+  color: #2f2b41 !important;
   background: transparent !important;
 }
 
@@ -513,7 +513,7 @@ html body #featureWorkspace .projects-toolbar,
 html body #featureWorkspace .projects-intro,
 html body #featureWorkspace .project-card-content,
 html body #featureWorkspace .project-field {
-  color: #3e6561 !important;
+  color: #464063 !important;
   background-color: transparent !important;
 }
 
@@ -528,31 +528,31 @@ html body #featureWorkspace .project-field {
 
 /* UMAIRA SETTINGS AND ACCOUNT */
 #featureWorkspace .umaira-settings-panel {
-  color: #3e6561;
+  color: #464063;
   background: rgba(255,255,255,.82);
-  border: 1px solid rgba(107,179,172,.25);
+  border: 1px solid rgba(121,111,175,.25);
   border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 8px 28px rgba(60,109,104,.07);
+  box-shadow: 0 8px 28px rgba(70,62,107,.07);
 }
 #featureWorkspace .umaira-setting-row {
   display: grid;
   gap: 10px;
   margin: 18px 0;
-  color: #3e6561;
+  color: #464063;
 }
 #featureWorkspace .umaira-setting-select {
   width: 100%;
   max-width: 320px;
   padding: 12px;
-  color: #2a4240;
+  color: #2f2b41;
   background: #fff;
-  border: 1px solid rgba(107,179,172,.35);
+  border: 1px solid rgba(121,111,175,.35);
   border-radius: 12px;
 }
 #featureWorkspace .umaira-account-status {
   padding: 12px;
-  background: rgba(109,196,188,.1);
+  background: rgba(126,113,192,.1);
   border-radius: 12px;
 }
 
@@ -570,12 +570,12 @@ html body #featureWorkspace .project-field {
 .sidebar-top,
 .sidebar-bottom {
   background: rgba(255, 255, 255, .96) !important;
-  color: #314644 !important;
+  color: #353245 !important;
 }
 
 @media (min-width: 761px) {
   .sidebar {
-    background: linear-gradient(160deg, #fff, #f7fffe) !important;
+    background: linear-gradient(160deg, #fff, #f9f7ff) !important;
   }
 }
 
@@ -584,31 +584,31 @@ html body #featureWorkspace .project-field {
   box-sizing: border-box;
   padding: 5px;
   border-radius: 11px;
-  background: #4faca3;
+  background: #6254a7;
   filter: none !important;
 }
 
 .sidebar .new-chat-btn {
-  background: linear-gradient(135deg, #eefefd, #fff) !important;
-  color: #3e7b75 !important;
-  border: 1px solid rgba(79,172,163,.24) !important;
-  box-shadow: 0 3px 12px rgba(62,123,117,.08) !important;
+  background: linear-gradient(135deg, #f1effd, #fff) !important;
+  color: #4a4178 !important;
+  border: 1px solid rgba(98,84,167,.24) !important;
+  box-shadow: 0 3px 12px rgba(74,65,120,.08) !important;
 }
 
 .sidebar .new-chat-btn *,
 .sidebar .new-chat-btn span {
-  color: #3e7b75 !important;
+  color: #4a4178 !important;
 }
 
 .sidebar .new-chat-btn:hover {
-  background: #e4fefb !important;
+  background: #e9e5fd !important;
 }
 
 .sb-collapse,
 .sb-reopen {
-  color: #3e7b75 !important;
-  background: rgba(240,254,253,.95) !important;
-  border-color: rgba(79,172,163,.2) !important;
+  color: #4a4178 !important;
+  background: rgba(243,241,253,.95) !important;
+  border-color: rgba(98,84,167,.2) !important;
 }
 
 .chat-history-row {
@@ -642,13 +642,13 @@ html body #featureWorkspace .project-field {
 
 .chat-history-menu-btn:hover,
 .chat-history-menu-btn:focus-visible {
-  background: #e9fbf9;
-  border-color: rgba(79,172,163,.2);
+  background: #edeafa;
+  border-color: rgba(98,84,167,.2);
   outline: none;
 }
 
 .chat-history-icon.is-pinned {
-  color: #4faca3;
+  color: #6254a7;
   font-weight: 700;
 }
 
@@ -657,10 +657,10 @@ html body #featureWorkspace .project-field {
   z-index: 999;
   min-width: 220px;
   padding: 6px;
-  border: 1px solid rgba(79,172,163,.2);
+  border: 1px solid rgba(98,84,167,.2);
   border-radius: 15px;
   background: rgba(255, 255, 255, .98);
-  box-shadow: 0 12px 36px rgba(28,61,57,.16);
+  box-shadow: 0 12px 36px rgba(35,30,59,.16);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 }
@@ -680,7 +680,7 @@ html body #featureWorkspace .project-field {
   border: 0;
   border-radius: 9px;
   background: transparent;
-  color: #314644;
+  color: #353245;
   text-align: left;
   font-size: 13px;
   cursor: pointer;
@@ -688,7 +688,7 @@ html body #featureWorkspace .project-field {
 
 .chat-history-menu button:hover,
 .chat-header-menu button:hover {
-  background: #ecfbfa;
+  background: #efedfa;
 }
 
 .chat-history-menu button.danger {
@@ -708,8 +708,8 @@ html body #featureWorkspace .project-field {
   padding: 0 !important;
   border-radius: 12px !important;
   background: rgba(255, 255, 255, .8) !important;
-  color: #3e7b75 !important;
-  border: 1px solid rgba(79,172,163,.22) !important;
+  color: #4a4178 !important;
+  border: 1px solid rgba(98,84,167,.22) !important;
   font-size: 25px !important;
   line-height: 1;
 }
@@ -721,10 +721,10 @@ html body #featureWorkspace .project-field {
   right: 0;
   width: 230px;
   padding: 6px;
-  border: 1px solid rgba(79,172,163,.2);
+  border: 1px solid rgba(98,84,167,.2);
   border-radius: 14px;
   background: rgba(255, 255, 255, .98);
-  box-shadow: 0 12px 32px rgba(28,61,57,.15);
+  box-shadow: 0 12px 32px rgba(35,30,59,.15);
 }
 
 @media (max-width: 760px) {
@@ -744,7 +744,7 @@ html body #featureWorkspace .project-field {
 .sidebar-inner,
 .sidebar-content {
   background: #fff !important;
-  color: #314644 !important;
+  color: #353245 !important;
 }
 .sidebar::before,
 .sidebar::after,
@@ -777,7 +777,7 @@ html body .brand-mark.umaira-logo {
 html body .sb-brand .sb-logo {
   padding: 5px !important;
   border-radius: 11px !important;
-  background: #4faca3 !important;
+  background: #6254a7 !important;
   filter: none !important;
   object-fit: contain;
 }
@@ -789,8 +789,8 @@ html body .sb-brand .sb-logo {
 }
 
 @keyframes umairaLogoGlowRestored {
-  0%, 100% { filter: drop-shadow(0 0 7px rgba(41,225,224,.24)); }
-  50% { filter: drop-shadow(0 0 14px rgba(34,211,238,.48)); }
+  0%, 100% { filter: drop-shadow(0 0 7px rgba(78,50,216,.24)); }
+  50% { filter: drop-shadow(0 0 14px rgba(75,44,228,.48)); }
 }
 
 html body .umaira-orb {
@@ -799,12 +799,12 @@ html body .umaira-orb {
 
 html body .umaira-orb img {
   animation: umairaLogoGlowRestored 3.6s ease-in-out infinite !important;
-  filter: drop-shadow(0 0 8px rgba(41,225,224,.3)) !important;
+  filter: drop-shadow(0 0 8px rgba(78,50,216,.3)) !important;
 }
 
 /* Backdrop terang di HP dan desktop saat sidebar terbuka. */
 html body.sidebar-open .sidebar-backdrop {
-  background: rgba(244,254,254,.88) !important;
+  background: rgba(246,245,254,.88) !important;
   -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
   backdrop-filter: blur(10px) saturate(125%) !important;
 }
@@ -812,22 +812,22 @@ html body.sidebar-open .sidebar-backdrop {
 /* Konfirmasi chat memakai dialog Umaira, bukan popup browser. */
 html body .umaira-chat-confirm-overlay {
   z-index: 100100 !important;
-  background: rgba(31,57,54,.34) !important;
+  background: rgba(36,32,56,.34) !important;
   -webkit-backdrop-filter: blur(8px) !important;
   backdrop-filter: blur(8px) !important;
 }
 
 html body .umaira-chat-confirm-dialog {
   max-width: 370px !important;
-  border: 1px solid rgba(85,172,163,.22) !important;
+  border: 1px solid rgba(102,89,168,.22) !important;
   border-radius: 22px !important;
   background: #fff !important;
-  color: #314644 !important;
-  box-shadow: 0 24px 75px rgba(28,61,57,.2) !important;
+  color: #353245 !important;
+  box-shadow: 0 24px 75px rgba(35,30,59,.2) !important;
 }
 
 html body .umaira-chat-confirm-dialog h3 {
-  color: #314644 !important;
+  color: #353245 !important;
 }
 
 html body .umaira-chat-confirm-dialog p {
@@ -840,13 +840,13 @@ html body .umaira-chat-confirm-dialog .umaira-confirm-icon {
 }
 
 html body .umaira-chat-confirm-dialog .umaira-confirm-cancel {
-  border-color: rgba(105,150,146,.24) !important;
-  background: #f4fbfa !important;
-  color: #3e6561 !important;
+  border-color: rgba(114,107,148,.24) !important;
+  background: #f5f4fb !important;
+  color: #464063 !important;
 }
 
 html body .umaira-chat-confirm-dialog .umaira-confirm-delete {
-  background: #448e87 !important;
+  background: #53488a !important;
   color: #fff !important;
 }
 
@@ -877,7 +877,7 @@ html body .sidebar,
 html body .sidebar-top,
 html body .sidebar-bottom {
   background: #ffffff !important;
-  color: #314644 !important;
+  color: #353245 !important;
 }
 
 html body.sidebar-open .sidebar-backdrop {
@@ -906,24 +906,24 @@ html body.sidebar-open .layout {
   html body.sidebar-open .sidebar {
     background: #ffffff !important;
     background-image: none !important;
-    color: #314644 !important;
+    color: #353245 !important;
   }
 
   html body.sidebar-open .sidebar *,
   html body.sidebar-open .sidebar .nav-item {
-    color: #314644;
+    color: #353245;
   }
 
   html body.sidebar-open .sidebar .nav-item.active {
-    background: #f0faf9 !important;
-    color: #387771 !important;
+    background: #f2f1f9 !important;
+    color: #453b74 !important;
   }
 }
 
 /* UMAIRA FIX: pertahankan gradasi logo topbar pada desktop */
 @media (min-width: 768px) {
   html body .topbar .brand > img.brand-mark.umaira-logo {
-    content: url("assets/umaira-topbar-gradient.svg?v=20261015-gradient3") !important;
+    content: url("assets/umaira-mark-v3.svg") !important;
     display: block !important;
     background: transparent !important;
     filter: none !important;

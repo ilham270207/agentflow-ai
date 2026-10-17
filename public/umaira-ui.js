@@ -7,7 +7,7 @@
 
   var root = document.documentElement;
   var LS = window.localStorage;
-  var LOGO = "/assets/umaira-logo-gradient.svg";
+  var LOGO = "/assets/umaira-mark-v3.svg";
   var THEME_KEY = "umaira-theme-preference";
   var user = window.__UMAIRA_USER__ || null;
   var panel = null;

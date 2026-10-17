@@ -22,3 +22,5 @@ patch-*.mjs
 patch-snippets/
 .umi-tmp/
 test-mail.mjs
+node_modules
+*.log

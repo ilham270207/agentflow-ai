@@ -25,7 +25,7 @@
     const status = make("p", "wsm-status", "Memuat plugin...");
     const list = make("div", "wsm-list");
     panel.append(
-      make("h2", "", "Plugin"),
+      make("h2", "", "Ekstensi"),
       make("p", "wsm-hint", "Aktifkan kemampuan tambahan untuk Obrolan Umaira. Pengaturan tersimpan di akunmu."),
       status, list
     );
@@ -149,7 +149,7 @@
     const panel = make("section", "wsm-panel");
     const status = make("p", "wsm-status", "Memuat sesi Codex...");
     panel.append(
-      make("h2", "", "Codex Workspace"),
+      make("h2", "", "Lab kode"),
       make("p", "wsm-hint", "Tulis, perbaiki, dan jelaskan kode dengan AI. Sesi tersimpan di akunmu."),
       status
     );

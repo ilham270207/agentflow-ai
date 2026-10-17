@@ -1,0 +1,72 @@
+/* Umaira ikon v2 */
+:root{--i-copy:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%279%27%20y%3D%279%27%20width%3D%2711%27%20height%3D%2711%27%20rx%3D%273%27%2F%3E%3Cpath%20d%3D%27M5%2015V7a3%203%200%20013-3h8%27%2F%3E%3C%2Fsvg%3E");--i-check:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%2012.5l4.5%204.5L19%207.5%27%2F%3E%3C%2Fsvg%3E");--i-redo:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M20%205v5h-5%27%2F%3E%3Cpath%20d%3D%27M19.5%2010A8%208%200%20105%2015%27%2F%3E%3C%2Fsvg%3E");--i-like:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M7%2011v9H4v-9zM7%2011l4-7c1.5%200%202.5%201%202.2%202.6L12.8%209H19a2%202%200%20012%202.3l-1.2%206.4A2.5%202.5%200%200117.4%2020H7%27%2F%3E%3C%2Fsvg%3E");--i-dislike:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M7%2013V4H4v9zM7%2013l4%207c1.5%200%202.5-1%202.2-2.6L12.8%2015H19a2%202%200%20002-2.3l-1.2-6.4A2.5%202.5%200%200017.4%204H7%27%2F%3E%3C%2Fsvg%3E");--i-edit:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.5%204.5a2%202%200%20013%203L8%2019zM14%207l3%203%27%2F%3E%3C%2Fsvg%3E");--i-share:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%276%27%20cy%3D%2712%27%20r%3D%272.5%27%2F%3E%3Ccircle%20cx%3D%2717%27%20cy%3D%276%27%20r%3D%272.5%27%2F%3E%3Ccircle%20cx%3D%2717%27%20cy%3D%2718%27%20r%3D%272.5%27%2F%3E%3Cpath%20d%3D%27M8.2%2010.8l6.6-3.6M8.2%2013.2l6.6%203.6%27%2F%3E%3C%2Fsvg%3E");--i-files:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M14%203H8a2%202%200%2000-2%202v14a2%202%200%20002%202h8a2%202%200%20002-2V7zM14%203v4h4%27%2F%3E%3C%2Fsvg%3E");--i-pin:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%204h6l-1%205%203%203v2H7v-2l3-3zM12%2014v6%27%2F%3E%3C%2Fsvg%3E");--i-clear:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M14%204l6%206M12.5%208.5l3%203M4%2020c2-1%204-3%205-6l5-3%203%203-3%205c-3%201-5%203-6%205z%27%2F%3E%3C%2Fsvg%3E");--i-trash:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%207h16M9%207V4.5h6V7M6.5%207l1%2012a2%202%200%20002%201.8h5a2%202%200%20002-1.8l1-12M10%2011v6M14%2011v6%27%2F%3E%3C%2Fsvg%3E");--i-plus:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14M5%2012h14%27%2F%3E%3C%2Fsvg%3E");--i-chat:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%205h14a2%202%200%20012%202v8a2%202%200%2001-2%202h-6l-5%204v-4H5a2%202%200%2001-2-2V7a2%202%200%20012-2z%27%2F%3E%3C%2Fsvg%3E");--i-archive:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%273.5%27%20y%3D%274.5%27%20width%3D%2717%27%20height%3D%2715%27%20rx%3D%274%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%273.2%27%2F%3E%3Cpath%20d%3D%27M12%208.8V7M12%2017v-1.8%27%2F%3E%3C%2Fsvg%3E");--i-library:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M5%204h5a2%202%200%20012%202v14a2%202%200%2000-2-2H5zM19%204h-5a2%202%200%2000-2%202v14a2%202%200%20012-2h5z%27%2F%3E%3C%2Fsvg%3E");--i-scheduled:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M6%2017V11a6%206%200%200112%200v6l1.5%202h-15zM10%2021h4%27%2F%3E%3C%2Fsvg%3E");--i-images:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.5a8.5%208.5%200%20100%2017c1.5%200%202-1%201.5-2-.6-1.2.2-2.5%201.6-2.5H17a3.5%203.5%200%20003.5-3.5C20.5%207%2016.7%203.5%2012%203.5z%27%2F%3E%3Ccircle%20cx%3D%278%27%20cy%3D%2711%27%20r%3D%271%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%277.8%27%20r%3D%271%27%2F%3E%3Ccircle%20cx%3D%2716%27%20cy%3D%2710%27%20r%3D%271%27%2F%3E%3C%2Fsvg%3E");--i-plugins:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%204a2%202%200%20014%200v2h4v4h-2a2%202%200%20100%204h2v4H5v-4h2a2%202%200%20100-4H5V6h4z%27%2F%3E%3C%2Fsvg%3E");--i-projects:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M3.5%207a2.5%202.5%200%20012.5-2.5h3.5L12%207h6a2.5%202.5%200%20012.5%202.5v7A2.5%202.5%200%200118%2019H6a2.5%202.5%200%2001-2.5-2.5z%27%2F%3E%3C%2Fsvg%3E");--i-codex:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M8.5%208L4.5%2012l4%204M15.5%208l4%204-4%204M13.5%205.5l-3%2013%27%2F%3E%3C%2Fsvg%3E");--i-settings:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%207h9M17%207h3M4%2017h3M11%2017h9%27%2F%3E%3Ccircle%20cx%3D%2715%27%20cy%3D%277%27%20r%3D%272%27%2F%3E%3Ccircle%20cx%3D%279%27%20cy%3D%2717%27%20r%3D%272%27%2F%3E%3C%2Fsvg%3E");--i-account:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.8%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%278.5%27%20r%3D%273.5%27%2F%3E%3Cpath%20d%3D%27M5%2020a7%207%200%200114%200%27%2F%3E%3C%2Fsvg%3E");}
+.uu-i{display:inline-block;width:20px;height:20px;vertical-align:middle;background:var(--umaira-grad,currentColor);-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;}
+.uu-i[data-i="copy"]{--m:var(--i-copy)}
+.uu-i[data-i="check"]{--m:var(--i-check)}
+.uu-i[data-i="redo"]{--m:var(--i-redo)}
+.uu-i[data-i="like"]{--m:var(--i-like)}
+.uu-i[data-i="dislike"]{--m:var(--i-dislike)}
+.uu-i[data-i="edit"]{--m:var(--i-edit)}
+.uu-i[data-i="share"]{--m:var(--i-share)}
+.uu-i[data-i="files"]{--m:var(--i-files)}
+.uu-i[data-i="pin"]{--m:var(--i-pin)}
+.uu-i[data-i="clear"]{--m:var(--i-clear)}
+.uu-i[data-i="trash"]{--m:var(--i-trash)}
+.uu-i[data-i="plus"]{--m:var(--i-plus)}
+.uu-i[data-i="chat"]{--m:var(--i-chat)}
+.uu-i[data-i="archive"]{--m:var(--i-archive)}
+.uu-i[data-i="library"]{--m:var(--i-library)}
+.uu-i[data-i="scheduled"]{--m:var(--i-scheduled)}
+.uu-i[data-i="images"]{--m:var(--i-images)}
+.uu-i[data-i="plugins"]{--m:var(--i-plugins)}
+.uu-i[data-i="projects"]{--m:var(--i-projects)}
+.uu-i[data-i="codex"]{--m:var(--i-codex)}
+.uu-i[data-i="settings"]{--m:var(--i-settings)}
+.uu-i[data-i="account"]{--m:var(--i-account)}
+html:root:root .new-chat-btn .uu-i{background:#fff}
+.chat-header-menu button[data-header-action="rename"]{--m:var(--i-edit)}
+.chat-header-menu button[data-header-action="share"]{--m:var(--i-share)}
+.chat-header-menu button[data-header-action="files"]{--m:var(--i-files)}
+.chat-header-menu button[data-header-action="pin"]{--m:var(--i-pin)}
+.chat-header-menu button[data-header-action="archive"]{--m:var(--i-archive)}
+.chat-header-menu button[data-header-action="clear"]{--m:var(--i-clear)}
+.chat-header-menu button[data-header-action="delete"]{--m:var(--i-trash)}
+.chat-header-menu button[data-header-action]::before{content:"";display:inline-block;width:18px;height:18px;margin-right:10px;vertical-align:-4px;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;}
+.chat-header-menu button.danger{color:#ff6b81!important}
+html:root:root .chat-message-actions button{font-size:0!important;width:34px;height:34px;min-width:0;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:11px;display:inline-grid;place-items:center;color:inherit;opacity:.72;cursor:pointer}
+html:root:root .chat-message-actions button:hover{opacity:1;background:rgba(127,127,127,.16)!important}
+.chat-message-actions button::before{content:"";width:19px;height:19px;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;}
+.copy-response-button{--m:var(--i-copy)}.copy-response-button.uu-done{--m:var(--i-check)}
+.regenerate-button{--m:var(--i-redo)}.regenerate-button:disabled::before{animation:uuspin 1s linear infinite}
+.uu-like{--m:var(--i-like)}.uu-dislike{--m:var(--i-dislike)}
+html:root:root .chat-message-actions .uu-on{color:var(--accent,#2563eb);opacity:1}
+@keyframes uuspin{to{transform:rotate(360deg)}}
+html:root:root .attachment-chip.uu-thumb{width:68px;height:68px;min-width:0;padding:0!important;position:relative;border-radius:16px;overflow:visible}
+.uu-thumb .attachment-icon{width:100%;height:100%;padding:0;margin:0;border-radius:inherit;overflow:hidden;background:none}
+.uu-thumb .attachment-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.uu-thumb .attachment-info{display:none!important}
+.uu-thumb .attachment-remove{position:absolute;top:-7px;right:-7px;width:22px;height:22px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:14px;line-height:1;background:rgba(10,20,40,.88);color:#fff;border:1px solid rgba(255,255,255,.4)}
+html:root:root .uu-msg-thumb{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;display:inline-block}
+.uu-msg-thumb img{width:min(220px,60vw);max-height:260px;object-fit:cover;border-radius:16px;display:block}
+
+/* ukuran font chat */
+html:root:root .chat-message .chat-bubble {
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  letter-spacing: 0 !important;
+}
+html:root:root .chat-message .chat-bubble :is(p, li, td, th, blockquote, span, strong, em, a) {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+html:root:root .chat-message .chat-bubble :is(p, ul, ol) { margin: 0 0 .6em !important; }
+html:root:root .chat-message .chat-bubble :is(p, ul, ol):last-child { margin-bottom: 0 !important; }
+html:root:root .chat-message .chat-bubble h1 { font-size: 1.25em !important; line-height: 1.3 !important; margin: .8em 0 .4em !important; }
+html:root:root .chat-message .chat-bubble h2 { font-size: 1.15em !important; line-height: 1.3 !important; margin: .8em 0 .4em !important; }
+html:root:root .chat-message .chat-bubble :is(h3, h4, h5) { font-size: 1.05em !important; line-height: 1.35 !important; margin: .7em 0 .3em !important; }
+html:root:root .chat-message .chat-bubble :is(pre, pre *, code) { font-size: 12.5px !important; line-height: 1.5 !important; }
+html:root:root .chat-message.user .chat-bubble { font-size: 13.5px !important; }
+@media (min-width: 761px) {
+  html:root:root .chat-message .chat-bubble,
+  html:root:root .chat-message.user .chat-bubble { font-size: 14px !important; }
+}
