@@ -1,0 +1,15 @@
+/* Umaira fase 2: edit pesan + sematkan */
+.uu2-uact{display:flex;justify-content:flex-end;margin-top:2px}
+.uu2-uact button{width:32px;height:32px;border:0;border-radius:10px;background:transparent;color:inherit;opacity:.55;display:grid;place-items:center;cursor:pointer;padding:0}
+.uu2-uact button:hover{opacity:1;background:rgba(127,127,127,.16)}
+.uu2-uact svg{width:17px;height:17px}
+.uu2-edit{display:grid;gap:8px;min-width:min(78vw,420px)}
+.uu2-edit textarea{width:100%;min-height:90px;padding:12px 14px;border-radius:16px;border:1px solid rgba(127,127,127,.35);background:rgba(127,127,127,.1);color:inherit;font:inherit;font-size:14.5px;line-height:1.55;outline:0;resize:vertical}
+.uu2-edit small{opacity:.65;font-size:12px}
+.uu2-edit .uu2-end{display:flex;gap:8px;justify-content:flex-end}
+.uu2-pinned{display:grid;gap:6px;margin-bottom:10px}
+.uu2-pinned-label{display:flex;align-items:center;gap:6px;font-size:12px;opacity:.7;margin:2px 4px}
+.uu2-pinned-label svg{width:14px;height:14px}
+.chat-history-row.uu2-pin{position:relative}
+.uu2-badge{position:absolute;top:-5px;right:-3px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#8b5cf6,#3b82f6 60%,#22d3ee);box-shadow:0 2px 8px rgba(79,70,229,.4);pointer-events:none}
+.uu2-badge svg{width:11px;height:11px}

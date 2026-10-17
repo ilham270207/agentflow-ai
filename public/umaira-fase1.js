@@ -143,7 +143,8 @@
     e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); kisi();
   }, true);
 
-  /* ---------- bacakan + waktu relatif ---------- */
+  window.umairaKisi = kisi;
+/* ---------- bacakan + waktu relatif ---------- */
   function rel(ts) {
     var d = (Date.now() - ts) / 1000;
     if (d < 45) return "baru saja";

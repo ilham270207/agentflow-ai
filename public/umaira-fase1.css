@@ -1,5 +1,4 @@
 /* Umaira fase 1 */
-#composerMenu{display:none!important}
 .uu1-back{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.42);display:flex;align-items:flex-end;justify-content:center}
 .uu1-sheet{width:min(100%,520px);max-height:86vh;overflow:auto;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;background:rgba(255,255,255,.92);color:#18181b;border:1px solid rgba(0,0,0,.08);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);animation:uu1up .22s ease-out}
 html:is([data-uui="dark"],[data-theme="dark"],.dark,[data-color-scheme="dark"]) .uu1-sheet{background:rgba(20,20,24,.9);color:#f4f4f5;border-color:rgba(255,255,255,.14)}
