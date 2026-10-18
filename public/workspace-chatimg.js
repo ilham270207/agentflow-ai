@@ -1,4 +1,5 @@
 (() => {
+  const __wsmRun = () => {
   const TOKEN_RE = /\u27e6umairaimg:([\w-]{4,64})\u27e7/g;
   const previewMap = new Map();
   const key = (f) => String(f.name) + "|" + Number(f.size || 0);
@@ -38,7 +39,7 @@
         const src = "/api/chat-images/" + id;
         return '<span class="wsm-fig"><button type="button" class="wsm-chat-img" data-src="' + src + '">' +
           '<img src="' + src + '" alt="Hasil edit gambar" loading="lazy"></button>' +
-          '<a class="wsm-dl" href="' + src + '" download="umaira-hasil-edit.png">Unduh</a></span>';
+          '<a class="wsm-dl" href="' + src + '" download="umaira-hasil-edit.jpg">Unduh</a></span>';
       });
     };
   }
@@ -141,4 +142,7 @@
     siapkan: typeof prepareUmairaAttachments,
     markdown: typeof renderChatMarkdown
   });
+
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", __wsmRun); else __wsmRun();
 })();

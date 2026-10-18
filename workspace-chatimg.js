@@ -161,6 +161,46 @@ async function callGeminiEdit(mime, b64, prompt) {
   return Buffer.from((hit.inlineData || hit.inline_data).data, "base64");
 }
 
+/* ---------- edit gambar lewat Cloudflare Workers AI (FLUX.2 klein) ---------- */
+function cfModel() { return (process.env.CF_EDIT_MODEL || "@cf/black-forest-labs/flux-2-klein-4b").trim(); }
+function cfDailyMax() { return Number(process.env.CF_EDITS_PER_DAY) || 50; }
+const cfDay = { key: "", n: 0 };
+
+async function callCloudflareEdit(mime, b64, prompt) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (cfDay.key !== today) { cfDay.key = today; cfDay.n = 0; }
+  if (cfDay.n >= cfDailyMax()) {
+    throw new HttpError(429, "Batas edit gambar harian sudah tercapai. Coba lagi besok.");
+  }
+  const accountId = String(process.env.CF_ACCOUNT_ID).trim();
+  const token = String(process.env.CF_API_TOKEN).trim();
+  const form = new FormData();
+  form.append("prompt", prompt);
+  form.append("input_image_0", new Blob([Buffer.from(b64, "base64")], { type: mime }), "foto." + (EXT[mime] || "jpg"));
+  let r;
+  try {
+    r = await fetch(
+      "https://api.cloudflare.com/client/v4/accounts/" + encodeURIComponent(accountId) + "/ai/run/" + cfModel(),
+      { method: "POST", headers: { Authorization: "Bearer " + token }, body: form, signal: AbortSignal.timeout(90000) }
+    );
+  } catch (err) {
+    console.error("[image-edit] cloudflare tidak terjangkau:", err?.message || err);
+    throw new HttpError(504, "Tidak dapat menghubungi layanan edit gambar. Coba lagi nanti.");
+  }
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok || data?.success === false) {
+    const msg = JSON.stringify(data?.errors || data).slice(0, 300);
+    console.error("[image-edit] cloudflare model=" + cfModel() + " status=" + r.status + " pesan=" + msg);
+    if (r.status === 429) throw new HttpError(429, "Layanan edit gambar sedang penuh. Coba lagi beberapa saat.");
+    if (r.status === 401 || r.status === 403) throw new HttpError(502, "Layanan edit gambar belum bisa diakses. Hubungi admin.");
+    throw new HttpError(502, "Edit gambar gagal diproses oleh layanan AI.");
+  }
+  const img = data?.result?.image;
+  if (!img) throw new HttpError(422, "AI tidak menghasilkan gambar untuk permintaan ini. Coba ubah instruksinya.");
+  cfDay.n += 1;
+  return Buffer.from(img, "base64");
+}
+
 export function createImageEditMiddleware({ currentUser }) {
   const hits = new Map();
   return async (req, res, next) => {
@@ -182,7 +222,7 @@ export function createImageEditMiddleware({ currentUser }) {
       if (b.n > EDITS_PER_HOUR) {
         return res.status(429).json({ error: "Batas edit gambar tercapai (" + EDITS_PER_HOUR + " per jam). Coba lagi nanti." });
       }
-      if (!process.env.GEMINI_API_KEY) {
+      if (!process.env.GEMINI_API_KEY && !(process.env.CF_ACCOUNT_ID && process.env.CF_API_TOKEN)) {
         return res.status(503).json({ error: "Fitur edit gambar belum dikonfigurasi (GEMINI_API_KEY)." });
       }
 
@@ -191,12 +231,13 @@ export function createImageEditMiddleware({ currentUser }) {
       const mime = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"].includes(img.mimeType) ? img.mimeType : "image/jpeg";
 
       const { prompt, generic } = buildInstruction(text);
-      const out = await callGeminiEdit(mime, b64, prompt);
+      const useCf = Boolean(process.env.CF_ACCOUNT_ID && process.env.CF_API_TOKEN);
+      const out = useCf ? await callCloudflareEdit(mime, b64, prompt) : await callGeminiEdit(mime, b64, prompt);
       const saved = await saveChatImage(user.id, out, "hasil-edit");
       const intro = generic
         ? "Karena belum ada instruksi yang spesifik, saya memperbaiki kualitas gambar secara umum. Kirim ulang dengan instruksi yang lebih jelas untuk hasil lain, misalnya: hapus latar belakang atau ubah jadi hitam putih."
         : "Berikut hasil editnya.";
-      return res.json({ mode: "image-edit", provider: "gemini", version: "1.5.0", message: intro + "\n\n\u27e6umairaimg:" + saved.id + "\u27e7" });
+      return res.json({ mode: "image-edit", provider: useCf ? "cloudflare" : "gemini", version: "1.5.0", message: intro + (useCf ? "\n\nCatatan: AI menggambar ulang gambar, jadi teks, wajah, dan detail halus bisa berubah. Jangan mengunggah foto berisi data pribadi seperti KTP, kartu bank, atau QR." : "") + "\n\n\u27e6umairaimg:" + saved.id + "\u27e7" });
     } catch (err) {
       if (err instanceof HttpError) return res.status(err.status).json({ error: err.message });
       console.error("[image-edit] gagal:", err?.message || err);
