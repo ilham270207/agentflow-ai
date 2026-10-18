@@ -232,6 +232,7 @@ export function createImageEditMiddleware({ currentUser }) {
 
       const { prompt, generic } = buildInstruction(text);
       const useCf = Boolean(process.env.CF_ACCOUNT_ID && process.env.CF_API_TOKEN);
+      console.log("[image-edit] provider=" + (useCf ? "cloudflare" : "gemini") + " cf_id_len=" + String(process.env.CF_ACCOUNT_ID || "").trim().length + " cf_token_len=" + String(process.env.CF_API_TOKEN || "").trim().length + " node=" + process.version);
       const out = useCf ? await callCloudflareEdit(mime, b64, prompt) : await callGeminiEdit(mime, b64, prompt);
       const saved = await saveChatImage(user.id, out, "hasil-edit");
       const intro = generic
