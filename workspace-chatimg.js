@@ -172,8 +172,13 @@ async function callCloudflareEdit(mime, b64, prompt) {
   if (cfDay.n >= cfDailyMax()) {
     throw new HttpError(429, "Batas edit gambar harian sudah tercapai. Coba lagi besok.");
   }
-  const accountId = String(process.env.CF_ACCOUNT_ID).trim();
-  const token = String(process.env.CF_API_TOKEN).trim();
+  const accountId = (String(process.env.CF_ACCOUNT_ID || "").match(/[0-9a-f]{32}/i) || [""])[0];
+  const rawTok = String(process.env.CF_API_TOKEN || "");
+  const token = (rawTok.match(/cfut_[A-Za-z0-9_-]+/) || [rawTok.replace(/['"\s]/g, "")])[0];
+  if (!accountId || !token) {
+    console.error("[image-edit] CF_ACCOUNT_ID atau CF_API_TOKEN tidak valid (id_len=" + accountId.length + " token_len=" + token.length + ")");
+    throw new HttpError(502, "Layanan edit gambar belum dikonfigurasi dengan benar. Hubungi admin.");
+  }
   const form = new FormData();
   form.append("prompt", prompt);
   form.append("input_image_0", new Blob([Buffer.from(b64, "base64")], { type: mime }), "foto." + (EXT[mime] || "jpg"));
