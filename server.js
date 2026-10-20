@@ -3,11 +3,13 @@ import { createScheduledRouter, startScheduler } from "./workspace-scheduler.js"
 import { createFilesRouter, buildFileContext } from "./workspace-files.js";
 import { createChatsRouter } from "./workspace-chats.js";
 import { createChatImagesRouter, createImageEditMiddleware } from "./workspace-chatimg.js";
+import { createGayaRouter, buildGayaContext } from "./umaira-gaya.js";
 import { createWorkspaceRouter } from "./workspace.js";
 import express from "express";
 import dotenv from "dotenv";
 import { authRouter } from "./auth.js";
 import { requireAuth, originGuard, currentUser } from "./auth.js";
+import { createGuestChatGate } from "./umaira-tamu.js";
 import { readFile as umairaReadFile } from "node:fs/promises";
 import { kvGet, kvSet, fileGet, fileSave, fileDelete } from "./db.js";
 import { auditApiMiddleware } from "./audit.js"; // UMAIRA AUDIT API
@@ -38,6 +40,18 @@ app.use(express.json({ limit: "15mb" }));
 app.get(["/", "/index.html"], async (req, res, next) => {
   let user = null;
   try { user = await currentUser(req); } catch {}
+  if (!user && String(process.env.GUEST_MODE || "").toLowerCase() !== "off") {
+    try {
+      let guestHtml = await umairaReadFile(process.cwd() + "/public/index.html", "utf8");
+      const guestBoot = "<script>window.__UMAIRA_GUEST__=true;</script><script src=\"/umaira-tamu.js\"></script>";
+      guestHtml = guestHtml.replace(/<head(\s[^>]*)?>/i, (m) => m + guestBoot);
+      res.setHeader("Cache-Control", "no-store");
+      return res.type("html").send(guestHtml);
+    } catch (err) {
+      console.error("Gagal menyajikan halaman tamu:", err.message);
+      return next();
+    }
+  }
   if (!user) return res.redirect("/login");
   try {
     let html = await umairaReadFile(process.cwd() + "/public/index.html", "utf8");
@@ -95,10 +109,12 @@ app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 
 // ===== UMAIRA API GUARD =====
+const guestChatGate = createGuestChatGate({ currentUser: (req) => currentUser(req), requireAuth });
 app.use("/api", originGuard);
 app.use("/api", auditApiMiddleware({ currentUser: (req) => currentUser(req) })); // UMAIRA AUDIT API
 app.use("/api", (req, res, next) => {
   if (req.path === "/health" || req.path === "/auth" || req.path.startsWith("/auth/")) return next();
+  if (req.method === "POST" && req.path === "/chat") return guestChatGate(req, res, next);
   return requireAuth(req, res, next);
 });
 app.use("/gallery", requireAuth);
@@ -107,6 +123,7 @@ app.use("/api/wsdata/scheduled", createScheduledRouter({ currentUser: (req) => c
 app.use("/api/wsdata/files", createFilesRouter({ currentUser: (req) => currentUser(req) }));
 app.use("/api/wsdata/chats", createChatsRouter({ currentUser: (req) => currentUser(req) }));
 app.use("/api/chat-images", createChatImagesRouter({ currentUser: (req) => currentUser(req) }));
+app.use("/api/gaya", createGayaRouter({ currentUser: (req) => currentUser(req) }));
 app.use("/api/chat", createImageEditMiddleware({ currentUser: (req) => currentUser(req) }));
 app.use("/api/wsdata", createWorkspaceDataRouter({ currentUser: (req) => currentUser(req) }));
 startScheduler();
@@ -115,7 +132,7 @@ app.use("/api/chat", async (req, res, next) => {
   try {
     const user = await currentUser(req);
     if (user?.id) {
-      const block = [await buildPluginContext(user.id, req.body.messages), await buildFileContext(user.id, req.body.messages)].filter(Boolean).join("\n\n");
+      const block = [await buildGayaContext(user.id), await buildPluginContext(user.id, req.body.messages), await buildFileContext(user.id, req.body.messages)].filter(Boolean).join("\n\n");
       if (block) req.body.projectContext = block + "\n\n" + String(req.body.projectContext || "");
     }
   } catch (err) {
