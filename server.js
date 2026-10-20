@@ -961,7 +961,34 @@ function cleanUmairaReply(text) {
   return t ? t.charAt(0).toUpperCase() + t.slice(1) : text.trim();
 }
 
-async function tryGeminiChat(
+async function tryGeminiChat(...args) {
+  const t0 = Date.now();
+  let out = null;
+  try {
+    out = await Promise.race([
+      __tryGeminiChat(...args),
+      new Promise((resolve) => setTimeout(() => resolve("__timeout__"), 30000))
+    ]);
+    if (out === "__timeout__") { console.warn("[chat] gemini timeout 30 dtk, pindah ke cadangan"); out = null; }
+    return out;
+  } finally {
+    console.log("[chat] gemini " + (out ? "ok" : "gagal") + " ms=" + (Date.now() - t0));
+  }
+}
+
+async function tryOpenRouterChat(...args) {
+  const t0 = Date.now();
+  let ok = false;
+  try {
+    const out = await __tryOpenRouterChat(...args);
+    ok = Boolean(out);
+    return out;
+  } finally {
+    console.log("[chat] openrouter " + (ok ? "ok" : "gagal") + " ms=" + (Date.now() - t0));
+  }
+}
+
+async function __tryGeminiChat(
   messages,
   projectContext = "",
   attachments = []
@@ -1076,7 +1103,7 @@ async function tryGeminiChat(
   }
 }
 
-async function tryOpenRouterChat(
+async function __tryOpenRouterChat(
   messages,
   projectContext = "",
   attachments = []
