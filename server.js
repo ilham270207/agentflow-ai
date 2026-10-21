@@ -961,19 +961,18 @@ function cleanUmairaReply(text) {
   return t ? t.charAt(0).toUpperCase() + t.slice(1) : text.trim();
 }
 
-async function tryGeminiChat(...args) {
-  const t0 = Date.now();
-  let out = null;
-  try {
-    out = await Promise.race([
-      __tryGeminiChat(...args),
-      new Promise((resolve) => setTimeout(() => resolve("__timeout__"), 30000))
-    ]);
-    if (out === "__timeout__") { console.warn("[chat] gemini timeout 30 dtk, pindah ke cadangan"); out = null; }
-    return out;
-  } finally {
-    console.log("[chat] gemini " + (out ? "ok" : "gagal") + " ms=" + (Date.now() - t0));
+async function tryGeminiChat(messages, projectContext = "", attachments = []) {
+  const primary = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+  const extra = (process.env.GEMINI_FALLBACK_MODELS || "gemini-3.7-flash,gemini-3.5-flash")
+    .split(",").map(x => x.trim()).filter(Boolean);
+  const models = [...new Set([primary, ...extra])];
+  for (const model of models) {
+    const t0 = Date.now();
+    const out = await __tryGeminiChat(messages, projectContext, attachments, model);
+    console.log("[chat] " + model + " " + (out ? "ok" : "gagal") + " ms=" + (Date.now() - t0));
+    if (out) return out;
   }
+  return null;
 }
 
 async function tryOpenRouterChat(...args) {
@@ -991,7 +990,8 @@ async function tryOpenRouterChat(...args) {
 async function __tryGeminiChat(
   messages,
   projectContext = "",
-  attachments = []
+  attachments = [],
+  modelName = process.env.GEMINI_MODEL || "gemini-3.8-flash"
 ) {
   if (!process.env.GEMINI_API_KEY) return null;
 
@@ -1047,7 +1047,7 @@ async function __tryGeminiChat(
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${
-        encodeURIComponent(process.env.GEMINI_MODEL || "gemini-3.8-flash")
+        encodeURIComponent(modelName)
       }:generateContent`,
       {
         method: "POST",
@@ -1055,6 +1055,7 @@ async function __tryGeminiChat(
           "Content-Type": "application/json",
           "x-goog-api-key": process.env.GEMINI_API_KEY
         },
+        signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
           systemInstruction: {
             parts: [{
